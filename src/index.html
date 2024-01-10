@@ -4,10 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width-device-width, initial-scale=1.0" />
-    <title>Malcolm Shi - Personal Website</title>
+    <title>Malcolm Shi - Portfolio Website</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- HEADER -->
     <div id="header">
       <div class="container">
         <nav>
@@ -22,6 +23,48 @@
         <div class="header-text">
           <p>Aspiring Software Engineer</p>
           <h1>Hi, I'm <span>Malcolm</span>.</h1>
+        </div>
+      </div>
+    </div>
+    <!-- ABOUT -->
+    <div id="about">
+      <div class="container">
+        <div class="row">
+          <div class="about-col-1">
+            <img src="images/user.png" />
+          </div>
+          <div class="about-col-2">
+            <h1 class="sub-title">About Me</h1>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit
+              veritatis quibusdam sint neque. Rerum illo veritatis soluta dicta,
+              non alias pariatur est ducimus repellendus, quis nisi architecto
+              eum blanditiis dolores.
+            </p>
+
+            <div class="tab-titles">
+              <p class="tab-links active-link" onclick="opentab('skills')">Skills</p>
+              <p class="tab-links" onclick="opentab('experience')">Experience</p>
+              <p class="tab-links" onclick="opentab('education')">Education</p>
+            </div>
+            <div class="tab-contents active-tab" id="skills">
+              <ul>
+                <li><span>Object-Oriented</span><br />Programming</li>
+                <li><span>Full-Stack</span><br />Development</li>
+              </ul>
+            </div>
+            <div class="tab-contents" id="experience">
+              <ul>
+                <li><span>OpenText</span></li>
+                <li><span>Nest Wealth</span></li>
+              </ul>
+            </div>
+            <div class="tab-contents" id="education">
+              <ul>
+                <li><span>University of<br /><span>Waterloo</span></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
