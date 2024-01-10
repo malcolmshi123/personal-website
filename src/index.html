@@ -61,12 +61,46 @@
             </div>
             <div class="tab-contents" id="education">
               <ul>
-                <li><span>University of<br /><span>Waterloo</span></li>
+                <li><span>University of <span>Waterloo</span></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <!-- SERVICES -->
+    <div id="services">
+      <div class="container">
+        <h1 class="sub-title">My services</h1>
+        <div class="services-list">
+          <div>
+            <h2>Private Tutoring</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. 
+              Dolore explicabo, doloremque consequatur impedit cupiditate recusandae dicta qui deserunt quibusdam voluptatem reiciendis repellat quia odit illo! 
+              Non voluptas sapiente dolore sit.</p>
+            <a href="#">I would like tutoring!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      let tablinks = document.getElementsByClassName("tab-links");
+      let tabcontents = document.getElementsByClassName("tab-contents");
+
+      function opentab(tabname) {
+
+        for(tablink of tablinks) {
+            tablink.classList.remove("active-link");
+        }
+
+        for(tabcontent of tabcontents) {
+            tabcontent.classList.remove("active-tab");
+        }
+
+        event.currentTarget.classList.add("active-link");
+        document.getElementById(tabname).classList.add("active-tab");
+
+      }
+    </script>
   </body>
 </html>
