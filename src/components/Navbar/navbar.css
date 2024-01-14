@@ -10,13 +10,12 @@
     position: sticky;
     top: 0;
     z-index: 3;
-
 }
 
 .logo {
     object-fit: cover;
     height: 3rem;
-    width: 4rem;
+    width: 3rem;
 }
 
 .desktopMenuListItem {
@@ -25,25 +24,23 @@
 }
 
 .desktopMenuListItem:hover {
-    color: yellow;
+    color: gold;
     padding-bottom: 0.5rem;
-    border-bottom: 3px solid yellow;
+    border-bottom: 3px solid gold;
 }
 
 .desktopMenuBtn {
     background: white;
     color: black;
-    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     border-radius: 2rem;
 }
 
 .desktopMenuImg {
     object-fit: cover;
     height: 1rem;
-    width: 1rem;
-    margin: 1rem;
+    margin: 1rem 0.5rem;
 }
