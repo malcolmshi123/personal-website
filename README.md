@@ -2,6 +2,29 @@
 
 Malcolm Shi
 
+## Development
+
+Requires Node.js 22 LTS or newer supported LTS and npm.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open http://localhost:3000 to view the site.
+
+```sh
+npm run typecheck
+npm run build
+```
+
+The production build exports static HTML, CSS, and JavaScript to `out/`. Deploy
+that directory to a static host; a Next.js server is not required. Typography uses
+system fonts, so builds do not need to download fonts.
+
+The initial foundation includes only the welcome page. The pages below will be
+added in later increments.
+
 ## Planned implementation
 
 - Next.js, TypeScript, and the App Router, with static export.

@@ -3,6 +3,7 @@
 ## Workflow
 
 - Implement one coherent, commit-sized increment at a time, then stop for review.
+- Whenever finishing an increment, outline the next increment without implementing it until Malcolm agrees.
 - Malcolm handles staging, commits, and pushes. Do not run git add, git commit, or git push unless explicitly requested.
 - Keep checks appropriate to the change. Do not broaden an increment with unrelated refactors.
 - Use Next.js, TypeScript, and the App Router. Export static pages unless an approved feature requires a server.
@@ -19,6 +20,7 @@
 
 ## Content
 
+- Write website copy in natural, conversational language that sounds like Malcolm talking to a visitor. Avoid slogans, vague metaphors, and promotional filler.
 - Do not publish phone numbers or email addresses in site content or the downloadable resume.
 - Preserve the original resume and gospel source document.
 - Use labeled photo placeholders until Malcolm supplies photographs.
