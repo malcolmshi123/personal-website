@@ -1,6 +1,6 @@
 # Personal Website
 
-Malcolm Shi's personal website, bringing together faith, engineering, writing, and photography.
+Malcolm Shi
 
 ## Planned implementation
 
@@ -12,10 +12,4 @@ Malcolm Shi's personal website, bringing together faith, engineering, writing, a
 - Curated links to Medium articles.
 - A downloadable resume without phone or email.
 - A Formspree contact form, with LinkedIn and GitHub links.
-- A private preview first; custom-domain selection before public launch.
-
-This initial commit contains repository setup only. Application code and dependencies will be added in subsequent reviewable increments.
-
-## Development workflow
-
-Make one commit-sized change at a time and stop for review. After the initial commit, Malcolm handles staging, commits, and pushes.
+- Custom-domain selection before launch.
