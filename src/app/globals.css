@@ -313,6 +313,15 @@ h1 em {
     font-size: 14px;
 }
 
+.resume-download {
+    display: inline-block;
+    margin-top: 24px;
+    color: var(--olive);
+    font-size: 14px;
+    line-height: 1.8;
+    text-underline-offset: 4px;
+}
+
 .work-list {
     margin: 0;
     padding: 0;

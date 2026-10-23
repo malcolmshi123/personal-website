@@ -1,0 +1,194 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\ifdefined\pdfglyphtounicode
+\input{glyphtounicode}
+\fi
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-0.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\ifdefined\pdfgentounicode
+\pdfgentounicode=1
+\fi
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%==================== HEADER ====================
+\begin{center}
+    \textbf{\Huge \scshape Malcolm Shi} \\ \vspace{1pt}
+    \small     \href{https://linkedin.com/in/malcolm-shi}{\underline{linkedin.com/in/malcolm-shi}} $|$
+    \href{https://github.com/malcolmshi123}{\underline{github.com/malcolmshi123}}
+\end{center}
+
+%==================== SKILLS ====================
+\section*{Technical Skills}
+\begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+    \textbf{Languages}{: Python, C/C++, Rust, Go, Java, JavaScript/TypeScript, SQL, Kotlin, HTML/CSS} \\
+    \textbf{Frameworks \& Libraries}{: PyTorch, TensorFlow, vLLM, CUDA, Spring, React, Angular, Node.js, Express.js} \\
+    \textbf{Developer Tools}{: Git, Docker, GitHub Actions, NVIDIA Nsight, PyTorch Profiler, Selenium, Sikuli, Android Studio} \\
+    \textbf{Platforms \& Technologies}{: Modal, AWS (EC2, S3), Prometheus, OpenGL, Vulkan, DirectX, MongoDB, MySQL}
+    }}
+\end{itemize}
+
+
+%==================== EXPERIENCE ====================
+\section*{Experience}
+\resumeSubHeadingListStart
+
+\resumeSubheading
+{Huawei Technologies Co., Ltd.}{Jan 2025 -- Apr 2025}
+{Software Engineer Intern $|$ Software-Hardware Optimization Lab}{Markham, ON}
+\resumeItemListStart
+\resumeItem{Engineered \textbf{4+} neural rendering models using \textbf{3DGS} and \textbf{NeRF} in \textbf{C++} and \textbf{Python} with \textbf{CUDA}, \textbf{OpenGL}, \textbf{PyTorch}, and \textbf{TensorFlow}, reducing GPU graphics pipeline latency across Huawei's embedded systems by \textbf{56\%}}
+\resumeItem{Implemented \textbf{2+ Vulkan} compute shaders in \textbf{Android APKs} on embedded \textbf{Linux} using \textbf{Android Studio} and \textbf{Kotlin}, improving firmware-level performance benchmarks on mobile operating systems by \textbf{33\%}}
+\resumeItem{Leveraged \textbf{DirectX 12 Work Graphs} in \textbf{C++} and \textbf{HLSL} to build an \textbf{occlusion culling} system profiled using \textbf{NVIDIA Nsight Tools}, optimizing memory usage to accelerate task execution by \textbf{24\%}}
+\resumeItemListEnd
+
+\resumeSubheading
+{Nest Wealth}{May 2023 -- Aug 2023}
+{Software Engineer Intern $|$ Pro 1.0 Platform}{Toronto, ON}
+\resumeItemListStart
+\resumeItem{Maintained \textbf{3+ RESTful API} endpoints on \textbf{EC2} instances with \textbf{Docker}, integrating \textbf{DocuSign} form logic and least-connection \textbf{load balancing} to query \textbf{MySQL} databases and increase system throughput by \textbf{38\%}}
+\resumeItem{Built an interactive donut chart in \textbf{TypeScript} using \textbf{Angular} components to visualize asset allocation, applying a \textbf{weighted decision matrix} to process client questionnaire data stored in \textbf{MongoDB}}
+\resumeItem{Conducted security reviews on \textbf{10+} third-party applications, performing \textbf{fault injection} and \textbf{penetration tests} to identify vulnerabilities, assess security controls, and support \textbf{SOC 2 compliance}}
+\resumeItemListEnd
+
+\resumeSubheading
+{OpenText}{Sep 2022 -- Dec 2022}
+{Software Engineer Intern $|$ Content Server Core}{Waterloo, ON}
+\resumeItemListStart
+\resumeItem{Executed monthly \textbf{end-to-end}, \textbf{integration}, and \textbf{functional tests} on \textbf{8+} core enterprise modules by enhancing \textbf{Selenium} automation scripts that interact with complex \textbf{HTML} structures, achieving \textbf{98\%} test coverage}
+\resumeItem{Developed \textbf{JUnit test report} generators that automatically interpret stack traces and summarize error logs into \textbf{XML} documents following test suite execution, accelerating debugging processes by \textbf{42\%}}
+\resumeItem{Streamlined \textbf{regression testing} workflows by writing \textbf{Sikuli} scripts that revert \textbf{VMware} virtual machines and restore \textbf{SQL Server} database snapshots, enabling fully automated test cycles}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%==================== PROJECTS ====================
+\section*{Projects}
+\resumeSubHeadingListStart
+
+\resumeProjectHeading
+{\href{https://github.com/malcolmshi123/llm-inference-optimization-lab}{\textbf{LLM Inference Optimization Lab} \faGithub} $|$ \emph{GPU Inference Performance Benchmarking}}{Oct 2026}
+\resumeItemListStart
+\resumeItem{Architected GPU-accelerated \textbf{model serving} infrastructure using \textbf{vLLM} and \textbf{Modal}, deploying \textbf{Qwen3-4B} on \textbf{NVIDIA A10} and \textbf{L4} GPUs with \textbf{BF16} precision, chunked prefill, and authenticated streaming APIs}
+\resumeItem{Constructed an asynchronous benchmarking framework in \textbf{Python} using \textbf{asyncio} and \textbf{httpx}, executing \textbf{1,000+} measured requests to evaluate concurrency, scheduling token budgets, and \textbf{TTFT}-throughput tradeoffs}
+\resumeItem{Investigated \textbf{KV-cache} prefix reuse through \textbf{A/B experiments} across \textbf{500+} requests, analyzing \textbf{Prometheus} telemetry to observe up to \textbf{77\%} lower median TTFT and \textbf{89\%} less prefill computation}
+\resumeItem{Profiled \textbf{CUDA kernels} using \textbf{PyTorch Profiler} to correlate cache reuse with changes in GPU execution patterns, measuring \textbf{36\%} lower aggregate kernel duration in a controlled diagnostic}
+\resumeItemListEnd
+
+\resumeSubHeadingListEnd
+
+%==================== EDUCATION ====================
+\section*{Education}
+\resumeSubHeadingListStart
+\resumeSubheading
+{University of Waterloo}{Jun 2026}
+{BASc in Computer Engineering (Co-op), With Distinction}{President's Scholarship}
+\resumeSubHeadingListEnd
+
+%==================== CERTIFICATIONS ====================
+\section*{Certifications}
+\resumeSubHeadingListStart
+\resumeSubheading
+{Scrum Alliance}{Nov 2022}
+{Scrum Foundations — Agile methodology}{}
+\resumeSubHeadingListEnd
+
+\end{document}

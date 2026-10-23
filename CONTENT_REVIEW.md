@@ -10,6 +10,12 @@ the word count.
 It keeps the testimony general and omits the specific personal experiences in
 the talk. The original document and its suggestions/comments are unchanged.
 
+## Resume before launch
+
+- Once the custom domain is selected, consider adding the final website URL as
+  a hyperlink in the resume header. Refresh the downloadable copy at the same
+  time, keeping phone numbers and email addresses out of the public version.
+
 ## Wording to review
 
 - The short draft describes our sin and separation from God without explaining

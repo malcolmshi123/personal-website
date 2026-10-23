@@ -11,6 +11,9 @@ export default function Work() {
         <article className="page-content reading-page">
             <h1>Work</h1>
             <p className="introduction">{work.introduction}</p>
+            <a className="resume-download" href="/resume.pdf" download="Malcolm-Shi-Resume.pdf">
+                Download resume (PDF)
+            </a>
             <div className="prose">
                 <section aria-labelledby="projects">
                     <h2 id="projects">Projects</h2>

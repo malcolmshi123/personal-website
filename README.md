@@ -30,6 +30,10 @@ The site currently includes the welcome, About, Gospel, Blog, and Work pages, pl
 page shells for Photos and Contact. Page wording and the curated article list
 live in `src/content/`. Add future Medium articles to `src/content/blog.ts`.
 Work experience and projects live in `src/content/work.ts`.
+The Work page links to `public/resume.pdf`, compiled from `resume/main.tex` with
+phone and email removed. Recompile that source and replace the PDF when updating
+it. Preserve the private original and check the PDF text and link annotations as
+well as its appearance.
 See `CONTENT_REVIEW.md` for draft wording to review before launch.
 
 ## Planned implementation
