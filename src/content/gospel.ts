@@ -12,12 +12,12 @@ type GospelSection = {
     references: { label: string; href: string }[];
 };
 
-export const gospelIntroduction = "The gospel is the good news of the kingdom of God. Jesus came to announce God’s reign and call people to repent, believe, and follow Him. I have come to understand my relationship with God through this big picture: following Jesus together, loving our neighbors, and caring for the world He made.";
+export const gospelIntroduction = "The gospel is the good news of the kingdom of God. Jesus came to announce God’s reign and call people to repent, believe, and follow Him. I have come to understand my relationship with God through this big picture: following Jesus together, loving our neighbors, and caring for the world He created.";
 
 export const gospelSections: GospelSection[] = [
     {
         id: "gods-kingdom",
-        heading: "God's kingdom",
+        heading: "God’s kingdom",
         paragraphs: [
             "In Mark 1:15, Jesus declares that God’s kingdom is at hand and calls people to repent and believe in the gospel. This is central to understanding what Jesus came to do.",
             "What is the kingdom of God? It is God’s reign, His good and rightful rule over His creation. In Jesus, this reign has come near. He calls us to turn towards God and live according to His word, the Bible.",
@@ -81,16 +81,16 @@ export const gospelSections: GospelSection[] = [
         ],
         references: [
             { label: "2 Corinthians 5:21", href: "https://www.esv.org/2+Corinthians+5:21/" },
-            { label: "Ephesians 1:7", href: "https://www.esv.org/Ephesians+1:7/" },
             { label: "1 Corinthians 15:3-8", href: "https://www.esv.org/1+Corinthians+15:3-8/" },
+            { label: "Romans 6:9", href: "https://www.esv.org/Romans+6:9/" },
         ],
     },
     {
         id: "new-life",
         heading: "Alive in Christ",
         paragraphs: [
-            "So how do we receive this life? Salvation is deliverance from sin, a free gift of God received by grace through faith in Jesus Christ. Grace means that God saves us out of His kindness, not because we have earned it. Faith means trusting Jesus and what He has done for us, and repentance means turning away from sin and towards God.",
-            "God makes us alive in Christ, and by His Holy Spirit, He changes our hearts so that we can walk in His ways. We become part of God’s family, learning to follow Jesus and put His teachings into practice. Obedience is our response to His love, not the price of His forgiveness. We love because He first loved us.",
+            "So how do we receive this life? Salvation is deliverance from sin, a free gift of God received by grace through faith in Jesus Christ. Grace means that God saves us out of His kindness, not because we have earned it. Faith means trusting Jesus and what He has done for us. Repentance means turning away from sin and towards God.",
+            "God makes us alive in Christ, and by the Holy Spirit, He changes our hearts so that we can walk in His ways. We become part of God’s family, learning to follow Jesus and put His teachings into practice. Obedience is our response to His love, not the price of His forgiveness. We love because He first loved us.",
         ],
         references: [
             { label: "Ephesians 2:1-10", href: "https://www.esv.org/Ephesians+2:1-10/" },
@@ -113,12 +113,12 @@ export const gospelSections: GospelSection[] = [
         id: "my-story",
         heading: "My testimony",
         paragraphs: [
-            "For much of university, I chose to reject God and live for myself. I had tasted and seen what the world had to offer, but I was still lost and unsatisfied.",
-            "Since being saved by grace through faith in Jesus Christ, I have tasted and seen that the Lord is good. I can testify that nothing in this world can satisfy nearly as much as God’s love for me. Though it hasn’t been easy, I have found joy as God continues to change my heart by the power of the Holy Spirit.",
+            "For much of university, I chose to reject God and live for myself. Among other things, I was addicted to video games and turned to substances and gambling. I had tasted and seen what the world had to offer, but I was still lost and unsatisfied.",
+            "Since being saved by grace through faith in Jesus Christ, I have tasted and seen that His grace is sufficient. I can testify that nothing in this world can satisfy nearly as much as God’s love for me. Though it hasn’t been easy, I have found everlasting joy as God continues to change my heart by the Holy Spirit’s power.",
         ],
         references: [
-            { label: "Psalm 16:11", href: "https://www.esv.org/Psalm+16:11/" },
             { label: "Psalm 34:8", href: "https://www.esv.org/Psalm+34:8/" },
+            { label: "2 Corinthians 12:9-10", href: "https://www.esv.org/2+Corinthians+12:9-10/" },
             { label: "Psalm 63:3", href: "https://www.esv.org/Psalm+63:3/" },
         ],
     },
@@ -127,7 +127,7 @@ export const gospelSections: GospelSection[] = [
         heading: "Come to Jesus",
         paragraphs: [
             "John 3:16 tells us that God loved the world so much that He gave His only Son, Jesus Christ, so that whoever believes in Him will have eternal life.",
-            "If you don’t know Jesus as Lord and Savior, I invite you to come to Him. Turn away from your sin, put your faith in Jesus, and receive the life He offers. You don’t need to have every question answered before taking this step. Come to know Him, grow in His love, and share that love with others.",
+            "If you don’t know Jesus as Lord and Savior, I invite you to come to Him. Turn away from your sin, put your faith in Jesus, and receive the life He offers. You don’t need to have every question answered before taking this step. Come to know Him, grow in His love, and share this love with others.",
         ],
         references: [
             { label: "John 3:16", href: "https://www.esv.org/John+3:16/" },
