@@ -12,9 +12,8 @@ the talk. The original document and its suggestions/comments are unchanged.
 
 ## Resume before launch
 
-- Once the custom domain is selected, consider adding the final website URL as
-  a hyperlink in the resume header. Refresh the downloadable copy at the same
-  time, keeping phone numbers and email addresses out of the public version.
+- Malcolm will manually add a personal website section to the resume. Leave the
+  resume source and downloadable PDF unchanged until he asks for further work.
 
 ## Wording to review
 

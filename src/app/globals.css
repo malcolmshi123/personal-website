@@ -313,6 +313,66 @@ h1 em {
     font-size: 14px;
 }
 
+.photos-page {
+    max-width: 1120px;
+    padding-block: clamp(56px, 7vw, 96px);
+}
+
+.photos-page .introduction {
+    max-width: 640px;
+}
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 40px 24px;
+    margin: 48px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.album {
+    margin: 0;
+}
+
+.album-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    padding: 24px;
+    border: 1px solid var(--rule);
+    background: #e9ecdf;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.album-grid li:nth-child(2) .album-placeholder {
+    background: #eae6de;
+}
+
+.album-grid li:nth-child(3) .album-placeholder {
+    background: #eee5d9;
+}
+
+.album h2 {
+    margin: 20px 0 8px;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+}
+
+.album p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.8;
+}
+
 .resume-download {
     display: inline-block;
     margin-top: 24px;

@@ -1,11 +1,31 @@
 import type { Metadata } from "next";
-import PageShell from "@/components/page-shell";
+import { albums } from "@/content/photos";
 
 export const metadata: Metadata = {
     title: "Photos",
-    description: "Photos from trips, meals, and everyday life.",
+    description: "Photos from my church, fellowship, and grad trip to Japan and Korea.",
 };
 
 export default function Photos() {
-    return <PageShell title="Photos" introduction="Photos from trips, meals, and everyday life. I’ll organize them into albums here." />;
+    return (
+        <div className="page-content photos-page">
+            <h1>Photos</h1>
+            <p className="introduction">Some of my most cherished memories.</p>
+            <ul className="album-grid" aria-label="Photo albums">
+                {albums.map((album) => (
+                    <li key={album.id}>
+                        <figure className="album">
+                            <div className="album-placeholder">
+                                <span>Photos coming soon</span>
+                            </div>
+                            <figcaption>
+                                <h2>{album.title}</h2>
+                                <p>{album.description}</p>
+                            </figcaption>
+                        </figure>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
