@@ -54,7 +54,12 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
                             <Link
                                 href={href}
                                 aria-current={pathname.replace(/\/$/, "") === href.replace(/\/$/, "") ? "page" : undefined}
-                                onClick={() => setIsOpen(false)}
+                                onClick={() => {
+                                    setIsOpen(false);
+                                    if (isOpen && pathname.replace(/\/$/, "") === href.replace(/\/$/, "")) {
+                                        menuButton.current?.focus();
+                                    }
+                                }}
                             >
                                 {label}
                             </Link>

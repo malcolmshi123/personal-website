@@ -19,7 +19,7 @@ export default function Home() {
                 </div>
             </div>
             <section className="welcome-sections" aria-labelledby="around-the-site">
-                <h2 id="around-the-site">Have a look around</h2>
+                <h2 id="around-the-site">Have a look around!</h2>
                 <ul className="welcome-links">
                     {homeLinks.map((link) => (
                         <li key={link.href}>
