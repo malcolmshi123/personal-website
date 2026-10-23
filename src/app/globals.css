@@ -313,6 +313,43 @@ h1 em {
     font-size: 14px;
 }
 
+.work-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.work-entry {
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+}
+
+.work-entry + .work-entry {
+    margin-top: 32px;
+}
+
+.work-entry h3 {
+    margin: 0 0 8px;
+    font-family: var(--font-heading);
+    font-size: 25px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
+}
+
+.work-entry .work-role {
+    margin-bottom: 8px;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.work-entry .work-meta {
+    margin-bottom: 16px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
 .article-list {
     margin: 48px 0 0;
     padding: 0;

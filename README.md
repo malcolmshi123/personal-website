@@ -26,9 +26,10 @@ The build also fixes nested prefetch filenames produced by Next.js on Windows.
 This keeps page navigation working on static hosts. On exports with correct
 filenames, this step makes no changes. Run `npm run test:export` to check it.
 
-The site currently includes the welcome, About, Gospel, and Blog pages, plus page
-shells for Work, Photos, and Contact. Page wording and the curated article list
+The site currently includes the welcome, About, Gospel, Blog, and Work pages, plus
+page shells for Photos and Contact. Page wording and the curated article list
 live in `src/content/`. Add future Medium articles to `src/content/blog.ts`.
+Work experience and projects live in `src/content/work.ts`.
 See `CONTENT_REVIEW.md` for draft wording to review before launch.
 
 ## Planned implementation
