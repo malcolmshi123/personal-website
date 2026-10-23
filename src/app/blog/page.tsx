@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import { articles } from "@/content/blog";
 
-export const metadata: Metadata = {
-    title: "Blog",
-    description: "Links to my writing on Medium.",
-};
+export const metadata = createPageMetadata(
+    "Blog",
+    "Links to my writing on Medium.",
+    "/blog/",
+);
 
 export default function Blog() {
     return (

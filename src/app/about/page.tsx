@@ -1,11 +1,12 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import Link from "next/link";
 import { about } from "@/content/about";
 
-export const metadata: Metadata = {
-    title: "About",
-    description: "A bit about me and my faith.",
-};
+export const metadata = createPageMetadata(
+    "About",
+    "A bit about me and my faith.",
+    "/about/",
+);
 
 export default function About() {
     return (

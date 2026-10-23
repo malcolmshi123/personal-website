@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import { contactLinks } from "@/content/contact";
 
-export const metadata: Metadata = {
-    title: "Contact",
-    description: "Get in touch with Malcolm Shi.",
-};
+export const metadata = createPageMetadata(
+    "Contact",
+    "Get in touch with Malcolm Shi.",
+    "/contact/",
+);
 
 export default function Contact() {
     return (

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f4ec"/>
+  <path d="M80 80H1120M80 550H1120" stroke="#d9dacb" stroke-width="2"/>
+  <text x="80" y="292" fill="#292b25" font-family="Georgia, serif" font-size="104" letter-spacing="-4">Malcolm Shi<tspan fill="#596348">.</tspan></text>
+  <text x="84" y="366" fill="#66685e" font-family="Segoe UI, Arial, sans-serif" font-size="30">Faith, engineering, writing, and photography.</text>
+  <text x="84" y="505" fill="#596348" font-family="Segoe UI, Arial, sans-serif" font-size="24">malcolmshi.ca</text>
+</svg>

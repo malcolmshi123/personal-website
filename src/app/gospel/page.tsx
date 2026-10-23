@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import { gospelIntroduction, gospelSections } from "@/content/gospel";
 
-export const metadata: Metadata = {
-    title: "The Gospel",
-    description: "The good news of God’s kingdom, what Jesus has done, and how He calls us to live.",
-};
+export const metadata = createPageMetadata(
+    "The Gospel",
+    "The good news of God’s kingdom, what Jesus has done, and how He calls us to live.",
+    "/gospel/",
+);
 
 export default function Gospel() {
     const words = [

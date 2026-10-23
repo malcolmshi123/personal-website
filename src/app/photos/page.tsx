@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import { albums } from "@/content/photos";
 
-export const metadata: Metadata = {
-    title: "Photos",
-    description: "Photos from my church, fellowship, and grad trip to Japan and Korea.",
-};
+export const metadata = createPageMetadata(
+    "Photos",
+    "Photos from my church, fellowship, and grad trip to Japan and Korea.",
+    "/photos/",
+);
 
 export default function Photos() {
     return (

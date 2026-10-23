@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "@/lib/site-metadata";
 import { experience, projects, work } from "@/content/work";
 
-export const metadata: Metadata = {
-    title: "Work",
-    description: "My engineering projects and experience.",
-};
+export const metadata = createPageMetadata(
+    "Work",
+    "My engineering projects and experience.",
+    "/work/",
+);
 
 export default function Work() {
     return (
