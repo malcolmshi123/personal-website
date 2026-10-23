@@ -26,12 +26,14 @@ The build also fixes nested prefetch filenames produced by Next.js on Windows.
 This keeps page navigation working on static hosts. On exports with correct
 filenames, this step makes no changes. Run `npm run test:export` to check it.
 
-The site currently includes the welcome, About, Gospel, Blog, Work, and Photos
-pages, plus a page shell for Contact. Page wording and the curated article list
+The site currently includes the welcome, About, Gospel, Blog, Work, Photos, and
+Contact pages. Page wording and the curated article list
 live in `src/content/`. Add future Medium articles to `src/content/blog.ts`.
 Work experience and projects live in `src/content/work.ts`.
 Planned photo albums live in `src/content/photos.ts`. Their covers are labeled
 placeholders until photographs are supplied; the albums do not open yet.
+Contact profile links live in `src/content/contact.ts`. The form fields and send
+button are disabled until Formspree is configured; no messages are sent.
 The Work page links to `public/resume.pdf`, compiled from `resume/main.tex` with
 phone and email removed. Recompile that source and replace the PDF when updating
 it. Preserve the private original and check the PDF text and link annotations as
