@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import SiteHeader from "@/components/site-header";
-import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,7 +23,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     </main>
                     <footer className="site-footer">
                         <span>Malcolm Shi</span>
-                        <Link href="/gospel/">The Gospel</Link>
                     </footer>
                 </div>
             </body>
