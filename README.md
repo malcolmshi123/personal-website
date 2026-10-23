@@ -32,8 +32,9 @@ live in `src/content/`. Add future Medium articles to `src/content/blog.ts`.
 Work experience and projects live in `src/content/work.ts`.
 Planned photo albums live in `src/content/photos.ts`. Their covers are labeled
 placeholders until photographs are supplied; the albums do not open yet.
-Contact profile links live in `src/content/contact.ts`. The form fields and send
-button are disabled until Formspree is configured; no messages are sent.
+Contact profile links live in `src/content/contact.ts`. The contact form posts to
+Formspree and opens its response page. The receiving email is managed in the
+Formspree dashboard and is not included in the site source.
 The Work page links to `public/resume.pdf`, compiled from `resume/main.tex` with
 phone and email removed. Recompile that source and replace the PDF when updating
 it. Preserve the private original and check the PDF text and link annotations as

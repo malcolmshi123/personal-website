@@ -19,24 +19,26 @@ export default function Contact() {
             </div>
             <section className="prose" aria-labelledby="send-a-message">
                 <h2 className="contact-heading" id="send-a-message">Send a message</h2>
-                <p className="contact-notice" id="contact-notice">
-                    I’m still setting up this form. You can message me on LinkedIn in the meantime.
-                </p>
-                <form className="contact-form" aria-label="Send a message" aria-describedby="contact-notice">
-                    <fieldset disabled>
+                <form
+                    className="contact-form"
+                    action="https://formspree.io/f/xzeebqoe"
+                    method="POST"
+                    aria-label="Send a message"
+                >
+                    <fieldset>
                         <label htmlFor="contact-name">
                             Name
-                            <input id="contact-name" name="name" type="text" autoComplete="name" />
+                            <input id="contact-name" name="name" type="text" autoComplete="name" maxLength={100} required />
                         </label>
                         <label htmlFor="contact-email">
                             Email
-                            <input id="contact-email" name="email" type="email" autoComplete="email" />
+                            <input id="contact-email" name="email" type="email" autoComplete="email" maxLength={254} required />
                         </label>
                         <label htmlFor="contact-message">
                             Message
-                            <textarea id="contact-message" name="message" rows={6} />
+                            <textarea id="contact-message" name="message" rows={6} maxLength={5000} required />
                         </label>
-                        <button type="button" disabled>Send message</button>
+                        <button type="submit">Send message</button>
                     </fieldset>
                 </form>
             </section>

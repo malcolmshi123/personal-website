@@ -31,7 +31,9 @@ a {
 }
 
 a:focus-visible,
-button:focus-visible {
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
     outline: 2px solid var(--olive);
     outline-offset: 6px;
 }
@@ -394,11 +396,6 @@ h1 em {
     margin-top: 48px;
 }
 
-.prose .contact-notice {
-    color: var(--muted);
-    font-size: 15px;
-}
-
 .contact-form fieldset {
     min-width: 0;
     margin: 0;
@@ -419,12 +416,11 @@ h1 em {
     padding: 12px 14px;
     border: 1px solid var(--rule);
     border-radius: 0;
-    background: #efeee7;
-    color: var(--muted);
+    background: var(--cream);
+    color: var(--charcoal);
     font: inherit;
     line-height: 1.6;
     opacity: 1;
-    cursor: not-allowed;
 }
 
 .contact-form textarea {
@@ -439,8 +435,11 @@ h1 em {
     color: var(--cream);
     font: inherit;
     font-size: 14px;
-    opacity: 0.6;
-    cursor: not-allowed;
+    cursor: pointer;
+}
+
+.contact-form button:hover {
+    background: #454f36;
 }
 
 .photos-page {
