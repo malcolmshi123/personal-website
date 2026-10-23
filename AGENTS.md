@@ -21,6 +21,8 @@
 ## Content
 
 - Write website copy in natural, conversational language that sounds like Malcolm talking to a visitor. Avoid slogans, vague metaphors, and promotional filler.
+- When adapting Malcolm's writing, stay close to his wording, rhythm, and tone rather than replacing it with generic explanatory prose. Do not use en dashes or em dashes in website copy; use ordinary punctuation and hyphens for verse ranges.
+- Use the American spellings "neighbor" and "neighbors" in website copy.
 - Do not publish phone numbers or email addresses in site content or the downloadable resume.
 - Preserve the original resume and gospel source document.
 - Use labeled photo placeholders until Malcolm supplies photographs.

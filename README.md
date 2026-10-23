@@ -22,9 +22,9 @@ The production build exports static HTML, CSS, and JavaScript to `out/`. Deploy
 that directory to a static host; a Next.js server is not required. Typography uses
 system fonts, so builds do not need to download fonts.
 
-The site currently includes the welcome page and page shells for About, Work,
-Blog, Photos, and Contact, with shared navigation and a mobile menu. Full page
-content will be added in later increments.
+The site currently includes the welcome, About, and Gospel pages, plus page
+shells for Work, Blog, Photos, and Contact. About and Gospel wording lives in
+`src/content/`. See `CONTENT_REVIEW.md` for draft wording to review before launch.
 
 ## Planned implementation
 

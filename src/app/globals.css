@@ -223,6 +223,96 @@ h1 em {
     line-height: 1.8;
 }
 
+.reading-page {
+    max-width: 760px;
+    padding-block: clamp(56px, 7vw, 96px);
+}
+
+.reading-page .introduction {
+    max-width: 640px;
+}
+
+.prose {
+    max-width: 640px;
+    font-size: 17px;
+    line-height: 1.85;
+    overflow-wrap: break-word;
+}
+
+.prose section {
+    margin-top: 48px;
+}
+
+.prose h2 {
+    margin: 0 0 16px;
+    font-family: var(--font-heading);
+    font-size: clamp(26px, 3vw, 34px);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+}
+
+.prose p {
+    margin: 0 0 20px;
+}
+
+.prose a,
+.back-link,
+.site-footer a {
+    color: var(--olive);
+    text-underline-offset: 4px;
+}
+
+.related-links,
+.scripture-links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 24px;
+    row-gap: 8px;
+}
+
+.scripture-links {
+    margin: 0;
+    padding: 0;
+    font-size: 13px;
+    list-style: none;
+}
+
+.reading-time {
+    margin: 20px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.gospel-quote {
+    margin: 28px 0;
+    padding: 4px 0 4px 24px;
+    border-left: 2px solid var(--olive);
+}
+
+.gospel-quote blockquote {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 21px;
+    line-height: 1.65;
+}
+
+.gospel-quote blockquote p {
+    margin-bottom: 12px;
+}
+
+.gospel-quote figcaption {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 32px;
+    font-size: 14px;
+}
+
 @media (max-width: 760px) {
     .site-header {
         flex-wrap: wrap;
