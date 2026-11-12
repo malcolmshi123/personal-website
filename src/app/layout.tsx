@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Figtree, Young_Serif } from "next/font/google";
+import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
 import SiteHeader from "@/components/site-header";
 import { contactLinks } from "@/content/contact";
+import { bootScript } from "@/lib/boot-script";
 import { createPageMetadata, siteDescription, siteUrl } from "@/lib/site-metadata";
 import "./globals.css";
 
-const bodyFont = Figtree({
+const bodyFont = Hanken_Grotesk({
     subsets: ["latin"],
-    variable: "--font-figtree",
+    variable: "--font-hanken",
     display: "swap",
 });
 
-const headingFont = Young_Serif({
+const headingFont = Fraunces({
     subsets: ["latin"],
-    weight: "400",
-    variable: "--font-young-serif",
+    axes: ["SOFT", "WONK", "opsz"],
+    variable: "--font-fraunces",
     display: "swap",
 });
 
@@ -30,7 +31,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en" className={`${bodyFont.variable} ${headingFont.variable}`}>
+        <html lang="en" className={`${bodyFont.variable} ${headingFont.variable}`} suppressHydrationWarning>
+            <head>
+                <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+            </head>
             <body>
                 <a className="skip-link" href="#main-content">Skip to content</a>
                 <div className="site-shell">

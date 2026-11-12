@@ -1,23 +1,44 @@
 :root {
-    --oat: #f2ece0;
-    --oat-deep: #e8dfce;
-    --bark: #2b2620;
-    --bark-soft: #5a5145;
-    --forest: #2f4b3a;
-    --forest-deep: #22382b;
-    --rust: #9e4527;
-    --rust-deep: #7f3519;
-    --clay: #edd5c2;
-    --moss: #d6dbbd;
-    --honey: #e3b562;
-    --rule: #d9cdb8;
-    --font-body: var(--font-figtree), "Segoe UI", sans-serif;
-    --font-heading: var(--font-young-serif), Georgia, serif;
+    --sky: #e8d9bf;
+    --heading: #1f150e;
+    --ink: #33241a;
+    --ink-soft: #644c3b;
+    --brick: #9a3324;
+    --olive: #4d5e34;
+    --ground: #4d5e34;
+    --ground-ink: #f1e6d2;
+    --ground-soft: #dcd3bc;
+    --ground-link: #f1c7a4;
+    --placeholder: #dcc9a8;
+    --rule: #cdb995;
+    --field: #f1e6d2;
+    --sun: #e3b562;
+    --moon: #e9dcc5;
+    --font-body: var(--font-hanken), "Segoe UI", sans-serif;
+    --font-heading: var(--font-fraunces), Georgia, serif;
     --radius: 14px;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --theme-fade: 800ms ease;
     color-scheme: light;
-    accent-color: var(--forest);
-    scrollbar-color: #c4b59c var(--oat);
+    accent-color: var(--olive);
+    scrollbar-color: var(--rule) var(--sky);
+}
+
+:root[data-theme="dark"] {
+    --sky: #1b1712;
+    --heading: #fbf4e8;
+    --ink: #e9dcc5;
+    --ink-soft: #b4a891;
+    --brick: #e58a76;
+    --olive: #a7b884;
+    --ground: #2c3523;
+    --ground-ink: #e9dcc5;
+    --ground-soft: #c9bea6;
+    --ground-link: #e58a76;
+    --placeholder: #2a221b;
+    --rule: #3a3027;
+    --field: #241e18;
+    color-scheme: dark;
 }
 
 * {
@@ -33,16 +54,18 @@ body {
     flex-direction: column;
     min-height: 100svh;
     margin: 0;
-    background: var(--oat);
-    color: var(--bark);
+    background: var(--sky);
+    color: var(--ink);
     font-family: var(--font-body);
-    font-size: 17px;
+    font-size: 18px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    transition: background-color var(--theme-fade), color var(--theme-fade);
 }
 
 ::selection {
-    background: var(--honey);
-    color: var(--bark);
+    background: var(--sun);
+    color: #1f150e;
 }
 
 a {
@@ -55,7 +78,7 @@ a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-    outline: 2px solid var(--rust);
+    outline: 2px solid var(--brick);
     outline-offset: 4px;
     border-radius: 4px;
 }
@@ -64,8 +87,24 @@ h1,
 h2,
 h3 {
     font-family: var(--font-heading);
-    font-weight: 400;
+    font-variation-settings: "SOFT" 100, "WONK" 1;
+    font-weight: 600;
     text-wrap: balance;
+}
+
+h1,
+h2 {
+    color: var(--heading);
+}
+
+h3 {
+    color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --theme-fade: 0s;
+    }
 }
 
 h1 {
@@ -101,8 +140,8 @@ h1 {
     z-index: 10;
     padding: 12px 16px;
     border-radius: 8px;
-    background: var(--forest);
-    color: var(--oat);
+    background: var(--olive);
+    color: var(--sky);
     transform: translateY(-200%);
 }
 
@@ -129,7 +168,7 @@ h1 {
 }
 
 .wordmark span {
-    color: var(--rust);
+    color: var(--brick);
 }
 
 .site-navigation ul {
@@ -145,7 +184,7 @@ h1 {
     display: inline-block;
     padding: 8px 12px;
     border-radius: 999px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 15px;
     font-weight: 500;
     text-decoration: none;
@@ -153,13 +192,13 @@ h1 {
 }
 
 .site-navigation a:hover {
-    background: var(--oat-deep);
-    color: var(--bark);
+    background: var(--placeholder);
+    color: var(--ink);
 }
 
 .site-navigation a[aria-current="page"] {
-    background: var(--forest);
-    color: var(--oat);
+    background: var(--olive);
+    color: var(--sky);
 }
 
 .menu-toggle {
@@ -171,7 +210,7 @@ h1 {
     border: 1px solid var(--rule);
     border-radius: 999px;
     background: transparent;
-    color: var(--bark);
+    color: var(--ink);
     font: inherit;
     font-size: 15px;
     font-weight: 500;
@@ -182,8 +221,8 @@ h1 {
 
 .site-footer {
     margin-top: clamp(72px, 10vw, 128px);
-    background: var(--forest);
-    color: var(--moss);
+    background: var(--ground);
+    color: var(--ground-soft);
     font-size: 15px;
 }
 
@@ -199,7 +238,7 @@ h1 {
 }
 
 .site-footer-name {
-    color: var(--oat);
+    color: var(--ground-ink);
     font-family: var(--font-heading);
     font-size: 22px;
 }
@@ -213,15 +252,15 @@ h1 {
 }
 
 .site-footer a {
-    color: var(--oat);
+    color: var(--ground-ink);
 }
 
 .site-footer a:hover {
-    color: var(--honey);
+    color: var(--ground-link);
 }
 
 .site-footer a:focus-visible {
-    outline-color: var(--honey);
+    outline-color: var(--ground-link);
 }
 
 /* Buttons and shared links */
@@ -232,7 +271,7 @@ h1 {
     justify-content: center;
     min-height: 48px;
     padding: 12px 24px;
-    border: 1.5px solid var(--forest);
+    border: 1.5px solid var(--olive);
     border-radius: 999px;
     font-size: 16px;
     font-weight: 600;
@@ -241,22 +280,22 @@ h1 {
 }
 
 .button-primary {
-    background: var(--forest);
-    color: var(--oat);
+    background: var(--olive);
+    color: var(--sky);
 }
 
 .button-primary:hover {
-    border-color: var(--forest-deep);
-    background: var(--forest-deep);
+    border-color: var(--olive);
+    background: var(--olive);
 }
 
 .button-secondary {
     background: transparent;
-    color: var(--forest);
+    color: var(--olive);
 }
 
 .button-secondary:hover {
-    background: var(--moss);
+    background: var(--placeholder);
 }
 
 .arrow-icon {
@@ -280,7 +319,7 @@ h1 {
 .introduction {
     max-width: 34em;
     margin: 28px 0 0;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: clamp(18px, 1.6vw, 21px);
     line-height: 1.65;
 }
@@ -302,8 +341,8 @@ h1 {
     aspect-ratio: 4 / 5;
     padding: 32px;
     border-radius: 999px 999px var(--radius) var(--radius);
-    background: var(--moss);
-    color: var(--forest);
+    background: var(--placeholder);
+    color: var(--olive);
     font-size: 14px;
     font-weight: 500;
     text-align: center;
@@ -344,11 +383,11 @@ h1 {
 }
 
 .featured-card-clay {
-    background: var(--clay);
+    background: var(--placeholder);
 }
 
 .featured-card-moss {
-    background: var(--moss);
+    background: var(--placeholder);
 }
 
 .featured-card:hover {
@@ -366,14 +405,14 @@ h1 {
 .featured-card p {
     max-width: 32em;
     margin: 0;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 17px;
     line-height: 1.7;
 }
 
 .featured-detail {
     margin-top: 20px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 14px;
 }
 
@@ -383,13 +422,13 @@ h1 {
     gap: 8px;
     margin-top: auto;
     padding-top: 28px;
-    color: var(--rust);
+    color: var(--brick);
     font-size: 16px;
     font-weight: 600;
 }
 
 .featured-card-moss .card-action {
-    color: var(--forest);
+    color: var(--olive);
 }
 
 .featured-card:hover .arrow-icon,
@@ -422,16 +461,16 @@ h1 {
 }
 
 .welcome-links h3 .arrow-icon {
-    color: var(--rust);
+    color: var(--brick);
 }
 
 .welcome-links a:hover h3 {
-    color: var(--rust);
+    color: var(--brick);
 }
 
 .welcome-links p {
     margin: 0;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.6;
 }
@@ -444,7 +483,7 @@ h1 {
 
 .page-note {
     margin-top: 32px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.8;
 }
@@ -483,12 +522,12 @@ h1 {
 
 .prose a,
 .back-link {
-    color: var(--rust);
+    color: var(--brick);
 }
 
 .prose a:hover,
 .back-link:hover {
-    color: var(--rust-deep);
+    color: var(--brick);
 }
 
 .related-links,
@@ -511,8 +550,8 @@ h1 {
     margin: 24px 0 0;
     padding: 6px 14px;
     border-radius: 999px;
-    background: var(--oat-deep);
-    color: var(--bark-soft);
+    background: var(--placeholder);
+    color: var(--ink-soft);
     font-size: 14px;
 }
 
@@ -520,7 +559,7 @@ h1 {
     margin: 32px 0;
     padding: 28px 32px;
     border-radius: var(--radius);
-    background: var(--clay);
+    background: var(--placeholder);
 }
 
 .gospel-quote blockquote {
@@ -535,7 +574,7 @@ h1 {
 }
 
 .gospel-quote figcaption {
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 14px;
     line-height: 1.7;
 }
@@ -548,7 +587,7 @@ h1 {
 
 .contact-links {
     margin-top: 24px;
-    color: var(--rust);
+    color: var(--brick);
     font-size: 16px;
     line-height: 1.8;
 }
@@ -578,22 +617,22 @@ h1 {
     padding: 12px 16px;
     border: 1.5px solid var(--rule);
     border-radius: 10px;
-    background: #faf6ee;
-    color: var(--bark);
+    background: var(--field);
+    color: var(--ink);
     font: inherit;
     line-height: 1.6;
-    caret-color: var(--rust);
+    caret-color: var(--brick);
     transition: border-color 200ms var(--ease-out);
 }
 
 .contact-form input:hover,
 .contact-form textarea:hover {
-    border-color: #c4b59c;
+    border-color: var(--ink-soft);
 }
 
 .contact-form input:focus-visible,
 .contact-form textarea:focus-visible {
-    border-color: var(--forest);
+    border-color: var(--olive);
     outline-offset: 2px;
 }
 
@@ -606,8 +645,8 @@ h1 {
     padding: 12px 28px;
     border: 0;
     border-radius: 999px;
-    background: var(--forest);
-    color: var(--oat);
+    background: var(--olive);
+    color: var(--sky);
     font: inherit;
     font-size: 16px;
     font-weight: 600;
@@ -616,7 +655,7 @@ h1 {
 }
 
 .contact-form button:hover {
-    background: var(--forest-deep);
+    background: var(--olive);
 }
 
 .photos-page {
@@ -645,8 +684,8 @@ h1 {
     aspect-ratio: 4 / 3;
     padding: 24px;
     border-radius: var(--radius);
-    background: var(--moss);
-    color: var(--forest);
+    background: var(--placeholder);
+    color: var(--olive);
     font-size: 14px;
     font-weight: 500;
     line-height: 1.6;
@@ -654,13 +693,13 @@ h1 {
 }
 
 .album-grid li:nth-child(2) .album-placeholder {
-    background: var(--clay);
-    color: var(--rust-deep);
+    background: var(--placeholder);
+    color: var(--brick);
 }
 
 .album-grid li:nth-child(3) .album-placeholder {
-    background: var(--oat-deep);
-    color: var(--bark-soft);
+    background: var(--placeholder);
+    color: var(--ink-soft);
 }
 
 .album h2 {
@@ -672,7 +711,7 @@ h1 {
 
 .album p {
     margin: 0;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 15px;
     line-height: 1.7;
 }
@@ -680,7 +719,7 @@ h1 {
 .resume-download {
     display: inline-block;
     margin-top: 24px;
-    color: var(--rust);
+    color: var(--brick);
     font-size: 15px;
     font-weight: 600;
     line-height: 1.8;
@@ -716,7 +755,7 @@ h1 {
 
 .work-entry .work-meta {
     margin-bottom: 16px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 14px;
     line-height: 1.7;
 }
@@ -736,7 +775,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     gap: 8px 24px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 14px;
     line-height: 1.6;
 }
@@ -754,20 +793,20 @@ h1 {
 }
 
 .article-list h2 a:hover {
-    color: var(--rust);
+    color: var(--brick);
     text-decoration: underline;
 }
 
 .article-list p {
     max-width: 640px;
     margin: 0 0 20px;
-    color: var(--bark-soft);
+    color: var(--ink-soft);
     font-size: 17px;
     line-height: 1.8;
 }
 
 .article-link {
-    color: var(--rust);
+    color: var(--brick);
     font-size: 15px;
     font-weight: 600;
     line-height: 1.8;

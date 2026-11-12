@@ -6,7 +6,8 @@
         "dev": "next dev",
         "build": "next build && node scripts/fix-export-paths.mjs",
         "test:export": "node --test scripts/fix-export-paths.test.mjs",
-        "typecheck": "next typegen && tsc --noEmit"
+        "typecheck": "next typegen && tsc --noEmit",
+        "test": "node --test \"scripts/*.test.mjs\""
     },
     "dependencies": {
         "next": "16.4.2",
