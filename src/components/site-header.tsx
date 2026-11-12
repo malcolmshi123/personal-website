@@ -45,7 +45,9 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
                 onClick={() => setIsOpen(!isOpen)}
             >
                 {isOpen ? "Close" : "Menu"}
-                <span aria-hidden="true">{isOpen ? "−" : "+"}</span>
+                <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+                    <path d={isOpen ? "M3 8h10" : "M3 8h10M8 3v10"} fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                </svg>
             </button>
             <nav id="site-navigation" className="site-navigation" aria-label="Main" data-open={isOpen}>
                 <ul>
