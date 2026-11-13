@@ -110,5 +110,45 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
 test("the gospel page shows its reading time", async () => {
     const html = await readExport("gospel/index.html");
 
-    assert.match(html, /About 5 minutes/);
+    assert.match(html, /<p class="page-meta">4 min<\/p>/);
+});
+
+test("the sin section cites Romans 1 and names its vices", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /harms our communities, relationships, and even ourselves/);
+    assert.match(html, /greed, envy, deceit, insolence, and the suffering we cause one another/);
+    assert.doesNotMatch(html, /injustice/);
+    assert.match(html, /Romans 1:29-30[\s\S]*?Romans 3:23[\s\S]*?Romans 6:23/);
+});
+
+test("Living as His people is one paragraph that includes loving our neighbors", async () => {
+    const html = await readExport("gospel/index.html");
+    const section = html.slice(html.indexOf('id="living-in-his-kingdom"'), html.indexOf('id="my-story"'));
+
+    assert.equal([...section.matchAll(/<p>/g)].length, 1);
+    assert.match(section, /We are called to love our neighbors and share the gospel through our words and actions so that others may come to know Him\./);
+    assert.doesNotMatch(section, /suffering/);
+});
+
+test("the gospel introduction is one sentence above the first section", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /<p class="introduction">The gospel is the good news of God’s kingdom\.<\/p>/);
+});
+
+test("the gospel invitation links to the contact page", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /<p>You don’t need to have every question answered before taking this step\. If you have any, find a local church or ask me <a href="\/contact\/">here<\/a>!<\/p>/);
+    assert.match(html, /receive the life He offers\.<\/p>/);
+    assert.doesNotMatch(html, /Come to Jesus, grow in His love/);
+});
+
+test("gospel reference labels keep the capitals in each heading", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /aria-label="Bible passages for God’s kingdom"/);
+    assert.match(html, /aria-label="Bible passages for Alive in Christ"/);
+    assert.doesNotMatch(html, /aria-label="Bible passages for [^"]*\b(god|christ|his)\b/);
 });
