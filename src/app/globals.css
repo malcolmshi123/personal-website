@@ -452,14 +452,17 @@ body:has(.home) .main-content,
     height: calc(var(--greeting-size) * 1.72);
     aspect-ratio: 4 / 5;
     margin-bottom: calc(var(--greeting-size) * 0.16);
-    padding: 12px;
+    overflow: hidden;
     border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
     background: var(--placeholder);
-    color: var(--ink-soft);
-    font-size: 13px;
-    line-height: 1.3;
-    text-align: center;
     transition: background-color var(--theme-fade);
+}
+
+.greeting-portrait img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .greeting {

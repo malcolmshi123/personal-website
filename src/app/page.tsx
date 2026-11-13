@@ -13,7 +13,7 @@ export default function Home() {
                             Hi, I’m <br /><span className="greeting-accent">Malcolm!</span>
                         </h1>
                         <div className="greeting-portrait">
-                            <span>portrait coming soon</span>
+                            <img src="/photos/portrait.webp" alt="Malcolm smiling in a suit outdoors" width={400} height={500} />
                         </div>
                     </div>
                     <p className="home-description">

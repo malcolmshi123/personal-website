@@ -144,10 +144,13 @@ test("the homepage hero shows a labeled photo stack in place of the single photo
     assert.doesNotMatch(hero, /class="hero-photo"/);
 });
 
-test("the homepage greeting has a labeled portrait placeholder beside it, outside the heading", async () => {
+test("the homepage greeting has the portrait photo beside it, outside the heading", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /<div class="greeting-row"><h1[^>]*class="greeting"[^>]*>[\s\S]*?<\/h1><div class="greeting-portrait"><span>portrait coming soon<\/span><\/div><\/div>/);
+    assert.match(html, /<div class="greeting-row"><h1[^>]*class="greeting"[^>]*>[\s\S]*?<\/h1><div class="greeting-portrait"><img[^>]*src="\/photos\/portrait\.webp"[^>]*><\/div><\/div>/);
+    assert.match(html, /<img[^>]*alt="Malcolm smiling in a suit outdoors"/);
+    assert.doesNotMatch(html, /portrait coming soon/);
+    await readFile(new URL("../out/photos/portrait.webp", import.meta.url));
 });
 
 test("the photo stack hint is hidden when JavaScript never runs", async () => {
