@@ -34,7 +34,7 @@ test("the about page is gone from the export and the navigation", async () => {
 });
 
 test("page introductions use the new wording", async () => {
-    assert.match(await readExport("blog/index.html"), /class="introduction">Some things I&#x27;ve written\.</);
+    assert.match(await readExport("blog/index.html"), /class="introduction">Some pieces I&#x27;ve written\.</);
     assert.match(await readExport("photos/index.html"), /class="introduction">My most cherished memories\.</);
     assert.match(await readExport("photos/index.html"), /Japan \+ Korea 2026\./);
     assert.match(await readExport("contact/index.html"), /class="introduction">Let’s get in touch!</);
