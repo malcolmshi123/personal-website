@@ -21,8 +21,10 @@ export default function Work() {
                     <ul className="work-list">
                         {projects.map((project) => (
                             <li className="work-entry" key={project.href}>
-                                <h3>{project.name}</h3>
-                                <p className="work-meta">{project.date}</p>
+                                <div className="entry-row-head">
+                                    <h3>{project.name}</h3>
+                                    <p className="entry-date">{project.date}</p>
+                                </div>
                                 <p>{project.description}</p>
                                 <p className="work-meta">{project.technologies}</p>
                                 <a href={project.href} aria-label={`View ${project.name} on GitHub`}>View on GitHub</a>
@@ -35,9 +37,11 @@ export default function Work() {
                     <ul className="work-list">
                         {experience.map((position) => (
                             <li className="work-entry" key={position.company}>
-                                <h3>{position.company}</h3>
+                                <div className="entry-row-head">
+                                    <h3>{position.company}</h3>
+                                    <p className="entry-date">{position.dates}</p>
+                                </div>
                                 <p className="work-role">{position.role} · {position.team}</p>
-                                <p className="work-meta">{position.dates}</p>
                                 <p>{position.description}</p>
                             </li>
                         ))}
@@ -46,9 +50,11 @@ export default function Work() {
                 <section aria-labelledby="education">
                     <h2 id="education">Education</h2>
                     <div className="work-entry">
-                        <h3>{work.education.school}</h3>
+                        <div className="entry-row-head">
+                            <h3>{work.education.school}</h3>
+                            <p className="entry-date">{work.education.date}</p>
+                        </div>
                         <p className="work-role">{work.education.degree}</p>
-                        <p className="work-meta">{work.education.date}</p>
                         <p>{work.education.detail}</p>
                     </div>
                 </section>

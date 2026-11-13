@@ -11,8 +11,15 @@ export const metadata = createPageMetadata(
 export default function About() {
     return (
         <article className="page-content reading-page">
-            <h1>About</h1>
-            <p className="introduction">{about.introduction}</p>
+            <div className="about-intro">
+                <div>
+                    <h1>About</h1>
+                    <p className="introduction">{about.introduction}</p>
+                </div>
+                <div className="soft-photo about-photo">
+                    <span>photo coming soon</span>
+                </div>
+            </div>
             <div className="prose">
                 <section aria-labelledby="my-faith">
                     <h2 id="my-faith">My faith</h2>

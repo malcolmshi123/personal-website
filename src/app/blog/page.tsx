@@ -16,8 +16,9 @@ export default function Blog() {
                 {articles.map((article) => (
                     <li key={article.href}>
                         <article>
-                            <div className="article-meta">
-                                <time dateTime={article.publishedAt}>
+                            <div className="entry-row-head">
+                                <h2><a href={article.href}>{article.title}</a></h2>
+                                <time className="entry-date" dateTime={article.publishedAt}>
                                     {new Date(article.publishedAt).toLocaleDateString("en-US", {
                                         month: "long",
                                         day: "numeric",
@@ -25,9 +26,8 @@ export default function Blog() {
                                         timeZone: "UTC",
                                     })}
                                 </time>
-                                <span>{article.readingTimeMinutes} min read</span>
                             </div>
-                            <h2><a href={article.href}>{article.title}</a></h2>
+                            <p className="article-meta">Medium · {article.readingTimeMinutes} min read</p>
                             <p>{article.summary}</p>
                             <a className="article-link" href={article.href} aria-label={`Read ${article.title} on Medium`}>
                                 Read on Medium <span aria-hidden="true">↗</span>

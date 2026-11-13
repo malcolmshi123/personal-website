@@ -21,7 +21,7 @@ export default function Gospel() {
     return (
         <article className="page-content reading-page">
             <h1>The Gospel</h1>
-            <p className="reading-time">About {readingMinutes} minutes</p>
+            <p className="page-meta">About {readingMinutes} minutes</p>
             <p className="introduction">{gospelIntroduction}</p>
             <div className="prose">
                 {gospelSections.map(({ id, heading, paragraphs, quote, afterQuote, references }) => (
