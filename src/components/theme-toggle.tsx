@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, type Theme } from "@/lib/theme";
+import { nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, syncFaviconLinks, type Theme } from "@/lib/theme";
 
 const darkQuery = "(prefers-color-scheme: dark)";
 
@@ -11,6 +11,18 @@ function getLocalStorage(): Storage | null {
     } catch {
         return null;
     }
+}
+
+const iconSelector = "link[rel~=\"icon\"]";
+
+function syncFavicon(theme: Theme) {
+    syncFaviconLinks(document.querySelectorAll<HTMLLinkElement>(iconSelector), theme);
+}
+
+function addsIconLink(mutations: MutationRecord[]): boolean {
+    return mutations.some((mutation) => [...mutation.addedNodes].some(
+        (node) => node instanceof HTMLLinkElement && node.matches(iconSelector),
+    ));
 }
 
 function currentTheme(): Theme {
@@ -47,6 +59,23 @@ export default function ThemeToggle() {
         media.addEventListener("change", followSystem);
         return () => media.removeEventListener("change", followSystem);
     }, []);
+
+    useEffect(() => {
+        if (!theme) {
+            return;
+        }
+
+        syncFavicon(theme);
+
+        // Next adds its own icon link after hydration and on navigation; keep it on the current theme.
+        const observer = new MutationObserver((mutations) => {
+            if (addsIconLink(mutations)) {
+                syncFavicon(theme);
+            }
+        });
+        observer.observe(document.head, { childList: true });
+        return () => observer.disconnect();
+    }, [theme]);
 
     function switchTheme() {
         const chosen = nextTheme(currentTheme());
