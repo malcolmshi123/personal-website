@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Hanken_Grotesk } from "next/font/google";
+import { Hanken_Grotesk, Lora } from "next/font/google";
 import type { ReactNode } from "react";
 import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
@@ -13,10 +13,10 @@ const bodyFont = Hanken_Grotesk({
     display: "swap",
 });
 
-const headingFont = Fraunces({
+const headingFont = Lora({
     subsets: ["latin"],
-    axes: ["SOFT", "WONK", "opsz"],
-    variable: "--font-fraunces",
+    style: ["normal", "italic"],
+    variable: "--font-lora",
     display: "swap",
 });
 

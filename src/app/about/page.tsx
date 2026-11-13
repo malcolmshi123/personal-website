@@ -24,7 +24,7 @@ export default function About() {
                 <section aria-labelledby="my-faith">
                     <h2 id="my-faith">My faith</h2>
                     <p>{about.faith}</p>
-                    <Link href="/gospel/">Read about the gospel</Link>
+                    <Link href="/gospel/">Read about the good news</Link>
                 </section>
                 <section aria-labelledby="my-work">
                     <h2 id="my-work">My work</h2>

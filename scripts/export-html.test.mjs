@@ -15,8 +15,8 @@ test("homepage HTML contains the greeting and description without JavaScript", a
     const greeting = html.match(/<h1[^>]*class="greeting"[^>]*>([\s\S]*?)<\/h1>/);
 
     assert.ok(greeting, "greeting heading is missing");
-    assert.equal(greeting[1].replace(/<[^>]+>/g, ""), "Hi, I’m Malcolm.");
-    assert.match(html, /Computer engineering grad from Waterloo\. My faith, my work, and a few things I enjoy\./);
+    assert.equal(greeting[1].replace(/<[^>]+>/g, ""), "Hi, I’m Malcolm!");
+    assert.match(html, /I’m a computer engineering graduate from Waterloo. I also enjoy writing and photography. Have a look around!/);
 });
 
 const pages = ["index.html", "about/index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
@@ -25,8 +25,7 @@ test("every page footer carries the verse", async () => {
     for (const page of pages) {
         const html = await readExport(page);
 
-        assert.match(html, /Do everything in love\./, page);
-        assert.match(html, /1 Corinthians 16:14/, page);
+        assert.match(html.replace(/<[^>]+>/g, ""), /“Do everything in love\.” 1 Corinthians 16:14/, page);
     }
 });
 
@@ -49,6 +48,30 @@ test("no content is hidden with inline opacity styles", async () => {
     const html = await readExport("index.html");
 
     assert.doesNotMatch(html, /opacity:\s*0[;"]/);
+});
+
+test("the homepage has no streamed greeting readout", async () => {
+    const html = await readExport("index.html");
+
+    assert.doesNotMatch(html, /greeting-readout|greeting-token/);
+});
+
+test("the homepage hero links to the about page", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /<a class="home-link" href="\/about\/">About me<\/a>/);
+});
+
+test("the good news entry says read more and names its destination for screen readers", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /href="\/gospel\/">Read more<span class="visually-hidden"> about the good news<\/span><\/a>/);
+});
+
+test("the about page links to the good news", async () => {
+    const html = await readExport("about/index.html");
+
+    assert.match(html, />Read about the good news</);
 });
 
 test("the gospel page shows its reading time", async () => {

@@ -6,15 +6,17 @@ type HomeLink = {
 
 type FeaturedLink = HomeLink & {
     action: string;
+    actionContext?: string;
 };
 
-export const homeDescription = "Computer engineering grad from Waterloo. My faith, my work, and a few things I enjoy.";
+export const homeDescription = "I’m a computer engineering graduate from Waterloo. I also enjoy writing and photography. Have a look around!";
 
 export const featuredLinks: FeaturedLink[] = [
     {
         title: "The Good News",
         description: "What I believe about Jesus and why it matters to me.",
-        action: "Read the good news",
+        action: "Read more",
+        actionContext: " about the good news",
         href: "/gospel/",
     },
     {

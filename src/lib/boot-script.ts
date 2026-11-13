@@ -4,7 +4,6 @@ type BootStorage = {
 
 export type BootWindow = {
     localStorage: BootStorage;
-    sessionStorage: BootStorage;
     matchMedia(query: string): { matches: boolean };
     document: { documentElement: { dataset: Record<string, string | undefined> } };
 };
@@ -27,13 +26,6 @@ export function bootDocument(win: BootWindow): void {
 
     if (read(() => win.localStorage, "theme-toggled") === "true") {
         dataset.themeToggled = "true";
-    }
-
-    const greetingPlayed = read(() => win.sessionStorage, "greeting-played") === "true";
-    const reducedMotion = win.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    if (!greetingPlayed && !reducedMotion) {
-        dataset.greeting = "stream";
     }
 }
 

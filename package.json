@@ -7,7 +7,7 @@
         "build": "next build && node scripts/fix-export-paths.mjs",
         "test:export": "node --test scripts/fix-export-paths.test.mjs",
         "typecheck": "next typegen && tsc --noEmit",
-        "test": "node --test scripts/theme.test.mjs scripts/greeting.test.mjs scripts/fix-export-paths.test.mjs",
+        "test": "node --test scripts/theme.test.mjs scripts/fix-export-paths.test.mjs",
         "test:html": "node --test scripts/export-html.test.mjs"
     },
     "dependencies": {

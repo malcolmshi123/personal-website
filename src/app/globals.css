@@ -3,19 +3,19 @@
     --heading: #1f150e;
     --ink: #33241a;
     --ink-soft: #644c3b;
-    --brick: #9a3324;
+    --brick: #933f2a;
     --olive: #4d5e34;
     --ground: #4d5e34;
     --ground-ink: #f1e6d2;
     --ground-soft: #dcd3bc;
-    --ground-link: #f1c7a4;
+    --ground-link: #efcfaa;
     --placeholder: #dcc9a8;
     --rule: #cdb995;
     --field: #f1e6d2;
     --sun: #e3b562;
     --moon: #e9dcc5;
     --font-body: var(--font-hanken), "Segoe UI", sans-serif;
-    --font-heading: var(--font-fraunces), Georgia, serif;
+    --font-heading: var(--font-lora), Georgia, serif;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --theme-fade: 800ms ease;
     color-scheme: light;
@@ -28,12 +28,12 @@
     --heading: #fbf4e8;
     --ink: #e9dcc5;
     --ink-soft: #b4a891;
-    --brick: #e58a76;
+    --brick: #df937a;
     --olive: #a7b884;
     --ground: #2c3523;
     --ground-ink: #e9dcc5;
     --ground-soft: #c9bea6;
-    --ground-link: #e58a76;
+    --ground-link: #df937a;
     --placeholder: #2a221b;
     --rule: #3a3027;
     --field: #241e18;
@@ -87,7 +87,6 @@ h1,
 h2,
 h3 {
     font-family: var(--font-heading);
-    font-variation-settings: "SOFT" 100, "WONK" 1;
     font-weight: 600;
     text-wrap: balance;
 }
@@ -163,7 +162,6 @@ h1 {
     margin-right: auto;
     color: var(--heading);
     font-family: var(--font-heading);
-    font-variation-settings: "SOFT" 100, "WONK" 1;
     font-size: 24px;
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -221,7 +219,6 @@ h1 {
     font-family: var(--font-heading);
     font-size: 15px;
     font-style: italic;
-    font-variation-settings: "SOFT" 100, "WONK" 1;
     white-space: nowrap;
     transition: color 200ms var(--ease-out);
 }
@@ -327,24 +324,17 @@ h1 {
 .site-footer-name {
     color: var(--ground-ink);
     font-family: var(--font-heading);
-    font-variation-settings: "SOFT" 100, "WONK" 1;
     font-size: 22px;
     font-weight: 600;
 }
 
 .site-footer-verse {
     margin: 0;
+    font-size: 14px;
 }
 
 .site-footer-verse-text {
     color: var(--ground-ink);
-    font-family: var(--font-heading);
-    font-size: 18px;
-    font-variation-settings: "SOFT" 100, "WONK" 1;
-}
-
-.site-footer-verse-reference {
-    font-size: 14px;
 }
 
 .site-footer-links {
@@ -405,42 +395,12 @@ h1 {
     margin: 0;
     max-width: 9ch;
     font-size: clamp(56px, 8.5vw, 96px);
-    letter-spacing: -0.03em;
-    line-height: 0.98;
+    letter-spacing: -0.02em;
+    line-height: 1;
 }
 
 .greeting-accent {
     color: var(--brick);
-}
-
-.greeting-token {
-    transition: opacity 140ms ease-out;
-}
-
-:root[data-greeting="stream"] .greeting-token:not(.is-shown) {
-    opacity: 0;
-    animation: greeting-failsafe 0s linear 5s forwards;
-}
-
-@keyframes greeting-failsafe {
-    to {
-        opacity: 1;
-    }
-}
-
-.greeting-readout {
-    display: none;
-    min-height: 1.5em;
-    margin: 12px 0 0;
-    color: var(--ink-soft);
-    font-size: 14px;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.01em;
-}
-
-:root[data-greeting="stream"] .greeting-readout,
-:root[data-greeting="done"] .greeting-readout {
-    display: block;
 }
 
 .home-description {
@@ -454,14 +414,14 @@ h1 {
 .home-link {
     display: inline-block;
     margin-top: 28px;
-    color: var(--olive);
+    color: var(--brick);
     font-weight: 500;
     text-decoration: underline;
-    text-decoration-thickness: 1.5px;
+    text-decoration-thickness: 1px;
 }
 
 .home-link:hover {
-    color: var(--brick);
+    text-decoration-thickness: 2px;
 }
 
 .hero-photo {
@@ -505,9 +465,6 @@ h1 {
     list-style: none;
 }
 
-.home-entry:nth-child(2) {
-    margin-top: clamp(24px, 4vw, 56px);
-}
 
 .home-entry h3 {
     margin: 0 0 10px;
@@ -519,7 +476,7 @@ h1 {
 
 .home-entry p {
     max-width: 32em;
-    margin: 0 0 14px;
+    margin: 0 0 18px;
 }
 
 .home-ground a {
@@ -536,7 +493,7 @@ h1 {
 }
 
 .home-also {
-    margin: clamp(40px, 5vw, 64px) 0 0;
+    margin: clamp(48px, 6vw, 72px) 0 0;
 }
 
 body:has(.home-ground) .site-footer {
@@ -559,10 +516,6 @@ body:has(.home-ground) .site-footer .hill-wave {
 
     .home-entries {
         grid-template-columns: minmax(0, 1fr);
-    }
-
-    .home-entry:nth-child(2) {
-        margin-top: 0;
     }
 }
 
@@ -660,7 +613,6 @@ body:has(.home-ground) .site-footer .hill-wave {
     color: var(--heading);
     font-family: var(--font-heading);
     font-size: clamp(22px, 2.4vw, 27px);
-    font-variation-settings: "SOFT" 100, "WONK" 1;
     line-height: 1.45;
 }
 

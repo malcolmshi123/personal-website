@@ -1,6 +1,5 @@
 import Link from "next/link";
 import HillWave from "@/components/hill-wave";
-import StreamedGreeting from "@/components/streamed-greeting";
 import { featuredLinks, homeDescription, homeLinks } from "@/content/home";
 
 export default function Home() {
@@ -8,9 +7,11 @@ export default function Home() {
         <div className="home">
             <section className="home-hero" aria-labelledby="greeting">
                 <div className="home-hero-text">
-                    <StreamedGreeting id="greeting" />
+                    <h1 id="greeting" className="greeting">
+                        Hi, I’m <span className="greeting-accent">Malcolm!</span>
+                    </h1>
                     <p className="home-description">{homeDescription}</p>
-                    <Link className="home-link" href="/work/">See my work</Link>
+                    <Link className="home-link" href="/about/">About me</Link>
                 </div>
                 <div className="hero-photo">
                     <span>photo coming soon</span>
@@ -26,7 +27,10 @@ export default function Home() {
                                 <li key={link.href} className="home-entry">
                                     <h3>{link.title}</h3>
                                     <p>{link.description}</p>
-                                    <Link href={link.href}>{link.action}</Link>
+                                    <Link href={link.href}>
+                                        {link.action}
+                                        {link.actionContext && <span className="visually-hidden">{link.actionContext}</span>}
+                                    </Link>
                                 </li>
                             ))}
                         </ul>

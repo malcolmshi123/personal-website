@@ -51,26 +51,17 @@ test("nextTheme flips between light and dark", () => {
     assert.equal(nextTheme("dark"), "light");
 });
 
-test("bootDocument applies the stored theme, toggle flag, and greeting flag", () => {
+test("bootDocument applies the stored theme and toggle flag", () => {
     const win = createWindow({ local: createStorage({ theme: "dark", "theme-toggled": "true" }) });
 
     bootDocument(win);
 
     assert.equal(win.document.documentElement.dataset.theme, "dark");
     assert.equal(win.document.documentElement.dataset.themeToggled, "true");
-    assert.equal(win.document.documentElement.dataset.greeting, "stream");
 });
 
-test("bootDocument skips the greeting stream when it already played this session", () => {
-    const win = createWindow({ session: createStorage({ "greeting-played": "true" }) });
-
-    bootDocument(win);
-
-    assert.equal(win.document.documentElement.dataset.greeting, undefined);
-});
-
-test("bootDocument skips the greeting stream under reduced motion", () => {
-    const win = createWindow({ reducedMotion: true });
+test("bootDocument no longer sets a greeting flag", () => {
+    const win = createWindow();
 
     bootDocument(win);
 
@@ -83,7 +74,6 @@ test("bootDocument survives blocked storage and follows the system theme", () =>
     assert.doesNotThrow(() => bootDocument(win));
     assert.equal(win.document.documentElement.dataset.theme, "dark");
     assert.equal(win.document.documentElement.dataset.themeToggled, undefined);
-    assert.equal(win.document.documentElement.dataset.greeting, "stream");
 });
 
 test("bootScript runs on its own against a window global", () => {
