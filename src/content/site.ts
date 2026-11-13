@@ -12,11 +12,11 @@ export const siteNavigation: NavigationLink[] = [
     { href: "/gospel/", label: "The Good News" },
     { href: "/work/", label: "Work" },
     { href: "/blog/", label: "Blog" },
-    { href: "/photos/", label: "Photos" },
+    { href: "/photos/", label: "Gallery" },
     { href: "/contact/", label: "Contact" },
 ];
 
 export const footerVerse: Verse = {
-    text: "Do everything in love.",
-    reference: "1 Corinthians 16:14",
+    text: "Oh, taste and see that the LORD is good!",
+    reference: "Psalm 34:8",
 };

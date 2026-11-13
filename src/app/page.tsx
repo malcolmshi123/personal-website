@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HillWave from "@/components/hill-wave";
+import PhotoStack from "@/components/photo-stack";
 import { featuredLinks } from "@/content/home";
 
 export default function Home() {
@@ -7,9 +8,14 @@ export default function Home() {
         <div className="home">
             <section className="home-hero" aria-labelledby="greeting">
                 <div className="home-hero-text">
-                    <h1 id="greeting" className="greeting">
-                        Hi, I’m <span className="greeting-accent">Malcolm!</span>
-                    </h1>
+                    <div className="greeting-row">
+                        <h1 id="greeting" className="greeting">
+                            Hi, I’m <br /><span className="greeting-accent">Malcolm!</span>
+                        </h1>
+                        <div className="greeting-portrait">
+                            <span>portrait coming soon</span>
+                        </div>
+                    </div>
                     <p className="home-description">
                         I’m a computer engineering graduate from Waterloo.
                         I like to write <Link href="/blog/">blogs</Link> and take <Link href="/photos/">photos</Link>.
@@ -17,9 +23,7 @@ export default function Home() {
                     </p>
                     <Link className="home-link" href="/contact/">Contact me</Link>
                 </div>
-                <div className="hero-photo">
-                    <span>photo coming soon</span>
-                </div>
+                <PhotoStack />
             </section>
             <section className="home-ground full-bleed" aria-labelledby="around-the-site">
                 <HillWave />
