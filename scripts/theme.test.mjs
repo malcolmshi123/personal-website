@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { bootDocument, bootScript } from "../src/lib/boot-script.ts";
-import { nextTheme, readStoredTheme, resolveTheme, saveThemeChoice, shouldFollowSystem } from "../src/lib/theme.ts";
+import { darkFaviconHref, faviconHrefFor, nextTheme, readStoredTheme, resolveTheme, saveThemeChoice, shouldFollowSystem } from "../src/lib/theme.ts";
 
 function createStorage(entries = {}) {
     const values = new Map(Object.entries(entries));
@@ -122,4 +122,12 @@ test("bootDocument survives a localStorage getter that throws", () => {
 
     assert.doesNotThrow(() => bootDocument(win));
     assert.equal(win.document.documentElement.dataset.theme, "dark");
+});
+
+test("the favicon uses the dark icon in dark mode and the original icon in light mode", () => {
+    const lightHref = "/icon.svg?icon.abc123.svg";
+
+    assert.equal(faviconHrefFor("dark", lightHref), darkFaviconHref);
+    assert.equal(darkFaviconHref, "/icon-dark.svg");
+    assert.equal(faviconHrefFor("light", lightHref), lightHref);
 });

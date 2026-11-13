@@ -176,6 +176,26 @@ test("the theme toggle is hidden when JavaScript never sets a theme", async () =
     assert.match(css, /:root:not\(\[data-theme\]\) \.theme-toggle\{display:none\}/);
 });
 
+test("every page links the M. favicon and the iPhone home screen icon", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+        const head = html.slice(0, html.indexOf("</head>"));
+
+        assert.match(head, /<link rel="icon" href="\/icon\.svg[^"]*"[^>]*type="image\/svg\+xml"/, page);
+        assert.match(head, /<link rel="apple-touch-icon" href="\/apple-icon\.png[^"]*"/, page);
+    }
+
+    const svg = await readFile(new URL("../out/icon.svg", import.meta.url), "utf8");
+
+    assert.match(svg, /fill="#933f2a"/);
+
+    const darkSvg = await readFile(new URL("../out/icon-dark.svg", import.meta.url), "utf8");
+
+    assert.match(darkSvg, /fill="#1b1712"/);
+    assert.match(darkSvg, /fill="#df937a"/);
+    await readFile(new URL("../out/apple-icon.png", import.meta.url));
+});
+
 test("the theme boot script ships in the head", async () => {
     const html = await readExport("index.html");
     const head = html.slice(0, html.indexOf("</head>"));

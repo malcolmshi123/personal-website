@@ -2,6 +2,7 @@ export type Theme = "light" | "dark";
 
 export const themeStorageKey = "theme";
 export const toggleSeenKey = "theme-toggled";
+export const darkFaviconHref = "/icon-dark.svg";
 
 export function resolveTheme(stored: string | null, prefersDark: boolean): Theme {
     if (stored === "light" || stored === "dark") {
@@ -40,4 +41,8 @@ export function saveThemeChoice(storage: ThemeStorage, theme: Theme): void {
 
 export function shouldFollowSystem(stored: Theme | null, toggledThisVisit: boolean): boolean {
     return stored === null && !toggledThisVisit;
+}
+
+export function faviconHrefFor(theme: Theme, lightHref: string): string {
+    return theme === "dark" ? darkFaviconHref : lightHref;
 }
