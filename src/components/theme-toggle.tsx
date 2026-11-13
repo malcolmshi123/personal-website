@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, type Theme } from "@/lib/theme";
+import { faviconHrefFor, nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, type Theme } from "@/lib/theme";
 
 const darkQuery = "(prefers-color-scheme: dark)";
 
@@ -11,6 +11,17 @@ function getLocalStorage(): Storage | null {
     } catch {
         return null;
     }
+}
+
+function syncFavicon(theme: Theme) {
+    const icon = document.querySelector<HTMLLinkElement>("link[rel=\"icon\"]");
+    if (!icon) {
+        return;
+    }
+
+    // Remember the light icon the first time, since its URL carries a build hash.
+    icon.dataset.lightHref ??= icon.getAttribute("href") ?? "";
+    icon.setAttribute("href", faviconHrefFor(theme, icon.dataset.lightHref));
 }
 
 function currentTheme(): Theme {
@@ -47,6 +58,12 @@ export default function ThemeToggle() {
         media.addEventListener("change", followSystem);
         return () => media.removeEventListener("change", followSystem);
     }, []);
+
+    useEffect(() => {
+        if (theme) {
+            syncFavicon(theme);
+        }
+    }, [theme]);
 
     function switchTheme() {
         const chosen = nextTheme(currentTheme());
