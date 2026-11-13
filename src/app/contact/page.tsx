@@ -1,4 +1,5 @@
 import { createPageMetadata } from "@/lib/site-metadata";
+import LinkIcon from "@/components/link-icon";
 import { contactLinks } from "@/content/contact";
 
 export const metadata = createPageMetadata(
@@ -14,7 +15,10 @@ export default function Contact() {
             <p className="introduction">Let’s get in touch!</p>
             <div className="related-links contact-links">
                 {contactLinks.map((link) => (
-                    <a href={link.href} key={link.href}>{link.label}</a>
+                    <a href={link.href} download={link.download} key={link.href}>
+                        <LinkIcon name={link.icon} />
+                        {link.label}
+                    </a>
                 ))}
             </div>
             <section className="prose" aria-labelledby="send-a-message">

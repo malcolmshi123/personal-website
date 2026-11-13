@@ -48,6 +48,55 @@ test("every page footer carries the verse", async () => {
     }
 });
 
+test("every page footer has labeled LinkedIn, GitHub, and resume icons", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+        const footer = html.slice(html.indexOf("<footer"));
+
+        for (const [href, label] of [
+            ["https://linkedin.com/in/malcolm-shi", "LinkedIn"],
+            ["https://github.com/malcolmshi123", "GitHub"],
+            ["/resume.pdf", "Resume (PDF)"],
+        ]) {
+            const link = footer.match(new RegExp(`<a href="${href}"[^>]*aria-label="${label.replace(/[()]/g, "\\$&")}"[^>]*>([\\s\\S]*?)</a>`));
+
+            assert.ok(link, `${page}: footer ${label} link is missing`);
+            assert.match(link[1], /^<svg[^>]*aria-hidden="true"/, `${page}: footer ${label} link has no icon`);
+        }
+    }
+});
+
+test("the header wordmark and footer name both end with a period", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+
+        assert.match(html, /<a class="wordmark"[^>]*>Malcolm Shi\.<\/a>/, page);
+        assert.match(html, /<span class="site-footer-name">Malcolm Shi\.<\/span>/, page);
+    }
+});
+
+test("the contact page lists LinkedIn, GitHub, and the resume with icons", async () => {
+    const html = await readExport("contact/index.html");
+    const links = [...html.matchAll(/<div class="related-links contact-links">([\s\S]*?)<\/div>/g)][0][1];
+
+    assert.match(links, /<a href="https:\/\/linkedin\.com\/in\/malcolm-shi"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>LinkedIn<\/a>/);
+    assert.match(links, /<a href="https:\/\/github\.com\/malcolmshi123"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>GitHub<\/a>/);
+    assert.match(links, /<a href="\/resume\.pdf" download="Malcolm-Shi-Resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Resume<\/a>/);
+});
+
+test("the work page resume link shows the resume icon", async () => {
+    const html = await readExport("work/index.html");
+
+    assert.match(html, /<a class="resume-download" href="\/resume\.pdf" download="Malcolm-Shi-Resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Download resume \(PDF\)<\/a>/);
+});
+
+test("the homepage hero has no icon links of its own", async () => {
+    const html = await readExport("index.html");
+    const hero = html.slice(html.indexOf('class="home-hero"'), html.indexOf('class="home-ground'));
+
+    assert.doesNotMatch(hero, /<svg/);
+});
+
 test("the theme toggle is hidden when JavaScript never sets a theme", async () => {
     const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
     const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
