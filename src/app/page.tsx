@@ -1,56 +1,46 @@
 import Link from "next/link";
-import ArrowIcon from "@/components/arrow-icon";
-import { featuredLinks, homeLinks } from "@/content/home";
+import HillWave from "@/components/hill-wave";
+import StreamedGreeting from "@/components/streamed-greeting";
+import { featuredLinks, homeDescription, homeLinks } from "@/content/home";
 
 export default function Home() {
     return (
-        <div className="welcome">
-            <section className="welcome-intro" aria-labelledby="welcome-heading">
-                <div className="welcome-text">
-                    <h1 id="welcome-heading">Hi, I’m Malcolm.</h1>
-                    <p className="introduction">
-                        I’m a computer engineering graduate from the University of Waterloo.
-                        This is where I share my faith, my work, and a few things I enjoy.
-                    </p>
-                    <div className="welcome-actions">
-                        <Link className="button button-primary" href="/work/">See my work</Link>
-                        <Link className="button button-secondary" href="/gospel/">Read the good news</Link>
-                    </div>
+        <div className="home">
+            <section className="home-hero" aria-labelledby="greeting">
+                <div className="home-hero-text">
+                    <StreamedGreeting id="greeting" />
+                    <p className="home-description">{homeDescription}</p>
+                    <Link className="home-link" href="/work/">See my work</Link>
                 </div>
-                <div className="welcome-photo">
-                    <span>Photo coming soon</span>
+                <div className="hero-photo">
+                    <span>photo coming soon</span>
                 </div>
             </section>
-            <section className="welcome-sections" aria-labelledby="around-the-site">
-                <h2 id="around-the-site">Have a look around!</h2>
-                <ul className="featured-links">
-                    {featuredLinks.map((link) => (
-                        <li key={link.href}>
-                            <Link className={`featured-card featured-card-${link.tone}`} href={link.href}>
-                                <h3>{link.title}</h3>
-                                <p>{link.description}</p>
-                                <span className="featured-detail">{link.detail}</span>
-                                <span className="card-action">
-                                    {link.action}
-                                    <ArrowIcon />
+            <section className="home-ground full-bleed" aria-labelledby="around-the-site">
+                <HillWave />
+                <div className="home-ground-band">
+                    <div className="home-ground-inner">
+                        <h2 id="around-the-site" className="visually-hidden">Around the site</h2>
+                        <ul className="home-entries">
+                            {featuredLinks.map((link) => (
+                                <li key={link.href} className="home-entry">
+                                    <h3>{link.title}</h3>
+                                    <p>{link.description}</p>
+                                    <Link href={link.href}>{link.action}</Link>
+                                </li>
+                            ))}
+                        </ul>
+                        <p className="home-also">
+                            Also:{" "}
+                            {homeLinks.map((link, index) => (
+                                <span key={link.href}>
+                                    {index > 0 && <span aria-hidden="true"> · </span>}
+                                    <Link href={link.href}>{link.title}</Link>
                                 </span>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-                <ul className="welcome-links">
-                    {homeLinks.map((link) => (
-                        <li key={link.href}>
-                            <Link href={link.href}>
-                                <h3>
-                                    {link.title}
-                                    <ArrowIcon />
-                                </h3>
-                                <p>{link.description}</p>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
+                            ))}
+                        </p>
+                    </div>
+                </div>
             </section>
         </div>
     );

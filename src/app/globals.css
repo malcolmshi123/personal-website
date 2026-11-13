@@ -60,6 +60,7 @@ body {
     font-size: 18px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
     transition: background-color var(--theme-fade), color var(--theme-fade);
 }
 
@@ -365,55 +366,25 @@ h1 {
 
 /* Buttons and shared links */
 
-.button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 48px;
-    padding: 12px 24px;
-    border: 1.5px solid var(--olive);
-    border-radius: 999px;
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
-}
-
-.button-primary {
-    background: var(--olive);
-    color: var(--sky);
-}
-
-.button-primary:hover {
-    border-color: var(--olive);
-    background: var(--olive);
-}
-
-.button-secondary {
-    background: transparent;
-    color: var(--olive);
-}
-
-.button-secondary:hover {
-    background: var(--placeholder);
-}
-
 .arrow-icon {
     flex-shrink: 0;
     transition: transform 240ms var(--ease-out);
 }
 
-/* Homepage */
+/* Shared helpers */
 
-.welcome {
-    padding-block: clamp(40px, 7vw, 96px) 0;
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
 }
 
-.welcome-intro {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
-    align-items: center;
-    gap: clamp(32px, 6vw, 88px);
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
 }
 
 .introduction {
@@ -424,155 +395,179 @@ h1 {
     line-height: 1.65;
 }
 
-.welcome-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 36px;
+/* Homepage */
+
+.home-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(32px, 6vw, 96px);
+    padding-block: clamp(32px, 6vw, 80px) clamp(56px, 8vw, 112px);
 }
 
-.welcome-photo {
+.greeting {
+    margin: 0;
+    max-width: 9ch;
+    font-size: clamp(56px, 8.5vw, 96px);
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+}
+
+.greeting-accent {
+    color: var(--brick);
+}
+
+.greeting-token {
+    transition: opacity 140ms ease-out;
+}
+
+:root[data-greeting="stream"] .greeting-token:not(.is-shown) {
+    opacity: 0;
+    animation: greeting-failsafe 0s linear 5s forwards;
+}
+
+@keyframes greeting-failsafe {
+    to {
+        opacity: 1;
+    }
+}
+
+.greeting-readout {
+    display: none;
+    min-height: 1.5em;
+    margin: 12px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.01em;
+}
+
+:root[data-greeting="stream"] .greeting-readout,
+:root[data-greeting="done"] .greeting-readout {
+    display: block;
+}
+
+.home-description {
+    max-width: 30em;
+    margin: 24px 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(19px, 1.7vw, 22px);
+    line-height: 1.55;
+}
+
+.home-link {
+    display: inline-block;
+    margin-top: 28px;
+    color: var(--olive);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+}
+
+.home-link:hover {
+    color: var(--brick);
+}
+
+.hero-photo {
     display: flex;
     align-items: flex-end;
     justify-content: center;
     justify-self: end;
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     aspect-ratio: 4 / 5;
-    padding: 32px;
-    border-radius: 999px 999px var(--radius) var(--radius);
+    padding: 28px;
+    border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
     background: var(--placeholder);
-    color: var(--olive);
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
+    color: var(--ink-soft);
+    font-size: 15px;
+    transition: background-color var(--theme-fade);
 }
 
-.welcome-sections {
-    margin-top: clamp(80px, 11vw, 144px);
+.home-ground {
+    margin-bottom: -1px;
 }
 
-.welcome-sections h2 {
-    margin: 0 0 28px;
-    font-size: clamp(30px, 3.4vw, 42px);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
+.home-ground-band {
+    background: var(--ground);
+    color: var(--ground-soft);
+    transition: background-color var(--theme-fade);
 }
 
-.featured-links,
-.welcome-links {
+.home-ground-inner {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: clamp(24px, 4vw, 48px) clamp(20px, 5vw, 72px) clamp(48px, 6vw, 80px);
+}
+
+.home-entries {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px clamp(32px, 6vw, 96px);
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-.featured-links {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+.home-entry:nth-child(2) {
+    margin-top: clamp(24px, 4vw, 56px);
 }
 
-.featured-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    padding: clamp(28px, 3.5vw, 44px);
-    border-radius: var(--radius);
-    text-decoration: none;
-    transition: transform 320ms var(--ease-out), box-shadow 320ms var(--ease-out);
-}
-
-.featured-card-clay {
-    background: var(--placeholder);
-}
-
-.featured-card-moss {
-    background: var(--placeholder);
-}
-
-.featured-card:hover {
-    box-shadow: 0 14px 32px -18px rgb(43 38 32 / 0.45);
-    transform: translateY(-3px);
-}
-
-.featured-card h3 {
-    margin: 0 0 14px;
-    font-size: clamp(28px, 3vw, 38px);
+.home-entry h3 {
+    margin: 0 0 10px;
+    color: var(--ground-ink);
+    font-size: clamp(28px, 3vw, 40px);
     letter-spacing: -0.02em;
-    line-height: 1.15;
+    line-height: 1.1;
 }
 
-.featured-card p {
+.home-entry p {
     max-width: 32em;
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 17px;
-    line-height: 1.7;
+    margin: 0 0 14px;
 }
 
-.featured-detail {
-    margin-top: 20px;
-    color: var(--ink-soft);
-    font-size: 14px;
+.home-ground a {
+    color: var(--ground-link);
+    font-weight: 500;
 }
 
-.card-action {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: auto;
-    padding-top: 28px;
-    color: var(--brick);
-    font-size: 16px;
-    font-weight: 600;
+.home-ground a:hover {
+    color: var(--ground-ink);
 }
 
-.featured-card-moss .card-action {
-    color: var(--olive);
+.home-ground a:focus-visible {
+    outline-color: var(--ground-link);
 }
 
-.featured-card:hover .arrow-icon,
-.welcome-links a:hover .arrow-icon {
-    transform: translateX(4px);
+.home-also {
+    margin: clamp(40px, 5vw, 64px) 0 0;
 }
 
-.welcome-links {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0 24px;
-    margin-top: 40px;
+body:has(.home-ground) .site-footer {
+    margin-top: 0;
 }
 
-.welcome-links a {
-    display: block;
-    height: 100%;
-    padding-block: 22px;
-    border-top: 1.5px solid var(--rule);
-    text-decoration: none;
+body:has(.home-ground) .site-footer .hill-wave {
+    display: none;
 }
 
-.welcome-links h3 {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 0 8px;
-    font-size: 23px;
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-}
+@media (max-width: 760px) {
+    .home-hero {
+        grid-template-columns: minmax(0, 1fr);
+    }
 
-.welcome-links h3 .arrow-icon {
-    color: var(--brick);
-}
+    .hero-photo {
+        justify-self: start;
+        max-width: 320px;
+    }
 
-.welcome-links a:hover h3 {
-    color: var(--brick);
-}
+    .home-entries {
+        grid-template-columns: minmax(0, 1fr);
+    }
 
-.welcome-links p {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 15px;
-    line-height: 1.6;
+    .home-entry:nth-child(2) {
+        margin-top: 0;
+    }
 }
 
 /* Inner pages */
@@ -914,27 +909,7 @@ h1 {
 
 /* Responsive */
 
-@media (max-width: 960px) {
-    .welcome-links {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
 @media (max-width: 760px) {
-    .welcome-intro {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .welcome-photo {
-        justify-self: start;
-        max-width: 280px;
-        order: -1;
-    }
-
-    .featured-links {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
     .site-header {
         flex-wrap: wrap;
         column-gap: 4px;
@@ -985,16 +960,6 @@ h1 {
 
     .site-navigation a[aria-current="page"] {
         color: var(--brick);
-    }
-}
-
-@media (max-width: 480px) {
-    .welcome-links {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .welcome-actions .button {
-        flex: 1 1 100%;
     }
 }
 
