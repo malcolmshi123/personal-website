@@ -31,7 +31,7 @@ export default function Gospel() {
                         {quote && (
                             <figure className="gospel-quote">
                                 <blockquote cite={quote.href}>
-                                    <p>“{quote.text}”</p>
+                                    <p>{quote.text}</p>
                                 </blockquote>
                                 <figcaption>
                                     {quote.author}, <cite><a href={quote.href}>{quote.source}</a></cite>
