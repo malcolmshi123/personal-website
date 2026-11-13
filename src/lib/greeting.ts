@@ -14,3 +14,12 @@ export function formatStreamReadout(shown: number, total: number, elapsedMs: num
     const rate = Math.round((shown / Math.max(elapsedMs, 1)) * 1000);
     return `${shown} tokens · ${rate} tok/s`;
 }
+
+export function initialReadout(flag: string | undefined): string {
+    return flag === "done" ? formatStreamReadout(greetingTokens.length, greetingTokens.length, 0) : "";
+}
+
+// React's development double-mount unmounts before the first token, so only a started stream counts as seen.
+export function greetingFlagAfterUnmount(shown: number): "stream" | "done" {
+    return shown > 0 ? "done" : "stream";
+}

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 
 async function readExport(path) {
@@ -12,16 +12,30 @@ async function readExport(path) {
 test("homepage HTML contains the greeting and description without JavaScript", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /Hi/);
-    assert.match(html, /Malcolm/);
+    const greeting = html.match(/<h1[^>]*class="greeting"[^>]*>([\s\S]*?)<\/h1>/);
+
+    assert.ok(greeting, "greeting heading is missing");
+    assert.equal(greeting[1].replace(/<[^>]+>/g, ""), "Hi, I’m Malcolm.");
     assert.match(html, /Computer engineering grad from Waterloo\. My faith, my work, and a few things I enjoy\./);
 });
 
-test("every page footer carries the verse", async () => {
-    const html = await readExport("index.html");
+const pages = ["index.html", "about/index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
 
-    assert.match(html, /Do everything in love\./);
-    assert.match(html, /1 Corinthians 16:14/);
+test("every page footer carries the verse", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+
+        assert.match(html, /Do everything in love\./, page);
+        assert.match(html, /1 Corinthians 16:14/, page);
+    }
+});
+
+test("the theme toggle is hidden when JavaScript never sets a theme", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /:root:not\(\[data-theme\]\) \.theme-toggle\{display:none\}/);
 });
 
 test("the theme boot script ships in the head", async () => {

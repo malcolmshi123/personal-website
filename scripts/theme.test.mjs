@@ -121,3 +121,15 @@ test("shouldFollowSystem follows only when the visitor has not chosen a theme", 
 test("shouldFollowSystem respects a choice made this visit even when storage is blocked", () => {
     assert.equal(shouldFollowSystem(null, true), false);
 });
+
+test("bootDocument survives a localStorage getter that throws", () => {
+    const win = createWindow({ prefersDark: true });
+    Object.defineProperty(win, "localStorage", {
+        get() {
+            throw new Error("storage blocked");
+        },
+    });
+
+    assert.doesNotThrow(() => bootDocument(win));
+    assert.equal(win.document.documentElement.dataset.theme, "dark");
+});

@@ -234,6 +234,10 @@ h1 {
     display: none;
 }
 
+:root:not([data-theme]) .theme-toggle {
+    display: none;
+}
+
 .theme-toggle-icon {
     overflow: hidden;
 }

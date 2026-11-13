@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatStreamReadout, greetingAccentFrom, greetingTokens } from "@/lib/greeting";
+import { formatStreamReadout, greetingAccentFrom, greetingFlagAfterUnmount, greetingTokens, initialReadout } from "@/lib/greeting";
 import { greetingPlayedKey } from "@/lib/theme";
 
 function markGreetingPlayed() {
@@ -23,6 +23,7 @@ export default function StreamedGreeting({ id }: { id: string }) {
     useEffect(() => {
         const root = document.documentElement;
         if (root.dataset.greeting !== "stream") {
+            setReadout(initialReadout(root.dataset.greeting));
             return;
         }
 
@@ -45,7 +46,10 @@ export default function StreamedGreeting({ id }: { id: string }) {
 
         timer = window.setTimeout(revealNext, randomTokenDelay());
 
-        return () => window.clearTimeout(timer);
+        return () => {
+            window.clearTimeout(timer);
+            root.dataset.greeting = greetingFlagAfterUnmount(count);
+        };
     }, []);
 
     return (

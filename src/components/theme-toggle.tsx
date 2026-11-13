@@ -21,10 +21,16 @@ export default function ThemeToggle() {
     const [theme, setTheme] = useState<Theme | null>(null);
 
     useEffect(() => {
-        setTheme(currentTheme());
-
         const storage = getLocalStorage();
         const media = window.matchMedia(darkQuery);
+        const root = document.documentElement;
+
+        // The system theme can change between the boot script and hydration.
+        if (shouldFollowSystem(storage ? readStoredTheme(storage) : null, root.dataset.themeToggled === "true")) {
+            root.dataset.theme = media.matches ? "dark" : "light";
+        }
+
+        setTheme(currentTheme());
 
         function followSystem(event: MediaQueryListEvent) {
             const stored = storage ? readStoredTheme(storage) : null;
