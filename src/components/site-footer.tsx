@@ -17,7 +17,7 @@ export default function SiteFooter() {
                     <ul className="site-footer-links">
                         {contactLinks.map((link) => (
                             <li key={link.href}>
-                                <a href={link.href} download={link.download} aria-label={link.iconLabel} title={link.iconLabel}>
+                                <a href={link.href} aria-label={link.iconLabel} title={link.iconLabel}>
                                     <LinkIcon name={link.icon} />
                                 </a>
                             </li>
