@@ -311,10 +311,9 @@ h1 {
 }
 
 .site-footer-inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
     gap: 16px 32px;
     max-width: 1280px;
     margin-inline: auto;
@@ -322,10 +321,12 @@ h1 {
 }
 
 .site-footer-name {
+    justify-self: start;
     color: var(--ground-ink);
     font-family: var(--font-heading);
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 600;
+    letter-spacing: -0.02em;
 }
 
 .site-footer-verse {
@@ -339,10 +340,21 @@ h1 {
 
 .site-footer-links {
     display: flex;
-    gap: 24px;
-    margin: 0;
+    justify-self: end;
+    gap: 8px;
+    margin: 0 -8px 0 0;
     padding: 0;
     list-style: none;
+}
+
+.site-footer-links a {
+    display: flex;
+    padding: 8px;
+}
+
+.site-footer-links .link-icon {
+    width: 26px;
+    height: 26px;
 }
 
 .site-footer a {
@@ -358,6 +370,12 @@ h1 {
 }
 
 /* Shared helpers */
+
+.link-icon {
+    flex: none;
+    width: 1.15em;
+    height: 1.15em;
+}
 
 .visually-hidden {
     position: absolute;
@@ -643,7 +661,9 @@ body:has(.home-ground) .site-footer .hill-wave {
 }
 
 .resume-download {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     margin-top: 24px;
     font-size: 16px;
     font-weight: 500;
@@ -735,7 +755,16 @@ body:has(.home-ground) .site-footer .hill-wave {
 }
 
 .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     color: var(--brick);
+}
+
+.contact-links .link-icon,
+.resume-download .link-icon {
+    width: 24px;
+    height: 24px;
 }
 
 .prose .contact-heading {
@@ -900,8 +929,19 @@ body:has(.home-ground) .site-footer .hill-wave {
         padding-block: 18px;
     }
 
-    .wordmark {
+    .wordmark,
+    .site-footer-name {
         font-size: 21px;
+    }
+
+    .site-footer-inner {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: start;
+    }
+
+    .site-footer-links {
+        justify-self: start;
+        margin: 0 0 0 -8px;
     }
 
     .theme-toggle {

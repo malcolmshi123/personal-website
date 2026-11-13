@@ -27,7 +27,7 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
             }}
         >
             <Link className="wordmark" href="/" aria-label="Malcolm Shi, home">
-                Malcolm Shi
+                Malcolm Shi.
             </Link>
             <ThemeToggle />
             <button
