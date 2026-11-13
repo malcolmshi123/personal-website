@@ -21,7 +21,7 @@ export const featuredLinks: FeaturedLink[] = [
     },
     {
         title: "Work",
-        description: "My recent work focuses on GPU performance and LLM inference. I’ve also worked on graphics and rendering, web applications, and test automation.",
+        description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
         action: "See my work",
         href: "/work/",
     },

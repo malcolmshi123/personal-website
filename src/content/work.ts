@@ -28,7 +28,7 @@ export const projects: Project[] = [
     {
         name: "LLM Inference Optimization Lab",
         date: "October 2026",
-        description: "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how serving decisions affect latency and throughput. My experiments look at concurrency, scheduling token budgets, and prefix-cache reuse, using server metrics and GPU profiling to understand the results.",
+        description: "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how serving decisions affect latency and throughput. I experiment with concurrency, scheduling token budgets, and prefix-cache reuse, and read the results through server metrics and GPU profiling.",
         technologies: "Python, vLLM, Modal, PyTorch Profiler, Prometheus",
         href: "https://github.com/malcolmshi123/llm-inference-optimization-lab",
     },
@@ -47,13 +47,13 @@ export const experience: Experience[] = [
         role: "Software Engineer Intern",
         team: "Pro 1.0 Platform",
         dates: "May – August 2023",
-        description: "I worked on APIs and document-signing workflows, built an Angular visualization for asset allocation, and reviewed third-party applications for security issues. The work spanned the backend, the interface, and the infrastructure supporting the platform.",
+        description: "I built APIs and document-signing workflows, plus an Angular visualization for asset allocation, and reviewed third-party applications for security issues.",
     },
     {
         company: "OpenText",
         role: "Software Engineer Intern",
         team: "Content Server Core",
         dates: "September – December 2022",
-        description: "I automated tests for enterprise software with Selenium, built tools to turn test failures into useful reports, and scripted the setup and reset of test environments. This helped make regression testing and debugging easier to repeat.",
+        description: "I automated tests for enterprise software with Selenium, built tools to turn test failures into useful reports, and scripted the setup and reset of test environments so regression runs were easy to repeat.",
     },
 ];
