@@ -11,7 +11,7 @@ export default function Blog() {
     return (
         <div className="page-content reading-page">
             <h1>Blog</h1>
-            <p className="introduction">Some things I've written.</p>
+            <p className="introduction">Some pieces I've written.</p>
             <ul className="article-list" aria-label="Articles">
                 {articles.map((article) => (
                     <li key={article.href}>
