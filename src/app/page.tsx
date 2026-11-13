@@ -1,6 +1,6 @@
 import Link from "next/link";
 import HillWave from "@/components/hill-wave";
-import { featuredLinks, homeDescription, homeLinks } from "@/content/home";
+import { featuredLinks } from "@/content/home";
 
 export default function Home() {
     return (
@@ -10,8 +10,12 @@ export default function Home() {
                     <h1 id="greeting" className="greeting">
                         Hi, I’m <span className="greeting-accent">Malcolm!</span>
                     </h1>
-                    <p className="home-description">{homeDescription}</p>
-                    <Link className="home-link" href="/about/">About me</Link>
+                    <p className="home-description">
+                        I’m a computer engineering graduate from Waterloo.
+                        I like to write <Link href="/blog/">blogs</Link> and take <Link href="/photos/">photos</Link>.
+                        Have a look around!
+                    </p>
+                    <Link className="home-link" href="/contact/">Contact me</Link>
                 </div>
                 <div className="hero-photo">
                     <span>photo coming soon</span>
@@ -34,15 +38,6 @@ export default function Home() {
                                 </li>
                             ))}
                         </ul>
-                        <p className="home-also">
-                            Also:{" "}
-                            {homeLinks.map((link, index) => (
-                                <span key={link.href}>
-                                    {index > 0 && <span aria-hidden="true"> · </span>}
-                                    <Link href={link.href}>{link.title}</Link>
-                                </span>
-                            ))}
-                        </p>
                     </div>
                 </div>
             </section>

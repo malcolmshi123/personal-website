@@ -9,8 +9,6 @@ type FeaturedLink = HomeLink & {
     actionContext?: string;
 };
 
-export const homeDescription = "I’m a computer engineering graduate from Waterloo. I also enjoy writing and photography. Have a look around!";
-
 export const featuredLinks: FeaturedLink[] = [
     {
         title: "The Good News",
@@ -24,28 +22,5 @@ export const featuredLinks: FeaturedLink[] = [
         description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
         action: "See my work",
         href: "/work/",
-    },
-];
-
-export const homeLinks: HomeLink[] = [
-    {
-        title: "About",
-        description: "A bit about me and the things I care about.",
-        href: "/about/",
-    },
-    {
-        title: "Blog",
-        description: "Things I’ve written.",
-        href: "/blog/",
-    },
-    {
-        title: "Photos",
-        description: "People, places, and moments.",
-        href: "/photos/",
-    },
-    {
-        title: "Contact",
-        description: "A few ways to get in touch.",
-        href: "/contact/",
     },
 ];

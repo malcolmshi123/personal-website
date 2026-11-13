@@ -13,7 +13,7 @@ export const albums: PhotoAlbum[] = [
     {
         id: "grad-trip",
         title: "Grad Trip",
-        description: "Japan + Korea.",
+        description: "Japan + Korea 2026.",
     },
     {
         id: "uwccf",

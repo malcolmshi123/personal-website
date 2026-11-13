@@ -4,15 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 import ThemeToggle from "@/components/theme-toggle";
-
-const navigation = [
-    { href: "/gospel/", label: "The Good News" },
-    { href: "/about/", label: "About" },
-    { href: "/work/", label: "Work" },
-    { href: "/blog/", label: "Blog" },
-    { href: "/photos/", label: "Photos" },
-    { href: "/contact/", label: "Contact" },
-];
+import { siteNavigation } from "@/content/site";
 
 export default function SiteHeader() {
     const pathname = usePathname();
@@ -53,7 +45,7 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
             </button>
             <nav id="site-navigation" className="site-navigation" aria-label="Main" data-open={isOpen}>
                 <ul>
-                    {navigation.map(({ href, label }) => (
+                    {siteNavigation.map(({ href, label }) => (
                         <li key={href}>
                             <Link
                                 href={href}

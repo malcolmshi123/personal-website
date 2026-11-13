@@ -16,10 +16,29 @@ test("homepage HTML contains the greeting and description without JavaScript", a
 
     assert.ok(greeting, "greeting heading is missing");
     assert.equal(greeting[1].replace(/<[^>]+>/g, ""), "Hi, I’m Malcolm!");
-    assert.match(html, /I’m a computer engineering graduate from Waterloo. I also enjoy writing and photography. Have a look around!/);
+    const description = html.match(/<p class="home-description">([\s\S]*?)<\/p>/);
+
+    assert.ok(description, "homepage description is missing");
+    assert.equal(description[1].replace(/<[^>]+>/g, ""), "I’m a computer engineering graduate from Waterloo. I like to write blogs and take photos. Have a look around!");
+    assert.match(description[1], /<a href="\/blog\/">blogs<\/a>/);
+    assert.match(description[1], /<a href="\/photos\/">photos<\/a>/);
 });
 
-const pages = ["index.html", "about/index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
+const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
+
+test("the about page is gone from the export and the navigation", async () => {
+    const html = await readExport("index.html");
+
+    await assert.rejects(readFile(new URL("../out/about/index.html", import.meta.url)));
+    assert.doesNotMatch(html, /href="\/about\/"/);
+});
+
+test("page introductions use the new wording", async () => {
+    assert.match(await readExport("blog/index.html"), /class="introduction">Some things I&#x27;ve written\.</);
+    assert.match(await readExport("photos/index.html"), /class="introduction">My most cherished memories\.</);
+    assert.match(await readExport("photos/index.html"), /Japan \+ Korea 2026\./);
+    assert.match(await readExport("contact/index.html"), /class="introduction">Let’s get in touch!</);
+});
 
 test("every page footer carries the verse", async () => {
     for (const page of pages) {
@@ -56,10 +75,16 @@ test("the homepage has no streamed greeting readout", async () => {
     assert.doesNotMatch(html, /greeting-readout|greeting-token/);
 });
 
-test("the homepage hero links to the about page", async () => {
+test("the homepage band ends after the featured entries without an extra link row", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /<a class="home-link" href="\/about\/">About me<\/a>/);
+    assert.doesNotMatch(html, /class="home-also"/);
+});
+
+test("the homepage hero links to the contact page", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /<a class="home-link" href="\/contact\/">Contact me<\/a>/);
 });
 
 test("the good news entry says read more and names its destination for screen readers", async () => {
@@ -68,10 +93,18 @@ test("the good news entry says read more and names its destination for screen re
     assert.match(html, /href="\/gospel\/">Read more<span class="visually-hidden"> about the good news<\/span><\/a>/);
 });
 
-test("the about page links to the good news", async () => {
-    const html = await readExport("about/index.html");
+test("the sitemap lists the homepage and every page in the navigation", async () => {
+    const xml = await readFile(new URL("../out/sitemap.xml", import.meta.url), "utf8");
+    const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
-    assert.match(html, />Read about the good news</);
+    assert.deepEqual(urls.sort(), [
+        "https://malcolmshi.ca/",
+        "https://malcolmshi.ca/blog/",
+        "https://malcolmshi.ca/contact/",
+        "https://malcolmshi.ca/gospel/",
+        "https://malcolmshi.ca/photos/",
+        "https://malcolmshi.ca/work/",
+    ]);
 });
 
 test("the gospel page shows its reading time", async () => {

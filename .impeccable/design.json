@@ -618,7 +618,7 @@
       "kind": "custom",
       "refersTo": "greeting",
       "description": "Static display greeting with the name in brick, followed by the homepage description.",
-      "html": "<div><h1 class=\"ds-greeting\">Hi, I’m <span class=\"ds-greeting-accent\">Malcolm!</span></h1><p class=\"ds-home-description\">I’m a computer engineering graduate from Waterloo. I also enjoy writing and photography. Have a look around!</p></div>",
+      "html": "<div><h1 class=\"ds-greeting\">Hi, I’m <span class=\"ds-greeting-accent\">Malcolm!</span></h1><p class=\"ds-home-description\">I’m a computer engineering graduate from Waterloo. I like to write blogs and take photos. Have a look around!</p></div>",
       "css": ".ds-greeting { margin: 0; max-width: 9ch; color: var(--heading, #1f150e); font-family: var(--font-heading, Lora, Georgia, serif); font-size: clamp(56px, 8.5vw, 96px); font-weight: 600; letter-spacing: -0.02em; line-height: 1; text-wrap: balance; } .ds-greeting-accent { color: var(--brick, #933f2a); } .ds-home-description { max-width: 30em; margin: 24px 0 0; color: var(--ink-soft, #644c3b); font-family: var(--font-body, \"Hanken Grotesk\", sans-serif); font-size: clamp(19px, 1.7vw, 22px); line-height: 1.55; }"
     },
     {

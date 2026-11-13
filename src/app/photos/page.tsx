@@ -11,7 +11,7 @@ export default function Photos() {
     return (
         <div className="page-content photos-page">
             <h1>Photos</h1>
-            <p className="introduction">Some of my most cherished memories.</p>
+            <p className="introduction">My most cherished memories.</p>
             <ul className="album-grid" aria-label="Photo albums">
                 {albums.map((album) => (
                     <li key={album.id}>

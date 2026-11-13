@@ -204,11 +204,11 @@ An earthy canyon palette: tan, espresso, sienna, and olive by day; brown night s
 
 ## Layout
 
-A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, About, Blog, Work) narrow to 760px with prose at 65ch; Photos widens to 1120px. Pages open with `clamp(40px, 6vw, 88px)` of vertical padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(72px, 10vw, 128px)` below content, except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
+A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, Blog, Work) narrow to 760px with prose at 65ch; Photos widens to 1120px. Pages open with `clamp(40px, 6vw, 88px)` of vertical padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(72px, 10vw, 128px)` below content, except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
 
 Composition is loose rather than gridded. The homepage hero is a 1.3fr / 1fr split with the greeting on the left and a portrait blob on the right; the two band entries sit side by side with their titles level, and each link sits 18px under its own text. The photo albums use uneven columns (1.2fr, 1fr, 1.1fr) at staggered heights. Lists (work, articles) are open rows with a 1px hairline above each.
 
-There is one breakpoint, 760px. Below it the hero, About intro, band entries, and albums stack into one column; albums take 85% width and alternate alignment; the nav collapses behind a Menu button while the sun toggle stays visible in the header.
+There is one breakpoint, 760px. Below it the hero, band entries, and albums stack into one column; albums take 85% width and alternate alignment; the nav collapses behind a Menu button while the sun toggle stays visible in the header.
 
 ## Elevation & Depth
 
@@ -219,7 +219,7 @@ Completely flat: there is no `box-shadow` in the system. Depth is the landscape 
 
 ## Shapes
 
-Two shape families. Interactive controls are gently rounded: form fields and the send button at 10px, the skip link at 8px, focus outlines drawn with a 4px radius and 4px offset. Photo slots are organic, each with its own asymmetric elliptical radius so no two look stamped from the same mold (hero `48% 48% 10% 36% / 40% 40% 8% 30%`, About portrait `44% 44% 12% 30% / 36% 36% 10% 26%`, and three different album shapes). The hill wave is a single smooth cubic curve stretched to full width at `clamp(40px, 6vw, 90px)` tall.
+Two shape families. Interactive controls are gently rounded: form fields and the send button at 10px, the skip link at 8px, focus outlines drawn with a 4px radius and 4px offset. Photo slots are organic, each with its own asymmetric elliptical radius so no two look stamped from the same mold (hero `48% 48% 10% 36% / 40% 40% 8% 30%` and three different album shapes). The hill wave is a single smooth cubic curve stretched to full width at `clamp(40px, 6vw, 90px)` tall.
 
 ### Named Rules
 **The No Two Alike Rule.** Every photo placeholder gets its own irregular radius and aspect ratio (4:5, 5:6, 1:1). Never reuse one shape for a set.
@@ -241,7 +241,7 @@ Quiet and solid, used once per page at most.
 ### Links
 - **In the sky:** inherit color with a 1px underline offset 4px. In prose, links are brick and thicken to 2px on hover. Blog titles are heading color with no underline until hover, when they turn brick and underline.
 - **On the band:** ground link color, weight 500, hover to ground ink.
-- **Homepage next step:** "About me" links to About in brick, like every other link on the sky, with a 1px underline that thickens on hover.
+- **Homepage next step:** "Contact me" links to Contact in brick, like every other link on the sky, with a 1px underline that thickens on hover.
 
 ### Navigation
 - **Desktop:** wordmark (Lora 24px, weight 600, heading color) on the left; nav links in soft ink at 16px weight 500 with a 1.5px transparent bottom border. Hover lifts to ink; the current page shows ink text over a brick underline. All transitions 200ms on `cubic-bezier(0.16, 1, 0.3, 1)`.
@@ -251,10 +251,10 @@ Quiet and solid, used once per page at most.
 A 32px sun in sun yellow sits beside the nav with an italic Lora "click me" hint (15px, soft ink, brick on hover). The hint disappears for good after the first toggle. Switching to dark slides the sun down 22px and fades it while a masked crescent moon and three small stars fade in, all on the 800ms theme fade. Hit area is at least 44px square, and the label reads "Switch to dark theme" or "Switch to light theme". Under reduced motion the swap is instant.
 
 ### Greeting
-"Hi, I’m Malcolm!" as a static h1 in display type, heading color, with "Malcolm!" in brick. Below it the homepage description sits in soft ink at `clamp(19px, 1.7vw, 22px)`, line height 1.55, max 30em, followed by a brick "About me" link. Nothing animates here.
+"Hi, I’m Malcolm!" as a static h1 in display type, heading color, with "Malcolm!" in brick. Below it the homepage description sits in soft ink at `clamp(19px, 1.7vw, 22px)`, line height 1.55, max 30em, followed by a brick "Contact me" link. "write" and "photos" inside the description link to Blog and Photos in brick. Nothing animates here.
 
 ### Hill Wave and Ground Band (signature)
-The hill-wave SVG fills with ground and sits flush on the ground band (1px overlap to avoid a seam). The band holds the footer: the Lora name (22px, weight 600, ground ink), the verse and its reference on one 14px Hanken Grotesk line (quote in ground ink, reference in ground soft), and LinkedIn and GitHub links. The verse line reads “Do everything in love.” 1 Corinthians 16:14, with the reference set apart by its smaller size and no dash, following the no-dash rule for site copy. On the homepage the band starts mid-page and holds The Good News and Work as two loose entries, then an "Also:" line of links separated by middle dots.
+The hill-wave SVG fills with ground and sits flush on the ground band (1px overlap to avoid a seam). The band holds the footer: the Lora name (22px, weight 600, ground ink), the verse and its reference on one 14px Hanken Grotesk line (quote in ground ink, reference in ground soft), and LinkedIn and GitHub links. The verse line reads “Do everything in love.” 1 Corinthians 16:14, with the reference set apart by its smaller size and no dash, following the no-dash rule for site copy. On the homepage the band starts mid-page and holds The Good News and Work as two loose entries, then flows straight into the footer; the nav covers the other pages.
 
 ### Photo Placeholder
 Placeholder tan fill, soft-ink 14 to 15px label pinned to the bottom center ("photo coming soon"), organic radius per the No Two Alike Rule. Its background follows the theme fade.

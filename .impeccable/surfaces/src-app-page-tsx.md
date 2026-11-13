@@ -15,9 +15,9 @@ THESIS: A warm, free-flowing personal homepage that opens with a greeting and fe
 
 OWN-WORLD: Canyon palette. Light: tan sky #E8D9BF, espresso ink #33241A, near-black headings #1F150E, sienna brick #933F2A, olive ground #4D5E34. Dark: brown night sky #1B1712, near-white headings #FBF4E8, tan-sienna brick #DF937A, moss ground #2C3523. Lora 600 headings, Hanken Grotesk 18px body. Hill-wave SVG flowing into a ground band; soft irregular photo placeholders; no cards, pills, or boxes.
 
-STORY: A big greeting, then one line about Malcolm and a link to his work. The ground band below holds The Good News and Work as equal entries, then the other pages, then the verse (1 Corinthians 16:14, NIV).
+STORY: A big greeting, then two lines about Malcolm with links to his writing and photos, and a way to get in touch. The ground band below holds The Good News and Work as equal entries, then the verse (1 Corinthians 16:14, NIV).
 
-FIRST VIEWPORT: Header with wordmark, nav, and the sunset toggle ("click me" until first use). Left: "Hi, I’m Malcolm!" with "Malcolm!" in brick, description, a "More about me" link to About. Right: irregular photo placeholder. The hill begins at the fold.
+FIRST VIEWPORT: Header with wordmark, nav, and the sunset toggle ("click me" until first use). Left: "Hi, I’m Malcolm!" with "Malcolm!" in brick, description with inline "write" and "photos" links, and a "Contact me" link. Right: irregular photo placeholder. The hill begins at the fold.
 
 SIGNATURE: Sunset toggle (sun sets into dark, moon and stars rise; follows system until chosen; light and dark only). The streamed greeting was removed on 2026-11-12.
 

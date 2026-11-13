@@ -11,7 +11,7 @@ export default function Contact() {
     return (
         <div className="page-content reading-page">
             <h1>Contact</h1>
-            <p className="introduction">Want to chat? You can find me here.</p>
+            <p className="introduction">Let’s get in touch!</p>
             <div className="related-links contact-links">
                 {contactLinks.map((link) => (
                     <a href={link.href} key={link.href}>{link.label}</a>
