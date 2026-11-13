@@ -16,8 +16,8 @@ export default function Photos() {
                 {albums.map((album) => (
                     <li key={album.id}>
                         <figure className="album">
-                            <div className="album-placeholder">
-                                <span>Photos coming soon</span>
+                            <div className="soft-photo album-photo">
+                                <span>photos coming soon</span>
                             </div>
                             <figcaption>
                                 <h2>{album.title}</h2>
