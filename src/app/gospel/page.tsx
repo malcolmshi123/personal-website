@@ -1,5 +1,7 @@
 import { createPageMetadata } from "@/lib/site-metadata";
-import { gospelIntroduction, gospelSections } from "@/content/gospel";
+import Link from "next/link";
+import { gospelIntroduction, gospelSections, paragraphText } from "@/content/gospel";
+import type { Paragraph } from "@/content/gospel";
 
 export const metadata = createPageMetadata(
     "The Gospel",
@@ -7,16 +9,30 @@ export const metadata = createPageMetadata(
     "/gospel/",
 );
 
+function GospelParagraph({ paragraph }: { paragraph: Paragraph }) {
+    if (typeof paragraph === "string") {
+        return <p>{paragraph}</p>;
+    }
+    return (
+        <p>
+            {paragraph.map((part) => typeof part === "string"
+                ? part
+                : <Link key={part.href} href={part.href}>{part.text}</Link>)}
+        </p>
+    );
+}
+
 export default function Gospel() {
     const words = [
         gospelIntroduction,
         ...gospelSections.flatMap(({ paragraphs, quote, afterQuote }) => [
-            ...paragraphs,
+            ...paragraphs.map(paragraphText),
             quote?.text ?? "",
             ...(afterQuote ?? []),
         ]),
     ].join(" ").split(/\s+/).length;
-    const readingMinutes = Math.ceil(words / 225);
+    // Medium’s reading speed, so this matches the times on Malcolm’s Medium posts.
+    const readingMinutes = Math.ceil(words / 265);
 
     return (
         <article className="page-content reading-page">
@@ -27,7 +43,7 @@ export default function Gospel() {
                 {gospelSections.map(({ id, heading, paragraphs, quote, afterQuote, references }) => (
                     <section key={id} aria-labelledby={id}>
                         <h2 id={id}>{heading}</h2>
-                        {paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                        {paragraphs.map((paragraph) => <GospelParagraph key={paragraphText(paragraph)} paragraph={paragraph} />)}
                         {quote && (
                             <figure className="gospel-quote">
                                 <blockquote cite={quote.href}>
@@ -40,7 +56,7 @@ export default function Gospel() {
                         )}
                         {afterQuote?.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                         {references.length > 0 && (
-                            <ul className="scripture-links" aria-label={`Bible passages for ${heading.toLowerCase()}`}>
+                            <ul className="scripture-links" aria-label={`Bible passages for ${heading}`}>
                                 {references.map(({ label, href }) => (
                                     <li key={href}><a href={href}>{label}</a></li>
                                 ))}

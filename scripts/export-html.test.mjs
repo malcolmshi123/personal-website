@@ -110,5 +110,27 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
 test("the gospel page shows its reading time", async () => {
     const html = await readExport("gospel/index.html");
 
-    assert.match(html, /About 5 minutes/);
+    assert.match(html, /About 4 minutes/);
+});
+
+test("the gospel introduction is one sentence above the first section", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /<p class="introduction">The gospel is the good news of God’s kingdom\.<\/p>/);
+});
+
+test("the gospel invitation links to the contact page", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /<p>You don’t need to have every question answered before taking this step\. If you have any, find a local church or ask me <a href="\/contact\/">here<\/a>!<\/p>/);
+    assert.match(html, /receive the life He offers\.<\/p>/);
+    assert.doesNotMatch(html, /Come to Jesus, grow in His love/);
+});
+
+test("gospel reference labels keep the capitals in each heading", async () => {
+    const html = await readExport("gospel/index.html");
+
+    assert.match(html, /aria-label="Bible passages for God’s kingdom"/);
+    assert.match(html, /aria-label="Bible passages for Alive in Christ"/);
+    assert.doesNotMatch(html, /aria-label="Bible passages for [^"]*\b(god|christ|his)\b/);
 });
