@@ -11,16 +11,16 @@ Audience: people curious about Malcolm (friends, church and fellowship, recruite
 
 ## Direction contract
 
-THESIS: The familiar personal homepage, played straight at full craft, in a granola palette. Refuses the dark developer portfolio and the cold white SaaS template.
+THESIS: A warm, free-flowing personal homepage that opens with a greeting and feels hand-made. Refuses the AI-generated split-hero card template and anything that reads as Claude (cream plus terracotta, Young Serif, pills).
 
-OWN-WORLD: Oat ground, bark-brown ink, forest green for primary actions and the footer band, rust for links and emphasis, moss and clay as soft card fields, honey for selection. Young Serif headings, Figtree body. Rounded 14px cards, an arched portrait frame, authored SVG arrows.
+OWN-WORLD: Canyon palette. Light: tan sky #E8D9BF, espresso ink #33241A, near-black headings #1F150E, oxblood brick #9A3324, olive ground #4D5E34. Dark: brown night sky #1B1712, near-white headings #FBF4E8, salmon brick #E58A76, moss ground #2C3523. Fraunces (SOFT 100, WONK 1, 600) headings, Hanken Grotesk 18px body. Hill-wave SVG flowing into a ground band; soft irregular photo placeholders; no cards, pills, or boxes.
 
-STORY: The visitor meets Malcolm by name, reads two sentences in his voice, sees faith and work given equal featured weight, then finds About, Blog, Photos, and Contact.
+STORY: The greeting streams in token by token, then one line about Malcolm and a link to his work. The ground band below holds The Good News and Work as equal entries, then the other pages, then the verse (1 Corinthians 16:14, NIV).
 
-FIRST VIEWPORT: Header with wordmark and nav. Left: "Hi, I'm Malcolm." at display scale, intro, two buttons (See my work, filled forest; Read the good news, outlined). Right: arched portrait placeholder. Featured cards begin just below the fold line.
+FIRST VIEWPORT: Header with wordmark, nav, and the sunset toggle ("click me" until first use). Left: streamed greeting with "Malcolm." in brick, readout, description, See my work. Right: irregular photo placeholder. The hill begins at the fold.
 
-FORM: canon (the standing exit) with the user's steer "a more granola color palette and design"; seed:5b95f958328adab4.
+SIGNATURES: Sunset toggle (sun sets into dark, moon and stars rise; follows system until chosen; light and dark only). Streamed greeting (once per session, instant under reduced motion).
 
-FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+FINISH: export test, Impeccable detector, and DESIGN.md generated from the shipped build.
 
-Unresolved: real portrait and album photos (Malcolm to supply); restyling of inner page layouts is the next increment.
+Unresolved: real portrait and album photos (Malcolm to supply).

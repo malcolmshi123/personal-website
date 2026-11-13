@@ -16,7 +16,6 @@
     --moon: #e9dcc5;
     --font-body: var(--font-hanken), "Segoe UI", sans-serif;
     --font-heading: var(--font-fraunces), Georgia, serif;
-    --radius: 14px;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     --theme-fade: 800ms ease;
     color-scheme: light;
@@ -276,7 +275,7 @@ h1 {
     min-height: 44px;
     padding: 8px 16px;
     border: 1px solid var(--rule);
-    border-radius: 999px;
+    border-radius: 10px;
     background: transparent;
     color: var(--ink);
     font: inherit;
@@ -362,13 +361,6 @@ h1 {
 
 .site-footer a:focus-visible {
     outline-color: var(--ground-link);
-}
-
-/* Buttons and shared links */
-
-.arrow-icon {
-    flex-shrink: 0;
-    transition: transform 240ms var(--ease-out);
 }
 
 /* Shared helpers */
@@ -580,12 +572,6 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-size: clamp(44px, 6vw, 72px);
 }
 
-.page-note {
-    margin-top: 32px;
-    color: var(--ink-soft);
-    font-size: 15px;
-}
-
 .reading-page {
     max-width: 760px;
 }
@@ -623,14 +609,12 @@ body:has(.home-ground) .site-footer .hill-wave {
 }
 
 .prose a,
-.back-link,
 .resume-download {
     color: var(--brick);
     text-decoration-thickness: 1px;
 }
 
 .prose a:hover,
-.back-link:hover,
 .resume-download:hover {
     text-decoration-thickness: 2px;
 }
@@ -682,12 +666,6 @@ body:has(.home-ground) .site-footer .hill-wave {
 
 .gospel-quote figcaption {
     color: var(--ink-soft);
-    font-size: 15px;
-}
-
-.back-link {
-    display: inline-block;
-    margin-bottom: 32px;
     font-size: 15px;
 }
 

@@ -36,7 +36,7 @@ One site that holds both a serious engineering record (GPU performance, LLM infe
 
 - Copy is conversational and sounds like Malcolm talking to a visitor. No slogans, vague metaphors, or promotional filler.
 - Approved gospel and testimony wording is preserved unless Malcolm asks for a change.
-- Visual direction chosen 2026-11-12: the standard personal site layout, played straight, with a granola (earthy, natural) palette and feel. Malcolm declined the more conceptual directions.
+- Visual direction (v2, 2026-11-12): free-flowing personal site with a greeting first, Canyon palette (tan sky, espresso ink, brick, olive ground; brown night sky over moss ground in dark mode), Fraunces Soft headings and Hanken Grotesk body, a sunset light/dark toggle, and a streamed greeting. Must not look AI-generated or like Claude: no split-hero card templates, pills, Young Serif, or cream-and-terracotta. Spec: docs/superpowers/specs/2026-11-12-site-revamp-design.md.
 
 ## Evidence on Hand
 

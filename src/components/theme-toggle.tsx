@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { nextTheme, readStoredTheme, saveThemeChoice, type Theme } from "@/lib/theme";
+import { nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, type Theme } from "@/lib/theme";
 
 const darkQuery = "(prefers-color-scheme: dark)";
 
@@ -27,7 +27,9 @@ export default function ThemeToggle() {
         const media = window.matchMedia(darkQuery);
 
         function followSystem(event: MediaQueryListEvent) {
-            if (storage && readStoredTheme(storage)) {
+            const stored = storage ? readStoredTheme(storage) : null;
+            const toggledThisVisit = document.documentElement.dataset.themeToggled === "true";
+            if (!shouldFollowSystem(stored, toggledThisVisit)) {
                 return;
             }
 

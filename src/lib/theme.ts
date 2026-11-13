@@ -38,3 +38,7 @@ export function saveThemeChoice(storage: ThemeStorage, theme: Theme): void {
         // Storage can be blocked in private browsing; the choice then lasts for this page only.
     }
 }
+
+export function shouldFollowSystem(stored: Theme | null, toggledThisVisit: boolean): boolean {
+    return stored === null && !toggledThisVisit;
+}

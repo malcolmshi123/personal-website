@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { bootDocument, bootScript } from "../src/lib/boot-script.ts";
-import { nextTheme, readStoredTheme, resolveTheme, saveThemeChoice } from "../src/lib/theme.ts";
+import { nextTheme, readStoredTheme, resolveTheme, saveThemeChoice, shouldFollowSystem } from "../src/lib/theme.ts";
 
 function createStorage(entries = {}) {
     const values = new Map(Object.entries(entries));
@@ -111,4 +111,13 @@ test("readStoredTheme returns null for blocked storage or invalid values", () =>
     assert.equal(readStoredTheme(createThrowingStorage()), null);
     assert.equal(readStoredTheme(createStorage({ theme: "system" })), null);
     assert.equal(readStoredTheme(createStorage({ theme: "dark" })), "dark");
+});
+
+test("shouldFollowSystem follows only when the visitor has not chosen a theme", () => {
+    assert.equal(shouldFollowSystem(null, false), true);
+    assert.equal(shouldFollowSystem("dark", false), false);
+});
+
+test("shouldFollowSystem respects a choice made this visit even when storage is blocked", () => {
+    assert.equal(shouldFollowSystem(null, true), false);
 });
