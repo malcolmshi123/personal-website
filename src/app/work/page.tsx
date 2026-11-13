@@ -1,6 +1,5 @@
 import { createPageMetadata } from "@/lib/site-metadata";
 import LinkIcon from "@/components/link-icon";
-import { resumeDownloadName } from "@/content/contact";
 import { experience, projects, work } from "@/content/work";
 
 export const metadata = createPageMetadata(
@@ -14,9 +13,9 @@ export default function Work() {
         <article className="page-content reading-page">
             <h1>Work</h1>
             <p className="introduction">{work.introduction}</p>
-            <a className="resume-download" href="/resume.pdf" download={resumeDownloadName}>
+            <a className="resume-download" href="/resume.pdf">
                 <LinkIcon name="resume" />
-                Download resume (PDF)
+                View resume (PDF)
             </a>
             <div className="prose">
                 <section aria-labelledby="projects">

@@ -5,10 +5,7 @@ type ContactLink = {
     iconLabel: string;
     href: string;
     icon: LinkIconName;
-    download?: string;
 };
-
-export const resumeDownloadName = "Malcolm-Shi-Resume.pdf";
 
 export const contactLinks: ContactLink[] = [
     {
@@ -28,6 +25,5 @@ export const contactLinks: ContactLink[] = [
         iconLabel: "Resume (PDF)",
         href: "/resume.pdf",
         icon: "resume",
-        download: resumeDownloadName,
     },
 ];

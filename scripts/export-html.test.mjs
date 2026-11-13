@@ -81,13 +81,21 @@ test("the contact page lists LinkedIn, GitHub, and the resume with icons", async
 
     assert.match(links, /<a href="https:\/\/linkedin\.com\/in\/malcolm-shi"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>LinkedIn<\/a>/);
     assert.match(links, /<a href="https:\/\/github\.com\/malcolmshi123"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>GitHub<\/a>/);
-    assert.match(links, /<a href="\/resume\.pdf" download="Malcolm-Shi-Resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Resume<\/a>/);
+    assert.match(links, /<a href="\/resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Resume<\/a>/);
 });
 
 test("the work page resume link shows the resume icon", async () => {
     const html = await readExport("work/index.html");
 
-    assert.match(html, /<a class="resume-download" href="\/resume\.pdf" download="Malcolm-Shi-Resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Download resume \(PDF\)<\/a>/);
+    assert.match(html, /<a class="resume-download" href="\/resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>View resume \(PDF\)<\/a>/);
+});
+
+test("resume links open the PDF in the browser instead of downloading it", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+
+        assert.doesNotMatch(html, /<a[^>]*href="\/resume\.pdf"[^>]*download/, page);
+    }
 });
 
 test("the homepage hero has no icon links of its own", async () => {
