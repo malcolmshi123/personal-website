@@ -15,7 +15,7 @@ type Experience = {
 };
 
 export const work = {
-    introduction: "My recent work focuses on GPU performance and LLM inference. I’ve also worked on graphics and rendering, web applications, and test automation.",
+    introduction: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
     education: {
         school: "University of Waterloo",
         degree: "BASc in Computer Engineering, Co-op",
@@ -40,7 +40,7 @@ export const experience: Experience[] = [
         role: "Software Engineer Intern",
         team: "Software-Hardware Optimization Lab",
         dates: "January – April 2025",
-        description: "I worked on neural rendering models with 3D Gaussian Splatting and NeRF, Vulkan compute shaders on Android, and an occlusion culling system using DirectX 12 Work Graphs. Much of the work involved profiling GPU execution and improving rendering performance on embedded systems.",
+        description: "I worked on neural rendering models with 3D Gaussian Splatting and NeRF, Vulkan compute shaders on Android, and an occlusion culling system using DirectX 12 Work Graphs. I profiled GPU execution and improved rendering performance on embedded systems.",
     },
     {
         company: "Nest Wealth",
