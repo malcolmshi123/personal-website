@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
+import ThemeToggle from "@/components/theme-toggle";
 
 const navigation = [
     { href: "/gospel/", label: "The Good News" },
@@ -34,8 +35,9 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
             }}
         >
             <Link className="wordmark" href="/" aria-label="Malcolm Shi, home">
-                Malcolm Shi<span aria-hidden="true">.</span>
+                Malcolm Shi
             </Link>
+            <ThemeToggle />
             <button
                 ref={menuButton}
                 className="menu-toggle"

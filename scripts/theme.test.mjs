@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { bootDocument, bootScript } from "../src/lib/boot-script.ts";
-import { nextTheme, resolveTheme } from "../src/lib/theme.ts";
+import { nextTheme, readStoredTheme, resolveTheme, saveThemeChoice } from "../src/lib/theme.ts";
 
 function createStorage(entries = {}) {
     const values = new Map(Object.entries(entries));
@@ -92,4 +92,23 @@ test("bootScript runs on its own against a window global", () => {
     new Function("window", bootScript)(win);
 
     assert.equal(win.document.documentElement.dataset.theme, "dark");
+});
+
+test("saveThemeChoice stores the theme and marks the toggle as seen", () => {
+    const storage = createStorage();
+
+    saveThemeChoice(storage, "dark");
+
+    assert.equal(storage.getItem("theme"), "dark");
+    assert.equal(storage.getItem("theme-toggled"), "true");
+});
+
+test("saveThemeChoice does not throw when storage is blocked", () => {
+    assert.doesNotThrow(() => saveThemeChoice(createThrowingStorage(), "light"));
+});
+
+test("readStoredTheme returns null for blocked storage or invalid values", () => {
+    assert.equal(readStoredTheme(createThrowingStorage()), null);
+    assert.equal(readStoredTheme(createStorage({ theme: "system" })), null);
+    assert.equal(readStoredTheme(createStorage({ theme: "dark" })), "dark");
 });

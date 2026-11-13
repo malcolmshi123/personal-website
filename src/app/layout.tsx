@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Hanken_Grotesk } from "next/font/google";
 import type { ReactNode } from "react";
+import SiteFooter from "@/components/site-footer";
 import SiteHeader from "@/components/site-header";
-import { contactLinks } from "@/content/contact";
 import { bootScript } from "@/lib/boot-script";
 import { createPageMetadata, siteDescription, siteUrl } from "@/lib/site-metadata";
 import "./globals.css";
@@ -43,18 +43,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                         {children}
                     </main>
                 </div>
-                <footer className="site-footer">
-                    <div className="site-footer-inner">
-                        <span className="site-footer-name">Malcolm Shi</span>
-                        <ul className="site-footer-links">
-                            {contactLinks.map((link) => (
-                                <li key={link.href}>
-                                    <a href={link.href}>{link.label}</a>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </footer>
+                <SiteFooter />
             </body>
         </html>
     );
