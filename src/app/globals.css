@@ -104,6 +104,11 @@ h3 {
     :root {
         --theme-fade: 0s;
     }
+
+    .photo-stack-card {
+        animation: none;
+        transition: background-color var(--theme-fade);
+    }
 }
 
 h1 {
@@ -320,13 +325,11 @@ h1 {
     padding: 20px clamp(20px, 5vw, 72px) 40px;
 }
 
-.site-footer-name {
+.site-footer-copyright {
     justify-self: start;
-    color: var(--ground-ink);
-    font-family: var(--font-heading);
-    font-size: 24px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ground-soft);
+    font-size: 14px;
 }
 
 .site-footer-verse {
@@ -399,20 +402,69 @@ h1 {
     line-height: 1.65;
 }
 
-/* Homepage */
+/* Homepage: everything fits in one screen, so sizes scale with the viewport height too */
+
+body:has(.home) .site-header {
+    padding-block: clamp(14px, 3svh, 28px);
+}
+
+body:has(.home) .main-content,
+.home {
+    display: flex;
+    flex-direction: column;
+}
+
+.home {
+    --stack-height: clamp(200px, min(33svh, 30vw), 460px);
+    --greeting-size: min(clamp(48px, 8.5vw, 96px), 9.5svh);
+    flex: 1;
+}
+
+.home-hero {
+    flex: 1;
+}
+
+@media (max-height: 740px) {
+    .home {
+        --stack-height: clamp(180px, min(30svh, 30vw), 460px);
+    }
+}
 
 .home-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, max-content) minmax(calc(var(--stack-height) * 0.8 + 96px), 1fr);
     align-items: center;
-    gap: clamp(32px, 6vw, 96px);
-    padding-block: clamp(32px, 6vw, 80px) clamp(56px, 8vw, 112px);
+    gap: clamp(32px, 6vw, 96px) 0;
+    padding-block: clamp(8px, 2.5svh, 48px) clamp(20px, 3.5svh, 72px);
+}
+
+.greeting-row {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(20px, 2.5vw, 36px);
+}
+
+.greeting-portrait {
+    display: flex;
+    flex: none;
+    align-items: flex-end;
+    justify-content: center;
+    height: calc(var(--greeting-size) * 1.72);
+    aspect-ratio: 4 / 5;
+    margin-bottom: calc(var(--greeting-size) * 0.16);
+    padding: 12px;
+    border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
+    background: var(--placeholder);
+    color: var(--ink-soft);
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: center;
+    transition: background-color var(--theme-fade);
 }
 
 .greeting {
     margin: 0;
-    max-width: 9ch;
-    font-size: clamp(56px, 8.5vw, 96px);
+    font-size: var(--greeting-size);
     letter-spacing: -0.02em;
     line-height: 1;
 }
@@ -423,9 +475,9 @@ h1 {
 
 .home-description {
     max-width: 30em;
-    margin: 24px 0 0;
+    margin: clamp(12px, 2svh, 24px) 0 0;
     color: var(--ink-soft);
-    font-size: clamp(19px, 1.7vw, 22px);
+    font-size: clamp(17px, min(1.7vw, 2.8svh), 22px);
     line-height: 1.55;
 }
 
@@ -440,7 +492,7 @@ h1 {
 
 .home-link {
     display: inline-block;
-    margin-top: 28px;
+    margin-top: clamp(12px, 2.4svh, 28px);
     color: var(--brick);
     font-weight: 500;
     text-decoration: underline;
@@ -451,20 +503,82 @@ h1 {
     text-decoration-thickness: 2px;
 }
 
-.hero-photo {
+/* The stack may overlap the hero padding so it never makes the page taller. */
+.photo-stack {
+    justify-self: center;
+    margin: calc(-1 * clamp(8px, 2.5svh, 48px)) 0;
+    text-align: center;
+}
+
+.photo-stack-button {
+    position: relative;
+    display: block;
+    height: var(--stack-height);
+    aspect-ratio: 4 / 5;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    font: inherit;
+    cursor: pointer;
+}
+
+.photo-stack-card {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    justify-self: end;
-    width: 100%;
-    max-width: 420px;
-    aspect-ratio: 4 / 5;
     padding: 28px;
     border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
     background: var(--placeholder);
+    font-size: 15px;
+    transition: background-color var(--theme-fade), transform 0.3s ease;
+}
+
+.photo-stack-back {
+    background: color-mix(in srgb, var(--placeholder) 62%, var(--ink-soft));
+    transform: rotate(-8deg) translateX(-14px);
+}
+
+.photo-stack-middle {
+    background: color-mix(in srgb, var(--placeholder) 78%, var(--ink-soft));
+    transform: rotate(6deg) translateX(12px);
+}
+
+.photo-stack-button[data-turned] .photo-stack-top {
+    animation: photo-stack-in 0.35s ease;
+}
+
+.photo-stack-button:hover .photo-stack-back {
+    transform: rotate(-11deg) translateX(-20px);
+}
+
+.photo-stack-button:hover .photo-stack-middle {
+    transform: rotate(9deg) translateX(18px);
+}
+
+@keyframes photo-stack-in {
+    from {
+        transform: rotate(-8deg) translateX(-14px);
+    }
+}
+
+.photo-stack-caption {
+    margin-top: 12px;
     color: var(--ink-soft);
     font-size: 15px;
-    transition: background-color var(--theme-fade);
+}
+
+.photo-stack-label {
+    color: var(--brick);
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+:root:not([data-theme]) .photo-stack-hint {
+    display: none;
 }
 
 .home-ground {
@@ -480,7 +594,11 @@ h1 {
 .home-ground-inner {
     max-width: 1280px;
     margin-inline: auto;
-    padding: clamp(24px, 4vw, 48px) clamp(20px, 5vw, 72px) clamp(48px, 6vw, 80px);
+    padding: clamp(16px, 3.5svh, 48px) clamp(20px, 5vw, 72px) clamp(20px, 4.5svh, 56px);
+}
+
+.home-ground .hill-wave {
+    height: clamp(28px, min(6vw, 7svh), 90px);
 }
 
 .home-entries {
@@ -496,14 +614,14 @@ h1 {
 .home-entry h3 {
     margin: 0 0 10px;
     color: var(--ground-ink);
-    font-size: clamp(28px, 3vw, 40px);
+    font-size: clamp(24px, min(3vw, 4.5svh), 40px);
     letter-spacing: -0.02em;
     line-height: 1.1;
 }
 
 .home-entry p {
     max-width: 32em;
-    margin: 0 0 18px;
+    margin: 0 0 clamp(8px, 1.6svh, 18px);
 }
 
 .home-ground a {
@@ -523,6 +641,12 @@ body:has(.home-ground) .site-footer {
     margin-top: 0;
 }
 
+body:has(.home-ground) .site-footer-inner {
+    padding-top: clamp(14px, 2.5svh, 24px);
+    padding-bottom: clamp(16px, 3svh, 40px);
+    background: linear-gradient(color-mix(in srgb, var(--ground-ink) 22%, transparent), color-mix(in srgb, var(--ground-ink) 22%, transparent)) no-repeat center top / calc(100% - 2 * clamp(20px, 5vw, 72px)) 1px;
+}
+
 body:has(.home-ground) .site-footer .hill-wave {
     display: none;
 }
@@ -532,9 +656,13 @@ body:has(.home-ground) .site-footer .hill-wave {
         grid-template-columns: minmax(0, 1fr);
     }
 
-    .hero-photo {
-        justify-self: start;
-        max-width: 320px;
+    .home {
+        --stack-height: clamp(160px, 26svh, 280px);
+    }
+
+    .photo-stack {
+        justify-self: center;
+        margin: 0;
     }
 
     .home-entries {
@@ -929,8 +1057,7 @@ body:has(.home-ground) .site-footer .hill-wave {
         padding-block: 18px;
     }
 
-    .wordmark,
-    .site-footer-name {
+    .wordmark {
         font-size: 21px;
     }
 

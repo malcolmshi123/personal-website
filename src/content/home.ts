@@ -20,7 +20,18 @@ export const featuredLinks: FeaturedLink[] = [
     {
         title: "Work",
         description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
-        action: "See my work",
+        action: "See more",
+        actionContext: " of my work",
         href: "/work/",
     },
+];
+
+type HeroPhoto = {
+    label: "Tasted" | "Seen";
+    placeholder: string;
+};
+
+export const heroPhotos: HeroPhoto[] = [
+    { label: "Tasted", placeholder: "food photo coming soon" },
+    { label: "Seen", placeholder: "nature photo coming soon" },
 ];

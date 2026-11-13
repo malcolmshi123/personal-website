@@ -34,18 +34,52 @@ test("the about page is gone from the export and the navigation", async () => {
 });
 
 test("page introductions use the new wording", async () => {
-    assert.match(await readExport("blog/index.html"), /class="introduction">Some pieces I&#x27;ve written\.</);
-    assert.match(await readExport("photos/index.html"), /class="introduction">My most cherished memories\.</);
-    assert.match(await readExport("photos/index.html"), /Japan \+ Korea 2026\./);
+    assert.match(await readExport("blog/index.html"), /class="introduction">Some blogs I&#x27;ve written\.</);
+    assert.match(await readExport("photos/index.html"), /class="introduction">Some photos I&#x27;ve taken\.</);
     assert.match(await readExport("contact/index.html"), /class="introduction">Let’s get in touch!</);
 });
 
-test("every page footer carries the verse", async () => {
+test("the gallery has Food, Nature, and Places albums with no descriptions yet", async () => {
+    const html = await readExport("photos/index.html");
+    const grid = html.slice(html.indexOf('class="album-grid"'), html.indexOf("</ul>", html.indexOf('class="album-grid"')));
+    const titles = [...grid.matchAll(/<h2>([^<]+)<\/h2>/g)].map((match) => match[1]);
+
+    assert.deepEqual(titles, ["Food", "Nature", "Places"]);
+    assert.doesNotMatch(grid, /<figcaption>[\s\S]*?<p>/);
+});
+
+test("the photos page is called Gallery in its heading and the navigation", async () => {
+    const html = await readExport("photos/index.html");
+
+    assert.match(html, /<h1>Gallery<\/h1>/);
+    assert.match(html, /<title>Gallery \| Malcolm Shi<\/title>/);
+    assert.match(html, /<a[^>]*href="\/photos\/"[^>]*>Gallery<\/a>/);
+    assert.doesNotMatch(html.replace(/<[^>]+>/g, " "), /\bPhotos\b/);
+});
+
+test("every page footer carries Psalm 34:8", async () => {
     for (const page of pages) {
         const html = await readExport(page);
 
-        assert.match(html.replace(/<[^>]+>/g, ""), /“Do everything in love\.” 1 Corinthians 16:14/, page);
+        assert.match(html.replace(/<[^>]+>/g, ""), /“Oh, taste and see that the LORD is good!” Psalm 34:8/, page);
     }
+});
+
+test("the homepage work entry says see more and names its destination for screen readers", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /href="\/work\/">See more<span class="visually-hidden"> of my work<\/span><\/a>/);
+});
+
+test("the gospel testimony uses the updated wording and references", async () => {
+    const page = await readExport("gospel/index.html");
+    const body = page.slice(page.indexOf('class="prose"'), page.indexOf("<footer")).replace(/<[^>]+>/g, "\n");
+    const testimony = body.slice(body.indexOf("My testimony"), body.indexOf("Come to Jesus"));
+
+    assert.match(testimony, /I had experienced what the world had to offer, but I was still lost and unsatisfied\./);
+    assert.match(testimony, /I have come to understand that His grace is sufficient\./);
+    assert.doesNotMatch(body, /Psalm 34:8/);
+    assert.equal((body.match(/Ephesians 2:1-5/g) ?? []).length, 1);
 });
 
 test("every page footer has labeled LinkedIn, GitHub, and resume icons", async () => {
@@ -66,12 +100,14 @@ test("every page footer has labeled LinkedIn, GitHub, and resume icons", async (
     }
 });
 
-test("the header wordmark and footer name both end with a period", async () => {
+test("the header keeps the wordmark and the footer shows a copyright notice instead", async () => {
     for (const page of pages) {
         const html = await readExport(page);
+        const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
 
         assert.match(html, /<a class="wordmark"[^>]*>Malcolm Shi\.<\/a>/, page);
-        assert.match(html, /<span class="site-footer-name">Malcolm Shi\.<\/span>/, page);
+        assert.match(footer, /<p class="site-footer-copyright">© \d{4} Malcolm Shi<\/p>/, page);
+        assert.doesNotMatch(footer, /Malcolm Shi\./, page);
     }
 });
 
@@ -96,6 +132,30 @@ test("resume links open the PDF in the browser instead of downloading it", async
 
         assert.doesNotMatch(html, /<a[^>]*href="\/resume\.pdf"[^>]*download/, page);
     }
+});
+
+test("the homepage hero shows a labeled photo stack in place of the single photo", async () => {
+    const html = await readExport("index.html");
+    const hero = html.slice(html.indexOf('class="home-hero"'), html.indexOf('class="home-ground'));
+
+    assert.match(hero, /<button[^>]*class="photo-stack-button"[^>]*aria-label="Show another photo"/);
+    assert.match(hero, /food photo coming soon/);
+    assert.match(hero.replace(/<[^>]+>/g, ""), /Tasted/);
+    assert.doesNotMatch(hero, /class="hero-photo"/);
+});
+
+test("the homepage greeting has a labeled portrait placeholder beside it, outside the heading", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /<div class="greeting-row"><h1[^>]*class="greeting"[^>]*>[\s\S]*?<\/h1><div class="greeting-portrait"><span>portrait coming soon<\/span><\/div><\/div>/);
+});
+
+test("the photo stack hint is hidden when JavaScript never runs", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /:root:not\(\[data-theme\]\) \.photo-stack-hint\{display:none\}/);
 });
 
 test("the homepage hero has no icon links of its own", async () => {
