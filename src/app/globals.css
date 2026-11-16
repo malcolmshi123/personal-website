@@ -356,8 +356,12 @@ h1 {
 }
 
 .site-footer-links .link-icon {
-    width: 26px;
-    height: 26px;
+    height: 17px;
+}
+
+.site-footer-links .link-icon-github,
+.site-footer-links .link-icon-resume {
+    height: 18px;
 }
 
 .site-footer a {
@@ -376,8 +380,8 @@ h1 {
 
 .link-icon {
     flex: none;
-    width: 1.15em;
-    height: 1.15em;
+    width: auto;
+    height: 1.1em;
 }
 
 .visually-hidden {
@@ -894,8 +898,13 @@ body:has(.home-ground) .site-footer .hill-wave {
 
 .contact-links .link-icon,
 .resume-download .link-icon {
-    width: 24px;
-    height: 24px;
+    height: 15px;
+}
+
+.contact-links .link-icon-github,
+.contact-links .link-icon-resume,
+.resume-download .link-icon-resume {
+    height: 16px;
 }
 
 .prose .contact-heading {
