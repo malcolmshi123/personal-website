@@ -7,7 +7,7 @@ Malcolm Shi
 Requires Node.js 22 LTS or newer supported LTS and npm.
 
 ```sh
-npm ci
+npm ci  
 npm run dev
 ```
 
@@ -23,7 +23,7 @@ that directory to a static host; a Next.js server is not required. Typography us
 system fonts, so builds do not need to download fonts.
 
 The build also fixes nested prefetch filenames produced by Next.js on Windows.
-This keeps page navigation working on static hosts. On exports with correct
+This keeps page navigation working on static host   s. On exports with correct
 filenames, this step makes no changes. Run `npm run test:export` to check it.
 
 The site currently includes the welcome, About, Gospel, Blog, Work, Photos, and
