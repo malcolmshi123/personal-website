@@ -153,6 +153,23 @@ test("the homepage greeting has the portrait photo beside it, outside the headin
     await readFile(new URL("../out/photos/portrait.webp", import.meta.url));
 });
 
+test("the homepage greeting is split into two lines that can rise in", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /<h1[^>]*class="greeting"[^>]*><span class="greeting-line"><span>Hi, I’m <\/span><\/span><span class="greeting-line"><span class="greeting-accent">Malcolm!<\/span><\/span><\/h1>/);
+});
+
+test("motion only runs during the intro and stops for reduced motion", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /:root\[data-intro=play\] \.greeting-line/);
+    assert.match(css, /@keyframes greeting-rise/);
+    assert.match(css, /@keyframes hill-breathe/);
+    assert.match(css, /prefers-reduced-motion:reduce\)\{[^@]*animation:none!important/);
+});
+
 test("the photo stack hint is hidden when JavaScript never runs", async () => {
     const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
     const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));

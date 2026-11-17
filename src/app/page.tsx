@@ -1,16 +1,19 @@
 import Link from "next/link";
 import HillWave from "@/components/hill-wave";
+import IntroEnd from "@/components/intro-end";
 import PhotoStack from "@/components/photo-stack";
 import { featuredLinks } from "@/content/home";
 
 export default function Home() {
     return (
         <div className="home">
+            <IntroEnd />
             <section className="home-hero" aria-labelledby="greeting">
                 <div className="home-hero-text">
                     <div className="greeting-row">
                         <h1 id="greeting" className="greeting">
-                            Hi, I’m <br /><span className="greeting-accent">Malcolm!</span>
+                            <span className="greeting-line"><span>Hi, I’m </span></span>
+                            <span className="greeting-line"><span className="greeting-accent">Malcolm!</span></span>
                         </h1>
                         <div className="greeting-portrait">
                             <img src="/photos/portrait.webp" alt="Malcolm smiling in a suit outdoors" width={400} height={500} />

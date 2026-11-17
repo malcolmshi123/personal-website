@@ -138,7 +138,7 @@ The page is a landscape. A tan sky fills the top, ink in espresso browns sits on
 
 Type does the talking. Lora, a calligraphic old-style serif set at 600, gives headings a hand-made warmth, and Hanken Grotesk at a generous 18px keeps the reading calm. Color is sparing: sienna brick marks things you can follow (links, the current page, the name in the greeting), olive marks the one thing you can press. Photos, until they exist, are irregular soft blobs in a slightly deeper tan, labeled plainly.
 
-One small moment carries the personality: the sun in the header sets into a moon and stars when you switch to dark. Everything else holds still, including the homepage greeting, which is plain type. The site explicitly rejects the split-hero card template, pills, Young Serif, and cream-and-terracotta.
+The sun in the header still sets into a moon and stars when you switch to dark, and the land moves the way land does: slowly. The homepage arrives once per visit (the greeting lines rise like a sunrise, the photo cards are dealt, the hill swells up), hovers answer with small physical gestures, and a few quiet loops keep the scene alive. Nothing moves fast, and nothing moves for people who ask for reduced motion. The site explicitly rejects the split-hero card template, pills, Young Serif, and cream-and-terracotta.
 
 **Key Characteristics:**
 - Sky above, ground below: a hill-wave SVG flowing into a solid ground band closes every page.
@@ -251,7 +251,7 @@ Quiet and solid, used once per page at most.
 A 32px sun in sun yellow sits beside the nav with an italic Lora "click me" hint (15px, soft ink, brick on hover). The hint disappears for good after the first toggle. Switching to dark slides the sun down 22px and fades it while a masked crescent moon and three small stars fade in, all on the 800ms theme fade. Hit area is at least 44px square, and the label reads "Switch to dark theme" or "Switch to light theme". Under reduced motion the swap is instant.
 
 ### Greeting
-"Hi, I’m Malcolm!" as a static h1 in display type, heading color, with "Malcolm!" in brick. Below it the homepage description sits in soft ink at `clamp(19px, 1.7vw, 22px)`, line height 1.55, max 30em, followed by a brick "Contact me" link. "write" and "photos" inside the description link to Blog and Photos in brick. Nothing animates here.
+"Hi, I’m Malcolm!" as an h1 in display type, split into two lines that rise in during the intro, heading color, with "Malcolm!" in brick. Below it the homepage description sits in soft ink at `clamp(19px, 1.7vw, 22px)`, line height 1.55, max 30em, followed by a brick "Contact me" link. "write" and "photos" inside the description link to Blog and Photos in brick. Nothing animates here.
 
 A portrait blob sits 20 to 36px right of “Malcolm!”, spanning from the top of “Hi” to the baseline of “Malcolm!” (1.72× the greeting size). It holds a 400×500 WebP portrait at `public/photos/portrait.webp`, cropped head and shoulders with room above the head so the rounded top never clips it. To the right, centered in the open space beside the text, sits the photo stack: three soft blobs fanned at -8° and 6°, the top one showing the current photo (placeholders until photos arrive). Tapping it brings the next photo forward from the back of the stack and updates the caption label, Tasted for food and Seen for everything else, after Psalm 34:8. The “tap for another” hint hides when JavaScript never runs. The homepage fits one laptop screen (tested 1024×700 through 1920×1080): header padding, hero spacing, greeting, stack height, band entries, and the hill all scale with viewport height. Phones scroll.
 
@@ -273,7 +273,10 @@ Open rows with a 1px hairline on top and 24px above the content. The head line p
 - **Do** separate content with space and 1px `rule` hairlines.
 - **Do** use brick for links and the current page, olive for the single primary action.
 - **Do** give every photo slot its own irregular radius and a plain label until a real photo exists.
-- **Do** keep motion to the theme fade, 200ms state changes on `cubic-bezier(0.16, 1, 0.3, 1)`, and the sunset toggle, all disabled under `prefers-reduced-motion`.
+- **Do** keep motion on `cubic-bezier(0.16, 1, 0.3, 1)` and to these three layers, all off under `prefers-reduced-motion`:
+  - **Intro (homepage, once per visit, about 1.2s):** the boot script sets `data-intro="play"` on the first homepage load of a session; greeting lines rise from a clip (800ms, second line +120ms), the portrait pops (350ms delay), description and Contact me settle in (450ms, 550ms), photo cards are dealt (300 to 500ms), the hill scales up from its base (1s). A client effect clears the flag after 1.6s so returning never replays it. Without JavaScript nothing animates and nothing is hidden.
+  - **Hover:** nav underline draws in from the left (300ms; hidden in the mobile menu), link underlines drop from 4px to 6px offset, the photo stack fans wider, the portrait lifts 3px and tilts 3°, footer icons lift 2px.
+  - **Idle:** the stack's back cards drift 3px (7s and 8s), every hill breathes (9s, alternate), the sun gently swells in light mode (4s), and the moon's stars twinkle in dark mode (3s, staggered).
 - **Do** keep a visible 2px brick focus outline and 44px minimum hit areas on header controls.
 
 ### Don't:
@@ -283,4 +286,4 @@ Open rows with a 1px hairline on top and 24px above the content. The head line p
 - **Don't** build a split-hero card template, or use Young Serif or a cream-and-terracotta scheme.
 - **Don't** add a third "system" theme option; the root theme is always `light` or `dark`.
 - **Don't** put brick or ink text on the ground band.
-- **Don't** add more animated moments; the sunset toggle is the only one.
+- **Don't** add page-load choreography beyond the homepage intro, scroll-triggered reveals, or anything faster than 200ms for state changes.

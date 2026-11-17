@@ -99,9 +99,9 @@ export default function ThemeToggle() {
                 </g>
                 <g className="theme-toggle-moon">
                     <circle cx="15" cy="15" r="8" mask="url(#moon-cut)" />
-                    <circle cx="26" cy="6" r="1" />
-                    <circle cx="27" cy="20" r="0.8" />
-                    <circle cx="6" cy="7" r="0.9" />
+                    <circle className="theme-toggle-star" cx="26" cy="6" r="1" />
+                    <circle className="theme-toggle-star" cx="27" cy="20" r="0.8" />
+                    <circle className="theme-toggle-star" cx="6" cy="7" r="0.9" />
                 </g>
             </svg>
         </button>
