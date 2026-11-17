@@ -2,8 +2,14 @@ type BootStorage = {
     getItem(key: string): string | null;
 };
 
+type BootSessionStorage = BootStorage & {
+    setItem(key: string, value: string): void;
+};
+
 export type BootWindow = {
     localStorage: BootStorage;
+    sessionStorage: BootSessionStorage;
+    location: { pathname: string };
     matchMedia(query: string): { matches: boolean };
     document: { documentElement: { dataset: Record<string, string | undefined> } };
 };
@@ -26,6 +32,18 @@ export function bootDocument(win: BootWindow): void {
 
     if (read(() => win.localStorage, "theme-toggled") === "true") {
         dataset.themeToggled = "true";
+    }
+
+    // The homepage intro plays once per visit; blocked storage skips it rather than replaying it.
+    if (win.location.pathname === "/" && !win.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        try {
+            if (win.sessionStorage.getItem("intro-seen") === null) {
+                win.sessionStorage.setItem("intro-seen", "true");
+                dataset.intro = "play";
+            }
+        } catch {
+            // No intro without storage.
+        }
     }
 }
 

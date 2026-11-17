@@ -20,10 +20,11 @@ function createThrowingStorage() {
     return { getItem: fail, setItem: fail };
 }
 
-function createWindow({ local = createStorage(), session = createStorage(), prefersDark = false, reducedMotion = false } = {}) {
+function createWindow({ local = createStorage(), session = createStorage(), prefersDark = false, reducedMotion = false, path = "/" } = {}) {
     return {
         localStorage: local,
         sessionStorage: session,
+        location: { pathname: path },
         matchMedia: (query) => ({
             matches: query.includes("prefers-color-scheme: dark") ? prefersDark : query.includes("prefers-reduced-motion: reduce") ? reducedMotion : false,
         }),
@@ -74,6 +75,35 @@ test("bootDocument survives blocked storage and follows the system theme", () =>
     assert.doesNotThrow(() => bootDocument(win));
     assert.equal(win.document.documentElement.dataset.theme, "dark");
     assert.equal(win.document.documentElement.dataset.themeToggled, undefined);
+});
+
+test("bootDocument plays the homepage intro once per visit", () => {
+    const session = createStorage();
+    const first = createWindow({ session });
+
+    bootDocument(first);
+
+    assert.equal(first.document.documentElement.dataset.intro, "play");
+
+    const second = createWindow({ session });
+
+    bootDocument(second);
+
+    assert.equal(second.document.documentElement.dataset.intro, undefined);
+});
+
+test("bootDocument skips the intro on other pages, for reduced motion, and when storage is blocked", () => {
+    const otherPage = createWindow({ path: "/work/" });
+    const reduced = createWindow({ reducedMotion: true });
+    const blocked = createWindow({ session: createThrowingStorage() });
+
+    bootDocument(otherPage);
+    bootDocument(reduced);
+    bootDocument(blocked);
+
+    assert.equal(otherPage.document.documentElement.dataset.intro, undefined);
+    assert.equal(reduced.document.documentElement.dataset.intro, undefined);
+    assert.equal(blocked.document.documentElement.dataset.intro, undefined);
 });
 
 test("bootScript runs on its own against a window global", () => {
