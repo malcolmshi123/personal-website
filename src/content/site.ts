@@ -10,7 +10,8 @@ type Verse = {
 
 export const siteNavigation: NavigationLink[] = [
     { href: "/gospel/", label: "The Good News" },
-    { href: "/work/", label: "Work" },
+    { href: "/work/", label: "Experience" },
+    { href: "/projects/", label: "Projects" },
     { href: "/blog/", label: "Blog" },
     { href: "/photos/", label: "Gallery" },
     { href: "/contact/", label: "Contact" },

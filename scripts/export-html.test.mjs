@@ -24,7 +24,78 @@ test("homepage HTML contains the greeting and description without JavaScript", a
     assert.match(description[1], /<a href="\/photos\/">photos<\/a>/);
 });
 
-const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
+const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "projects/index.html", "work/index.html"];
+
+test("the projects page lists the four projects in order, with tech, status, and GitHub links but no dates", async () => {
+    const html = await readExport("projects/index.html");
+    const text = html.replace(/<[^>]+>/g, "\n");
+    const names = [...html.matchAll(/<h2[^>]*>([^<]+)</g)].map((match) => match[1]);
+
+    assert.match(html, /<title>Projects \| Malcolm Shi<\/title>/);
+    assert.deepEqual(names, ["LLM Inference Optimization Lab", "TFTeacher", "GojoBracken", "Personal Website"]);
+    assert.match(text, /C#, Unity, Blender/);
+    assert.match(text, /TypeScript, Next\.js, Formspree/);
+    assert.match(html, /class="project-status">in progress</);
+    assert.equal((html.match(/class="project-status"/g) ?? []).length, 1);
+    for (const repo of ["llm-inference-optimization-lab", "tfteacher", "GojoBracken", "personal-website"]) {
+        assert.match(html, new RegExp(`href="https://github\\.com/malcolmshi123/${repo}"`));
+    }
+    assert.doesNotMatch(html, /class="entry-date"/);
+});
+
+test("the projects page sits after Work in the navigation, and Work no longer lists projects", async () => {
+    const html = await readExport("work/index.html");
+    const nav = [...html.matchAll(/<a[^>]*href="(\/[a-z]+\/)"[^>]*>(The Good News|Experience|Projects|Blog|Gallery|Contact)<\/a>/g)].map((match) => match[2]);
+
+    assert.deepEqual(nav.slice(0, 6), ["The Good News", "Experience", "Projects", "Blog", "Gallery", "Contact"]);
+    assert.doesNotMatch(html, /id="projects"/);
+    assert.doesNotMatch(html, /View on GitHub/);
+});
+
+test("the experience page lists roles without a subheading, team names, or long months", async () => {
+    const page = await readExport("work/index.html");
+    const main = page.slice(page.indexOf("<main"), page.indexOf("</main>"));
+    const text = main.replace(/<[^>]+>/g, "\n");
+
+    assert.match(page, /<title>Experience \| Malcolm Shi<\/title>/);
+    assert.match(main, /<h1>Experience<\/h1>/);
+    assert.doesNotMatch(main, /<h2[^>]*>Experience<\/h2>/);
+    assert.deepEqual([...main.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map((match) => match[1]), ["Huawei", "Nest Wealth", "OpenText", "Education"]);
+    assert.match(text, /Jan – Apr 2025/);
+    assert.match(text, /May – Aug 2023/);
+    assert.match(text, /Sep – Dec 2022/);
+    assert.match(text, /Jun 2026/);
+    assert.doesNotMatch(text, /January|April|August|September|December|June/);
+    assert.doesNotMatch(text, /Software-Hardware Optimization Lab|Pro 1\.0 Platform|Content Server Core/);
+    assert.match(text, /high-performance computing, machine learning, and distributed systems/);
+});
+
+test("each experience entry has a location under the date and a skills line, with no 'On the' opener", async () => {
+    const page = await readExport("work/index.html");
+    const main = page.slice(page.indexOf("<main"), page.indexOf("</main>"));
+    const entries = [...main.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+    const expected = [
+        ["Markham, ON", "Computer Graphics, GPU Programming, Performance Optimization"],
+        ["Toronto, ON", "Wealth Management, Full-Stack Development, Security &amp; Compliance"],
+        ["Waterloo, ON", "Content Management, QA &amp; Automation"],
+    ];
+
+    assert.equal(entries.length, 3);
+    entries.forEach((entry, index) => {
+        const [location, skills] = expected[index];
+        assert.match(entry, new RegExp(`<p class="work-role">Software Engineer Intern</p><p class="entry-location">${location}</p>`));
+        assert.match(entry, new RegExp(`<p class="work-meta">${skills.replace(/\+/g, "\\+")}</p>`));
+        assert.doesNotMatch(entry, /<p>On (a|the) /);
+    });
+    assert.match(main, /<p class="entry-location">Waterloo, ON<\/p>[\s\S]*?Graduated with distinction/);
+});
+
+test("the homepage calls the work entry Experience", async () => {
+    const html = await readExport("index.html");
+
+    assert.match(html, /<h3>Experience<\/h3>/);
+    assert.doesNotMatch(html, /<h3>Work<\/h3>/);
+});
 
 test("the about page is gone from the export and the navigation", async () => {
     const html = await readExport("index.html");
@@ -68,7 +139,7 @@ test("every page footer carries Psalm 34:8", async () => {
 test("the homepage work entry says see more and names its destination for screen readers", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /href="\/work\/">See more<span class="visually-hidden"> of my work<\/span><\/a>/);
+    assert.match(html, /href="\/work\/">See more<span class="visually-hidden"> of my experience<\/span><\/a>/);
 });
 
 test("the gospel testimony uses the updated wording and references", async () => {
@@ -260,6 +331,7 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
         "https://malcolmshi.ca/contact/",
         "https://malcolmshi.ca/gospel/",
         "https://malcolmshi.ca/photos/",
+        "https://malcolmshi.ca/projects/",
         "https://malcolmshi.ca/work/",
     ]);
 });

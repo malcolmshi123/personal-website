@@ -1,17 +1,10 @@
-type Project = {
-    name: string;
-    date: string;
-    description: string;
-    technologies: string;
-    href: string;
-};
-
 type Experience = {
     company: string;
     role: string;
-    team: string;
     dates: string;
+    location: string;
     description: string;
+    skills: string;
 };
 
 export const work = {
@@ -19,41 +12,35 @@ export const work = {
     education: {
         school: "University of Waterloo",
         degree: "BASc in Computer Engineering, Co-op",
-        date: "June 2026",
-        detail: "Graduated with distinction.",
+        date: "Jun 2026",
+        location: "Waterloo, ON",
+        detail: "Graduated with distinction. My coursework included high-performance computing, machine learning, and distributed systems.",
     },
 };
-
-export const projects: Project[] = [
-    {
-        name: "LLM Inference Optimization Lab",
-        date: "October 2026",
-        description: "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how serving decisions affect latency and throughput. I experiment with concurrency, scheduling token budgets, and prefix-cache reuse, and read the results through server metrics and GPU profiling.",
-        technologies: "Python, vLLM, Modal, PyTorch Profiler, Prometheus",
-        href: "https://github.com/malcolmshi123/llm-inference-optimization-lab",
-    },
-];
 
 export const experience: Experience[] = [
     {
         company: "Huawei",
         role: "Software Engineer Intern",
-        team: "Software-Hardware Optimization Lab",
-        dates: "January – April 2025",
-        description: "I worked on neural rendering models with 3D Gaussian Splatting and NeRF, Vulkan compute shaders on Android, and an occlusion culling system using DirectX 12 Work Graphs. I profiled GPU execution and improved rendering performance on embedded systems.",
+        dates: "Jan – Apr 2025",
+        location: "Markham, ON",
+        description: "I built neural rendering models, compute shaders, and an occlusion culling system, and profiled them to run faster on proprietary GPUs.",
+        skills: "Computer Graphics, GPU Programming, Performance Optimization",
     },
     {
         company: "Nest Wealth",
         role: "Software Engineer Intern",
-        team: "Pro 1.0 Platform",
-        dates: "May – August 2023",
-        description: "I built APIs and document-signing workflows, plus an Angular visualization for asset allocation, and reviewed third-party applications for security issues.",
+        dates: "May – Aug 2023",
+        location: "Toronto, ON",
+        description: "I set up document signing, built an asset allocation visualizer, and reviewed third-party applications for security issues.",
+        skills: "Wealth Management, Full-Stack Development, Security & Compliance",
     },
     {
         company: "OpenText",
         role: "Software Engineer Intern",
-        team: "Content Server Core",
-        dates: "September – December 2022",
-        description: "I automated tests for enterprise software with Selenium, built tools to turn test failures into useful reports, and scripted the setup and reset of test environments so regression runs were easy to repeat.",
+        dates: "Sep – Dec 2022",
+        location: "Waterloo, ON",
+        description: "I automated end-to-end testing for enterprise software, built tools that summarize failures into reports, and scripted virtual machine resets between runs.",
+        skills: "Content Management, QA & Automation",
     },
 ];

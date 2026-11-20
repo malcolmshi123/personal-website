@@ -18,10 +18,10 @@ export const featuredLinks: FeaturedLink[] = [
         href: "/gospel/",
     },
     {
-        title: "Work",
+        title: "Experience",
         description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
         action: "See more",
-        actionContext: " of my work",
+        actionContext: " of my experience",
         href: "/work/",
     },
 ];
