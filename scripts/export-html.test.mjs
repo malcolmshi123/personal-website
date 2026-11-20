@@ -24,7 +24,33 @@ test("homepage HTML contains the greeting and description without JavaScript", a
     assert.match(description[1], /<a href="\/photos\/">photos<\/a>/);
 });
 
-const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "work/index.html"];
+const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "projects/index.html", "work/index.html"];
+
+test("the projects page lists the four projects in order, with tech, status, and GitHub links but no dates", async () => {
+    const html = await readExport("projects/index.html");
+    const text = html.replace(/<[^>]+>/g, "\n");
+    const names = [...html.matchAll(/<h2[^>]*>([^<]+)</g)].map((match) => match[1]);
+
+    assert.match(html, /<title>Projects \| Malcolm Shi<\/title>/);
+    assert.deepEqual(names, ["LLM Inference Optimization Lab", "TFTeacher", "GojoBracken", "Personal Website"]);
+    assert.match(text, /C#, Unity, Blender/);
+    assert.match(text, /TypeScript, Next\.js, Formspree/);
+    assert.match(html, /class="project-status">in progress</);
+    assert.equal((html.match(/class="project-status"/g) ?? []).length, 1);
+    for (const repo of ["llm-inference-optimization-lab", "tfteacher", "GojoBracken", "personal-website"]) {
+        assert.match(html, new RegExp(`href="https://github\\.com/malcolmshi123/${repo}"`));
+    }
+    assert.doesNotMatch(html, /class="entry-date"/);
+});
+
+test("the projects page sits after Work in the navigation, and Work no longer lists projects", async () => {
+    const html = await readExport("work/index.html");
+    const nav = [...html.matchAll(/<a[^>]*href="(\/[a-z]+\/)"[^>]*>(The Good News|Work|Projects|Blog|Gallery|Contact)<\/a>/g)].map((match) => match[2]);
+
+    assert.deepEqual(nav.slice(0, 6), ["The Good News", "Work", "Projects", "Blog", "Gallery", "Contact"]);
+    assert.doesNotMatch(html, /id="projects"/);
+    assert.doesNotMatch(html, /View on GitHub/);
+});
 
 test("the about page is gone from the export and the navigation", async () => {
     const html = await readExport("index.html");
@@ -260,6 +286,7 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
         "https://malcolmshi.ca/contact/",
         "https://malcolmshi.ca/gospel/",
         "https://malcolmshi.ca/photos/",
+        "https://malcolmshi.ca/projects/",
         "https://malcolmshi.ca/work/",
     ]);
 });

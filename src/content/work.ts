@@ -1,11 +1,3 @@
-type Project = {
-    name: string;
-    date: string;
-    description: string;
-    technologies: string;
-    href: string;
-};
-
 type Experience = {
     company: string;
     role: string;
@@ -23,16 +15,6 @@ export const work = {
         detail: "Graduated with distinction.",
     },
 };
-
-export const projects: Project[] = [
-    {
-        name: "LLM Inference Optimization Lab",
-        date: "October 2026",
-        description: "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how serving decisions affect latency and throughput. I experiment with concurrency, scheduling token budgets, and prefix-cache reuse, and read the results through server metrics and GPU profiling.",
-        technologies: "Python, vLLM, Modal, PyTorch Profiler, Prometheus",
-        href: "https://github.com/malcolmshi123/llm-inference-optimization-lab",
-    },
-];
 
 export const experience: Experience[] = [
     {

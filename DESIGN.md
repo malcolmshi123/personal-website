@@ -204,7 +204,7 @@ An earthy canyon palette: tan, espresso, sienna, and olive by day; brown night s
 
 ## Layout
 
-A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, Blog, Work) narrow to 760px with prose at 65ch; Photos widens to 1120px. Pages open with `clamp(40px, 6vw, 88px)` of vertical padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(72px, 10vw, 128px)` below content, except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
+A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, Work, Projects, Blog) narrow to 760px with prose at 65ch; Photos widens to 1120px. Pages open with `clamp(40px, 6vw, 88px)` of vertical padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(72px, 10vw, 128px)` below content, except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
 
 Composition is loose rather than gridded. The homepage hero is a 1.3fr / 1fr split with the greeting on the left and a portrait blob on the right; the two band entries sit side by side with their titles level, and each link sits 18px under its own text. The photo albums use uneven columns (1.2fr, 1fr, 1.1fr) at staggered heights. Lists (work, articles) are open rows with a 1px hairline above each.
 

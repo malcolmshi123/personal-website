@@ -21,7 +21,7 @@ One site that holds both a serious engineering record (GPU performance, LLM infe
 ## Operating Context
 
 - Static Next.js (App Router) and TypeScript site, exported to `out/`, hosted on Vercel at https://malcolmshi.ca/.
-- Pages: The Good News (`/gospel/`), Work, Blog, Gallery (`/photos/`), Contact. The About page was folded into the homepage on 2026-11-12.
+- Pages: The Good News (`/gospel/`), Work, Projects (`/projects/`), Blog, Gallery (`/photos/`), Contact. Projects moved off the Work page on 2026-11-20 and are ordered for recruiters: LLM Inference Optimization Lab, TFTeacher (in progress), GojoBracken, Personal Website. The About page was folded into the homepage on 2026-11-12.
 - Contact uses a native HTML form posting to Formspree.
 - Blog entries live in `src/content/blog.ts` and currently link to Medium.
 

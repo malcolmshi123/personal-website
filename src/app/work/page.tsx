@@ -1,10 +1,10 @@
 import { createPageMetadata } from "@/lib/site-metadata";
 import LinkIcon from "@/components/link-icon";
-import { experience, projects, work } from "@/content/work";
+import { experience, work } from "@/content/work";
 
 export const metadata = createPageMetadata(
     "Work",
-    "My engineering projects and experience.",
+    "My engineering experience and education.",
     "/work/",
 );
 
@@ -18,22 +18,6 @@ export default function Work() {
                 View resume (PDF)
             </a>
             <div className="prose">
-                <section aria-labelledby="projects">
-                    <h2 id="projects">Projects</h2>
-                    <ul className="work-list">
-                        {projects.map((project) => (
-                            <li className="work-entry" key={project.href}>
-                                <div className="entry-row-head">
-                                    <h3>{project.name}</h3>
-                                    <p className="entry-date">{project.date}</p>
-                                </div>
-                                <p>{project.description}</p>
-                                <p className="work-meta">{project.technologies}</p>
-                                <a href={project.href} aria-label={`View ${project.name} on GitHub`}>View on GitHub</a>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
                 <section aria-labelledby="experience">
                     <h2 id="experience">Experience</h2>
                     <ul className="work-list">
