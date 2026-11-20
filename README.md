@@ -28,7 +28,7 @@ filenames, this step makes no changes. Run `npm run test:export` to check it.
 
 The site currently includes the welcome, About, Gospel, Blog, Work, Photos, and
 Contact pages. Page wording and the curated article list
-live in `src/content/`. Add future Medium articles to `src/content/blog.ts`.
+live in `src/content/`. Blog posts come from the Medium feed at build time (`npm run blog:fetch`), with `src/content/blog-fallback.json` as the offline fallback.
 Work experience and projects live in `src/content/work.ts`.
 Planned photo albums live in `src/content/photos.ts`. Their covers are labeled
 placeholders until photographs are supplied; the albums do not open yet.

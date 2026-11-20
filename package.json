@@ -3,11 +3,15 @@
     "version": "0.1.0",
     "private": true,
     "scripts": {
+        "blog:fetch": "node scripts/fetch-medium.mjs",
+        "predev": "node scripts/fetch-medium.mjs",
+        "prebuild": "node scripts/fetch-medium.mjs",
+        "pretypecheck": "node scripts/fetch-medium.mjs",
         "dev": "next dev",
         "build": "next build && node scripts/fix-export-paths.mjs",
         "test:export": "node --test scripts/fix-export-paths.test.mjs",
         "typecheck": "next typegen && tsc --noEmit",
-        "test": "node --test scripts/theme.test.mjs scripts/fix-export-paths.test.mjs",
+        "test": "node --test scripts/theme.test.mjs scripts/fix-export-paths.test.mjs scripts/medium.test.mjs",
         "test:html": "node --test scripts/export-html.test.mjs"
     },
     "dependencies": {

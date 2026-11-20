@@ -20,7 +20,7 @@ export default function Blog() {
                                 <h2><a href={article.href}>{article.title}</a></h2>
                                 <time className="entry-date" dateTime={article.publishedAt}>
                                     {new Date(article.publishedAt).toLocaleDateString("en-US", {
-                                        month: "long",
+                                        month: "short",
                                         day: "numeric",
                                         year: "numeric",
                                         timeZone: "UTC",

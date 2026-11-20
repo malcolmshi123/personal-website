@@ -26,6 +26,21 @@ test("homepage HTML contains the greeting and description without JavaScript", a
 
 const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "projects/index.html", "work/index.html"];
 
+test("the blog lists Medium posts newest first with Medium titles, short months, and read times", async () => {
+    const page = await readExport("blog/index.html");
+    const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
+    const text = html.replace(/<[^>]+>/g, "\n");
+    const titles = [...html.matchAll(/<h2><a href="https:\/\/medium\.com\/@malcolmshi123\/[^"]+">([^<]+)<\/a><\/h2>/g)].map((match) => match[1]);
+
+    assert.deepEqual(titles.slice(-2), ["Running Thoughts", "my testimony"]);
+    assert.doesNotMatch(html, /my testimony!/);
+    assert.match(text, /Nov 18, 2026/);
+    assert.match(text, /Nov 26, 2024/);
+    assert.match(text, /Medium · 6 min read/);
+    assert.match(text, /the extended version/);
+    assert.doesNotMatch(text, /November/);
+});
+
 test("the projects page lists the four projects in order, with tech, status, and GitHub links but no dates", async () => {
     const html = await readExport("projects/index.html");
     const text = html.replace(/<[^>]+>/g, "\n");
