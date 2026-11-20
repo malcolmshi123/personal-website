@@ -15,3 +15,6 @@ yarn-debug.log*
 yarn-error.log*
 .DS_Store
 Thumbs.db
+
+# Written at build time from the Medium feed
+src/content/blog-feed.generated.json

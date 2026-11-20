@@ -26,6 +26,62 @@ test("homepage HTML contains the greeting and description without JavaScript", a
 
 const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "projects/index.html", "work/index.html"];
 
+test("the blog lists Medium posts newest first with Medium titles, short months, and read times", async () => {
+    const page = await readExport("blog/index.html");
+    const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
+    const text = html.replace(/<[^>]+>/g, "\n");
+    const titles = [...html.matchAll(/<h2><a href="https:\/\/medium\.com\/@malcolmshi123\/[^"]+">([^<]+)<\/a><\/h2>/g)].map((match) => match[1]);
+
+    assert.deepEqual(titles.slice(-2), ["Running Thoughts", "my testimony"]);
+    assert.doesNotMatch(html, /my testimony!/);
+    assert.match(text, /Nov 18, 2026/);
+    assert.match(text, /Nov 26, 2024/);
+    assert.match(html, /<p class="article-meta">A Short Devo · 5 min<\/p>/);
+    assert.match(html, /<p class="article-meta">the extended version · 6 min<\/p>/);
+    assert.doesNotMatch(html, /article-duration/);
+    assert.doesNotMatch(text, /min read/);
+    assert.doesNotMatch(text, /November/);
+});
+
+test("blog links say Read without mentioning Medium", async () => {
+    const page = await readExport("blog/index.html");
+    const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
+    const links = [...html.matchAll(/<a class="article-link"([^>]*)>([\s\S]*?)<\/a>/g)];
+
+    assert.ok(links.length >= 2);
+    for (const [, attributes, label] of links) {
+        assert.match(label, /^Read <span aria-hidden="true">↗<\/span>$/);
+        assert.match(attributes, /aria-label="Read [^"]+"/);
+        assert.doesNotMatch(attributes, /Medium/);
+    }
+    assert.doesNotMatch(html, /Medium ·|on Medium/);
+});
+
+test("each blog post shows its Medium preview image", async () => {
+    const page = await readExport("blog/index.html");
+    const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
+    const posts = html.split("<li>").slice(1);
+
+    assert.ok(posts.length >= 2);
+    for (const post of posts) {
+        const image = post.match(/<img class="article-image"[^>]*>/)[0];
+        assert.match(image, /src="https:\/\/miro\.medium\.com\/v2\/resize:fit:440\/[^"]+"/);
+        assert.match(image, /srcSet="[^"]+ 440w, [^"]+resize:fit:880\/[^"]+ 880w"/i);
+        assert.match(image, /sizes="\(max-width: 600px\) 100vw, 220px"/);
+        assert.match(image, /alt=""/);
+        assert.match(image, /loading="lazy"/);
+    }
+    assert.doesNotMatch(html, /_\/stat/);
+});
+
+test("blog thumbnail borders fade with the theme instead of jumping", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /\.article-with-image \.article-image\{[^}]*transition:border-color var\(--theme-fade\), ?background-color var\(--theme-fade\)/);
+});
+
 test("the projects page lists the four projects in order, with tech, status, and GitHub links but no dates", async () => {
     const html = await readExport("projects/index.html");
     const text = html.replace(/<[^>]+>/g, "\n");

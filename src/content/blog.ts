@@ -1,17 +1,13 @@
+import generated from "./blog-feed.generated.json";
+
 type BlogArticle = {
     title: string;
     summary: string;
     publishedAt: string;
     readingTimeMinutes: number;
     href: string;
+    image?: string;
 };
 
-export const articles: BlogArticle[] = [
-    {
-        title: "my testimony!",
-        summary: "the extended version.",
-        publishedAt: "2024-11-26",
-        readingTimeMinutes: 7,
-        href: "https://medium.com/@malcolmshi123/my-testimony-2b6bc05feb73",
-    },
-];
+// Written at build time from the Medium feed by scripts/fetch-medium.mjs.
+export const articles: BlogArticle[] = generated;

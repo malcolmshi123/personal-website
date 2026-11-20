@@ -23,7 +23,7 @@ One site that holds both a serious engineering record (GPU performance, LLM infe
 - Static Next.js (App Router) and TypeScript site, exported to `out/`, hosted on Vercel at https://malcolmshi.ca/.
 - Pages: The Good News (`/gospel/`), Experience (`/work/`), Projects (`/projects/`), Blog, Gallery (`/photos/`), Contact. Projects moved off the Work page on 2026-11-20 and are ordered for recruiters: LLM Inference Optimization Lab, TFTeacher (in progress), GojoBracken, Personal Website. The About page was folded into the homepage on 2026-11-12.
 - Contact uses a native HTML form posting to Formspree.
-- Blog entries live in `src/content/blog.ts` and currently link to Medium.
+- The blog lists Malcolm’s Medium posts automatically. Each build reads the Medium feed (`scripts/fetch-medium.mjs`), takes Medium’s own titles, subtitles, and read times, and falls back to `src/content/blog-fallback.json` if Medium is unreachable. A daily GitHub Action (`.github/workflows/refresh-blog.yml`) triggers a Vercel rebuild through the `VERCEL_DEPLOY_HOOK` secret.
 
 ## Capabilities and Constraints
 
