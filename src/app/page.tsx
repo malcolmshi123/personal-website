@@ -21,10 +21,10 @@ export default function Home() {
                     </div>
                     <p className="home-description">
                         I’m a computer engineering graduate from Waterloo.
-                        I like to write <Link href="/blog/">blogs</Link> and take <Link href="/photos/">photos</Link>.
+                        I like to write <Link href="/blog">blogs</Link> and take <Link href="/photos">photos</Link>.
                         Have a look around!
                     </p>
-                    <Link className="home-link" href="/contact/">Contact me</Link>
+                    <Link className="home-link" href="/contact">Contact me</Link>
                 </div>
                 <PhotoStack />
             </section>

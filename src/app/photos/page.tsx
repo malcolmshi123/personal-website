@@ -4,7 +4,7 @@ import { albums } from "@/content/photos";
 export const metadata = createPageMetadata(
     "Gallery",
     "What I’ve tasted and seen.",
-    "/photos/",
+    "/photos",
 );
 
 export default function Gallery() {

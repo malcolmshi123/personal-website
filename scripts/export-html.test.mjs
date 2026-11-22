@@ -21,14 +21,14 @@ test("homepage HTML contains the greeting and description without JavaScript", a
 
     assert.ok(description, "homepage description is missing");
     assert.equal(description[1].replace(/<[^>]+>/g, ""), "I’m a computer engineering graduate from Waterloo. I like to write blogs and take photos. Have a look around!");
-    assert.match(description[1], /<a href="\/blog\/">blogs<\/a>/);
-    assert.match(description[1], /<a href="\/photos\/">photos<\/a>/);
+    assert.match(description[1], /<a href="\/blog">blogs<\/a>/);
+    assert.match(description[1], /<a href="\/photos">photos<\/a>/);
 });
 
-const pages = ["index.html", "blog/index.html", "contact/index.html", "gospel/index.html", "photos/index.html", "projects/index.html", "work/index.html"];
+const pages = ["index.html", "blog.html", "contact.html", "gospel.html", "photos.html", "projects.html", "work.html"];
 
 test("the blog lists Medium posts newest first with Medium titles, short months, and read times", async () => {
-    const page = await readExport("blog/index.html");
+    const page = await readExport("blog.html");
     const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
     const text = html.replace(/<[^>]+>/g, "\n");
     const titles = [...html.matchAll(/<h2><a href="https:\/\/medium\.com\/@malcolmshi123\/[^"]+">([^<]+)<\/a><\/h2>/g)].map((match) => match[1]);
@@ -45,7 +45,7 @@ test("the blog lists Medium posts newest first with Medium titles, short months,
 });
 
 test("blog links say Read without mentioning Medium", async () => {
-    const page = await readExport("blog/index.html");
+    const page = await readExport("blog.html");
     const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
     const links = [...html.matchAll(/<a class="article-link"([^>]*)>([\s\S]*?)<\/a>/g)];
 
@@ -59,7 +59,7 @@ test("blog links say Read without mentioning Medium", async () => {
 });
 
 test("each blog post shows its Medium preview image", async () => {
-    const page = await readExport("blog/index.html");
+    const page = await readExport("blog.html");
     const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
     const posts = html.split("<li>").slice(1);
 
@@ -84,7 +84,7 @@ test("blog thumbnail borders fade with the theme instead of jumping", async () =
 });
 
 test("the projects page lists the three projects in order, with tech, status, and GitHub links but no dates", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const text = html.replace(/<[^>]+>/g, "\n");
     const names = [...html.matchAll(/<h2[^>]*>([^<]+)</g)].map((match) => match[1]);
 
@@ -101,7 +101,7 @@ test("the projects page lists the three projects in order, with tech, status, an
 });
 
 test("each project shows its title, then its photo, then the new description", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
     const descriptions = [
         "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how configuration choices affect latency and throughput. I experiment with concurrency, token budgets, and KV cache reuse, and analyze the results with server metrics and GPU profiling.",
@@ -117,7 +117,7 @@ test("each project shows its title, then its photo, then the new description", a
 });
 
 test("each project links out with logo links, Thunderstore before GitHub for GojoBracken", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
     const linkLabels = (entry) => [...entry.matchAll(/<a href="([^"]+)"[^>]*><svg[^>]*class="link-icon link-icon-([a-z]+)"[\s\S]*?<\/svg>([^<]+)<\/a>/g)]
         .map((match) => [match[1], match[2], match[3]]);
@@ -132,7 +132,7 @@ test("each project links out with logo links, Thunderstore before GitHub for Goj
 });
 
 test("Personal Website has its own theme toggle beside the title, without the hint", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
     const website = entries[2];
     const toggle = website.indexOf('class="theme-toggle');
@@ -144,7 +144,7 @@ test("Personal Website has its own theme toggle beside the title, without the hi
 });
 
 test("every id on the projects page is unique", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
 
     assert.equal(new Set(ids).size, ids.length, ids.join(", "));
@@ -159,7 +159,7 @@ test("projectsDescription lists the first three project labels", () => {
 });
 
 test("the projects page description comes from the project list and fits in a search snippet", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const description = html.match(/<meta name="description" content="([^"]+)"/)[1];
 
     assert.equal(description, "What I’ve built: LLM inference benchmarks, a Lethal Company mod, and this site.");
@@ -168,7 +168,7 @@ test("the projects page description comes from the project list and fits in a se
 });
 
 test("each project shows a 16:9 picture with alt text that exists in public", async () => {
-    const html = await readExport("projects/index.html");
+    const html = await readExport("projects.html");
     const images = [...html.matchAll(/<img([^>]*)>/g)].map((match) => match[1]);
     const sources = images.map((attributes) => attributes.match(/src="([^"]+)"/)[1]);
 
@@ -197,8 +197,8 @@ test("project image borders fade with the theme instead of jumping", async () =>
 });
 
 test("the projects page sits after Work in the navigation, and Work no longer lists projects", async () => {
-    const html = await readExport("work/index.html");
-    const nav = [...html.matchAll(/<a[^>]*href="(\/[a-z]+\/)"[^>]*>(The Good News|Experience|Projects|Blog|Gallery|Contact)<\/a>/g)].map((match) => match[2]);
+    const html = await readExport("work.html");
+    const nav = [...html.matchAll(/<a[^>]*href="(\/[a-z]+)"[^>]*>(The Good News|Experience|Projects|Blog|Gallery|Contact)<\/a>/g)].map((match) => match[2]);
 
     assert.deepEqual(nav.slice(0, 6), ["The Good News", "Experience", "Projects", "Blog", "Gallery", "Contact"]);
     assert.doesNotMatch(html, /id="projects"/);
@@ -206,7 +206,7 @@ test("the projects page sits after Work in the navigation, and Work no longer li
 });
 
 test("the experience page lists roles without a subheading, team names, or long months", async () => {
-    const page = await readExport("work/index.html");
+    const page = await readExport("work.html");
     const main = page.slice(page.indexOf("<main"), page.indexOf("</main>"));
     const text = main.replace(/<[^>]+>/g, "\n");
 
@@ -224,7 +224,7 @@ test("the experience page lists roles without a subheading, team names, or long 
 });
 
 test("each experience entry has a location under the date and a skills line, with no 'On the' opener", async () => {
-    const page = await readExport("work/index.html");
+    const page = await readExport("work.html");
     const main = page.slice(page.indexOf("<main"), page.indexOf("</main>"));
     const entries = [...main.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
     const expected = [
@@ -258,20 +258,20 @@ test("the about page is gone from the export and the navigation", async () => {
 });
 
 test("page introductions use the new wording", async () => {
-    assert.match(await readExport("projects/index.html"), /class="introduction">What I’ve built\.</);
-    assert.match(await readExport("blog/index.html"), /class="introduction">What I&#x27;ve written\.</);
-    assert.match(await readExport("photos/index.html"), /class="introduction">What I&#x27;ve tasted and seen\.</);
-    assert.match(await readExport("contact/index.html"), /class="introduction">Let’s get in touch!</);
+    assert.match(await readExport("projects.html"), /class="introduction">What I’ve built\.</);
+    assert.match(await readExport("blog.html"), /class="introduction">What I&#x27;ve written\.</);
+    assert.match(await readExport("photos.html"), /class="introduction">What I&#x27;ve tasted and seen\.</);
+    assert.match(await readExport("contact.html"), /class="introduction">Let’s get in touch!</);
 });
 
 test("the projects, blog, and gallery pages never call their contents things", async () => {
-    for (const page of ["projects/index.html", "blog/index.html", "photos/index.html"]) {
+    for (const page of ["projects.html", "blog.html", "photos.html"]) {
         assert.doesNotMatch(await readExport(page), /things I/i, page);
     }
 });
 
 test("the gallery has Food, Nature, and Places albums with no descriptions yet", async () => {
-    const html = await readExport("photos/index.html");
+    const html = await readExport("photos.html");
     const grid = html.slice(html.indexOf('class="album-grid"'), html.indexOf("</ul>", html.indexOf('class="album-grid"')));
     const titles = [...grid.matchAll(/<h2>([^<]+)<\/h2>/g)].map((match) => match[1]);
 
@@ -280,11 +280,11 @@ test("the gallery has Food, Nature, and Places albums with no descriptions yet",
 });
 
 test("the photos page is called Gallery in its heading and the navigation", async () => {
-    const html = await readExport("photos/index.html");
+    const html = await readExport("photos.html");
 
     assert.match(html, /<h1>Gallery<\/h1>/);
     assert.match(html, /<title>Gallery \| Malcolm Shi<\/title>/);
-    assert.match(html, /<a[^>]*href="\/photos\/"[^>]*>Gallery<\/a>/);
+    assert.match(html, /<a[^>]*href="\/photos"[^>]*>Gallery<\/a>/);
     assert.doesNotMatch(html.replace(/<[^>]+>/g, " "), /\bPhotos\b/);
 });
 
@@ -299,11 +299,11 @@ test("every page footer carries Psalm 34:8", async () => {
 test("the homepage work entry says see more and names its destination for screen readers", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /href="\/work\/">See more<span class="visually-hidden"> of my experience<\/span><\/a>/);
+    assert.match(html, /href="\/work">See more<span class="visually-hidden"> of my experience<\/span><\/a>/);
 });
 
 test("the gospel testimony uses the updated wording and references", async () => {
-    const page = await readExport("gospel/index.html");
+    const page = await readExport("gospel.html");
     const body = page.slice(page.indexOf('class="prose"'), page.indexOf("<footer")).replace(/<[^>]+>/g, "\n");
     const testimony = body.slice(body.indexOf("My testimony"), body.indexOf("Come to Jesus"));
 
@@ -343,7 +343,7 @@ test("the header keeps the wordmark and the footer shows a copyright notice inst
 });
 
 test("the contact page lists LinkedIn, GitHub, and the resume with icons", async () => {
-    const html = await readExport("contact/index.html");
+    const html = await readExport("contact.html");
     const links = [...html.matchAll(/<div class="related-links contact-links">([\s\S]*?)<\/div>/g)][0][1];
 
     assert.match(links, /<a href="https:\/\/linkedin\.com\/in\/malcolm-shi"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>LinkedIn<\/a>/);
@@ -352,7 +352,7 @@ test("the contact page lists LinkedIn, GitHub, and the resume with icons", async
 });
 
 test("the contact form posts to Formspree with a spam trap and a status line", async () => {
-    const html = await readExport("contact/index.html");
+    const html = await readExport("contact.html");
     const form = html.slice(html.indexOf("<form"), html.indexOf("</form>"));
 
     assert.match(form, /action="https:\/\/formspree\.io\/f\/xzeebqoe"/);
@@ -363,7 +363,7 @@ test("the contact form posts to Formspree with a spam trap and a status line", a
 });
 
 test("the work page resume link shows the resume icon", async () => {
-    const html = await readExport("work/index.html");
+    const html = await readExport("work.html");
 
     assert.match(html, /<a class="resume-download" href="\/resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>View resume \(PDF\)<\/a>/);
 });
@@ -483,13 +483,28 @@ test("the homepage band ends after the featured entries without an extra link ro
 test("the homepage hero links to the contact page", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /<a class="home-link" href="\/contact\/">Contact me<\/a>/);
+    assert.match(html, /<a class="home-link" href="\/contact">Contact me<\/a>/);
 });
 
 test("the good news entry says read more and names its destination for screen readers", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /href="\/gospel\/">Read more<span class="visually-hidden"> about the good news<\/span><\/a>/);
+    assert.match(html, /href="\/gospel">Read more<span class="visually-hidden"> about the good news<\/span><\/a>/);
+});
+
+test("no link on any page ends in a slash, apart from the home link and ESV verses", async () => {
+    for (const page of pages) {
+        const html = await readExport(page);
+        const urls = [
+            ...[...html.matchAll(/<a[^>]*\shref="([^"]+)"/g)].map((match) => match[1]),
+            ...[...html.matchAll(/<link rel="canonical" href="([^"]+)"/g)].map((match) => match[1]),
+            ...[...html.matchAll(/<meta property="og:url" content="([^"]+)"/g)].map((match) => match[1]),
+        ];
+        const slashed = urls.filter((url) => url.endsWith("/") && url !== "/" && !url.startsWith("https://www.esv.org/"));
+
+        assert.ok(urls.length > 0, page);
+        assert.deepEqual(slashed, [], page);
+    }
 });
 
 test("the sitemap lists the homepage and every page in the navigation", async () => {
@@ -497,24 +512,24 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
     const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
     assert.deepEqual(urls.sort(), [
-        "https://malcolmshi.ca/",
-        "https://malcolmshi.ca/blog/",
-        "https://malcolmshi.ca/contact/",
-        "https://malcolmshi.ca/gospel/",
-        "https://malcolmshi.ca/photos/",
-        "https://malcolmshi.ca/projects/",
-        "https://malcolmshi.ca/work/",
+        "https://malcolmshi.ca",
+        "https://malcolmshi.ca/blog",
+        "https://malcolmshi.ca/contact",
+        "https://malcolmshi.ca/gospel",
+        "https://malcolmshi.ca/photos",
+        "https://malcolmshi.ca/projects",
+        "https://malcolmshi.ca/work",
     ]);
 });
 
 test("the gospel page shows its reading time", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
 
     assert.match(html, /<p class="page-meta">4 min<\/p>/);
 });
 
 test("the sin section cites Romans 1 and names its vices", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
 
     assert.match(html, /harms our communities, relationships, and even ourselves/);
     assert.match(html, /greed, envy, deceit, insolence, and the suffering we cause one another/);
@@ -523,7 +538,7 @@ test("the sin section cites Romans 1 and names its vices", async () => {
 });
 
 test("Living as His people is one paragraph that includes loving our neighbors", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
     const section = html.slice(html.indexOf('id="living-in-his-kingdom"'), html.indexOf('id="my-story"'));
 
     assert.equal([...section.matchAll(/<p>/g)].length, 1);
@@ -532,21 +547,21 @@ test("Living as His people is one paragraph that includes loving our neighbors",
 });
 
 test("the gospel introduction is one sentence above the first section", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
 
     assert.match(html, /<p class="introduction">The gospel is the good news of God’s kingdom\.<\/p>/);
 });
 
 test("the gospel invitation links to the contact page", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
 
-    assert.match(html, /<p>You don’t need to have every question answered before taking this step\. If you have any, find a local church or ask me <a href="\/contact\/">here<\/a>!<\/p>/);
+    assert.match(html, /<p>You don’t need to have every question answered before taking this step\. If you have any, find a local church or ask me <a href="\/contact">here<\/a>!<\/p>/);
     assert.match(html, /receive the life He offers\.<\/p>/);
     assert.doesNotMatch(html, /Come to Jesus, grow in His love/);
 });
 
 test("gospel reference labels keep the capitals in each heading", async () => {
-    const html = await readExport("gospel/index.html");
+    const html = await readExport("gospel.html");
 
     assert.match(html, /aria-label="Bible passages for God’s kingdom"/);
     assert.match(html, /aria-label="Bible passages for Alive in Christ"/);

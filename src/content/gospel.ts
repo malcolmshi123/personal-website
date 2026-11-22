@@ -132,7 +132,7 @@ export const gospelSections: GospelSection[] = [
             "If you don’t know Jesus as Lord and Savior, I invite you to come to Him. Turn away from your sin, put your faith in Christ, and receive the life He offers.",
             [
                 "You don’t need to have every question answered before taking this step. If you have any, find a local church or ask me ",
-                { text: "here", href: "/contact/" },
+                { text: "here", href: "/contact" },
                 "!",
             ],
         ],

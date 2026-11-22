@@ -6,7 +6,7 @@ import { contactLinks } from "@/content/contact";
 export const metadata = createPageMetadata(
     "Contact",
     "Get in touch with Malcolm Shi.",
-    "/contact/",
+    "/contact",
 );
 
 export default function Contact() {

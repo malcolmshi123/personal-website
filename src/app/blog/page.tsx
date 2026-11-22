@@ -5,7 +5,7 @@ import { mediumImageSet } from "@/lib/medium-image";
 export const metadata = createPageMetadata(
     "Blog",
     "Links to my writing on Medium.",
-    "/blog/",
+    "/blog",
 );
 
 export default function Blog() {

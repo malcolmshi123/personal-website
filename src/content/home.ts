@@ -15,14 +15,14 @@ export const featuredLinks: FeaturedLink[] = [
         description: "What I believe about Jesus and why it matters to me.",
         action: "Read more",
         actionContext: " about the good news",
-        href: "/gospel/",
+        href: "/gospel",
     },
     {
         title: "Experience",
         description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
         action: "See more",
         actionContext: " of my experience",
-        href: "/work/",
+        href: "/work",
     },
 ];
 

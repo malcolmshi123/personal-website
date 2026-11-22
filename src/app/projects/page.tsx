@@ -6,7 +6,7 @@ import { projects, projectsDescription, projectsIntroduction } from "@/content/p
 export const metadata = createPageMetadata(
     "Projects",
     projectsDescription(projects),
-    "/projects/",
+    "/projects",
 );
 
 type ProjectImageProps = { className: string; src: string; alt: string; loading: "lazy" | "eager" };

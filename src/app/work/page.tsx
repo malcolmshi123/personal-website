@@ -5,7 +5,7 @@ import { experience, work } from "@/content/work";
 export const metadata = createPageMetadata(
     "Experience",
     "My engineering experience and education.",
-    "/work/",
+    "/work",
 );
 
 export default function Experience() {
