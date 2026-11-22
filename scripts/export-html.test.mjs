@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
+import { projectsDescription } from "../src/content/projects.ts";
 
 async function readExport(path) {
     const html = await readFile(new URL(`../out/${path}`, import.meta.url), "utf8");
@@ -82,21 +83,117 @@ test("blog thumbnail borders fade with the theme instead of jumping", async () =
     assert.match(css, /\.article-with-image \.article-image\{[^}]*transition:border-color var\(--theme-fade\), ?background-color var\(--theme-fade\)/);
 });
 
-test("the projects page lists the four projects in order, with tech, status, and GitHub links but no dates", async () => {
+test("the projects page lists the three projects in order, with tech, status, and GitHub links but no dates", async () => {
     const html = await readExport("projects/index.html");
     const text = html.replace(/<[^>]+>/g, "\n");
     const names = [...html.matchAll(/<h2[^>]*>([^<]+)</g)].map((match) => match[1]);
 
     assert.match(html, /<title>Projects \| Malcolm Shi<\/title>/);
-    assert.deepEqual(names, ["LLM Inference Optimization Lab", "TFTeacher", "GojoBracken", "Personal Website"]);
+    assert.deepEqual(names, ["LLM Inference Optimization Lab", "GojoBracken", "Personal Website"]);
     assert.match(text, /C#, Unity, Blender/);
-    assert.match(text, /TypeScript, Next\.js, Formspree/);
-    assert.match(html, /class="project-status">in progress</);
-    assert.equal((html.match(/class="project-status"/g) ?? []).length, 1);
-    for (const repo of ["llm-inference-optimization-lab", "tfteacher", "GojoBracken", "personal-website"]) {
+    assert.match(text, /TypeScript, Next\.js, Vercel, Formspree/);
+    assert.match(text, /Python, vLLM, Modal, Prometheus, PyTorch Profiler/);
+    assert.doesNotMatch(html, /TFTeacher|tfteacher/);
+    for (const repo of ["llm-inference-optimization-lab", "GojoBracken", "personal-website"]) {
         assert.match(html, new RegExp(`href="https://github\\.com/malcolmshi123/${repo}"`));
     }
     assert.doesNotMatch(html, /class="entry-date"/);
+});
+
+test("each project shows its title, then its photo, then the new description", async () => {
+    const html = await readExport("projects/index.html");
+    const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+    const descriptions = [
+        "I built a GPU model-serving setup and an asynchronous benchmarking framework to study how configuration choices affect latency and throughput. I experiment with concurrency, token budgets, and KV cache reuse, and analyze the results with server metrics and GPU profiling.",
+        "I made a cosmetic mod for Lethal Company that replaces the Bracken with Gojo Satoru. When the Bracken enters aggro, Gojo plays a Japanese voice line over looping music. As the Bracken gets angrier, the music gets louder and Gojo’s aura grows stronger.",
+        "I designed and built this site to bring my faith, work, writing, and photos together in one place. It’s a static Next.js site on Vercel that pulls my latest Medium posts every day and sends messages through Formspree.",
+    ];
+
+    assert.equal(entries.length, 3);
+    entries.forEach((entry, index) => {
+        assert.ok(entry.indexOf("<h2") < entry.indexOf("<img"), `title before photo in entry ${index}`);
+        assert.ok(entry.lastIndexOf("<img") < entry.indexOf(`<p>${descriptions[index]}</p>`), `photo before description in entry ${index}`);
+    });
+});
+
+test("each project links out with logo links, Thunderstore before GitHub for GojoBracken", async () => {
+    const html = await readExport("projects/index.html");
+    const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+    const linkLabels = (entry) => [...entry.matchAll(/<a href="([^"]+)"[^>]*><svg[^>]*class="link-icon link-icon-([a-z]+)"[\s\S]*?<\/svg>([^<]+)<\/a>/g)]
+        .map((match) => [match[1], match[2], match[3]]);
+
+    assert.deepEqual(linkLabels(entries[0]), [["https://github.com/malcolmshi123/llm-inference-optimization-lab", "github", "GitHub"]]);
+    assert.deepEqual(linkLabels(entries[1]), [
+        ["https://thunderstore.io/c/lethal-company/p/FreakyFriday/GojoBracken", "thunderstore", "Thunderstore"],
+        ["https://github.com/malcolmshi123/GojoBracken", "github", "GitHub"],
+    ]);
+    assert.deepEqual(linkLabels(entries[2]), [["https://github.com/malcolmshi123/personal-website", "github", "GitHub"]]);
+    assert.doesNotMatch(html, /View on GitHub/);
+});
+
+test("Personal Website has its own theme toggle beside the title, without the hint", async () => {
+    const html = await readExport("projects/index.html");
+    const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+    const website = entries[2];
+    const toggle = website.indexOf('class="theme-toggle');
+
+    assert.match(website, /<div class="project-heading"><h2 class="project-name">Personal Website<\/h2><button class="theme-toggle/);
+    assert.ok(toggle > -1 && toggle < website.indexOf("<img"), "toggle sits between the title and the screenshot");
+    assert.doesNotMatch(website, /theme-toggle-hint/);
+    assert.ok(entries.slice(0, 2).every((entry) => !entry.includes("theme-toggle")));
+});
+
+test("every id on the projects page is unique", async () => {
+    const html = await readExport("projects/index.html");
+    const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+
+    assert.equal(new Set(ids).size, ids.length, ids.join(", "));
+});
+
+test("projectsDescription lists the first three project labels", () => {
+    const labelled = (...labels) => labels.map((label) => ({ label }));
+
+    assert.equal(projectsDescription(labelled("a game")), "What I’ve built: a game.");
+    assert.equal(projectsDescription(labelled("a game", "an app")), "What I’ve built: a game and an app.");
+    assert.equal(projectsDescription(labelled("a game", "an app", "a site", "a bot")), "What I’ve built: a game, an app, and a site.");
+});
+
+test("the projects page description comes from the project list and fits in a search snippet", async () => {
+    const html = await readExport("projects/index.html");
+    const description = html.match(/<meta name="description" content="([^"]+)"/)[1];
+
+    assert.equal(description, "What I’ve built: LLM inference benchmarks, a Lethal Company mod, and this site.");
+    assert.ok(description.length <= 155, `${description.length} characters`);
+    assert.match(html, new RegExp(`<meta property="og:description" content="${description.replace(/\./g, "\\.")}"`));
+});
+
+test("each project shows a 16:9 picture with alt text that exists in public", async () => {
+    const html = await readExport("projects/index.html");
+    const images = [...html.matchAll(/<img([^>]*)>/g)].map((match) => match[1]);
+    const sources = images.map((attributes) => attributes.match(/src="([^"]+)"/)[1]);
+
+    assert.deepEqual(sources, ["/projects/llm-inference-optimization-lab.webp", "/projects/gojobracken.webp", "/projects/personal-website-dark.webp", "/projects/personal-website.webp"]);
+    assert.match(images[2], /class="project-image shows-in-light-theme"/);
+    assert.match(images[3], /class="project-image shows-in-dark-theme"/);
+    for (const attributes of images) {
+        assert.match(attributes, /class="project-image/);
+        assert.match(attributes, /width="1280"/);
+        assert.match(attributes, /height="720"/);
+        assert.match(attributes, /alt="[^"]{10,}"/);
+    }
+    // Both theme screenshots load up front so the swap never shows an empty frame.
+    assert.deepEqual(images.map((attributes) => attributes.match(/loading="([a-z]+)"/)[1]), ["lazy", "lazy", "eager", "eager"]);
+    for (const source of sources) {
+        await readExport(source.slice(1));
+    }
+});
+
+test("project image borders fade with the theme instead of jumping", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /\.project-image\{[^}]*transition:border-color var\(--theme-fade\), ?background-color var\(--theme-fade\)/);
 });
 
 test("the projects page sits after Work in the navigation, and Work no longer lists projects", async () => {
@@ -161,9 +258,16 @@ test("the about page is gone from the export and the navigation", async () => {
 });
 
 test("page introductions use the new wording", async () => {
-    assert.match(await readExport("blog/index.html"), /class="introduction">Some blogs I&#x27;ve written\.</);
-    assert.match(await readExport("photos/index.html"), /class="introduction">Some photos I&#x27;ve taken\.</);
+    assert.match(await readExport("projects/index.html"), /class="introduction">What I’ve built\.</);
+    assert.match(await readExport("blog/index.html"), /class="introduction">What I&#x27;ve written\.</);
+    assert.match(await readExport("photos/index.html"), /class="introduction">What I&#x27;ve tasted and seen\.</);
     assert.match(await readExport("contact/index.html"), /class="introduction">Let’s get in touch!</);
+});
+
+test("the projects, blog, and gallery pages never call their contents things", async () => {
+    for (const page of ["projects/index.html", "blog/index.html", "photos/index.html"]) {
+        assert.doesNotMatch(await readExport(page), /things I/i, page);
+    }
 });
 
 test("the gallery has Food, Nature, and Places albums with no descriptions yet", async () => {

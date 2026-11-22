@@ -890,8 +890,37 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-size: 16px;
 }
 
+.project-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    margin: 0 0 20px;
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    object-fit: cover;
+    background: var(--field);
+    transition: border-color var(--theme-fade), background-color var(--theme-fade);
+}
+
+:root[data-theme="dark"] .shows-in-light-theme,
+:root:not([data-theme="dark"]) .shows-in-dark-theme {
+    display: none;
+}
+
+.project-heading {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0 0 16px;
+}
+
+.project-heading .theme-toggle {
+    padding-left: 4px;
+}
+
 .prose .project-name {
-    margin: 0 0 6px;
+    margin: 0;
     font-size: clamp(22px, 2.2vw, 26px);
     letter-spacing: -0.015em;
     line-height: 1.25;
@@ -983,6 +1012,25 @@ body:has(.home-ground) .site-footer .hill-wave {
     align-items: center;
     gap: 8px;
     color: var(--brick);
+}
+
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-bottom: 20px;
+}
+
+.project-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--brick);
+    font-weight: 500;
+}
+
+.project-links .link-icon {
+    height: 16px;
 }
 
 .contact-links .link-icon,

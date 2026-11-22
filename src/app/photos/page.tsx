@@ -3,7 +3,7 @@ import { albums } from "@/content/photos";
 
 export const metadata = createPageMetadata(
     "Gallery",
-    "Some photos I’ve taken.",
+    "What I’ve tasted and seen.",
     "/photos/",
 );
 
@@ -11,7 +11,7 @@ export default function Gallery() {
     return (
         <div className="page-content photos-page">
             <h1>Gallery</h1>
-            <p className="introduction">Some photos I've taken.</p>
+            <p className="introduction">What I've tasted and seen.</p>
             <ul className="album-grid" aria-label="Photo albums">
                 {albums.map((album) => (
                     <li key={album.id}>

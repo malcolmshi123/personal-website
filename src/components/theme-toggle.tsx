@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { nextTheme, readStoredTheme, saveThemeChoice, shouldFollowSystem, syncFaviconLinks, type Theme } from "@/lib/theme";
 
 const darkQuery = "(prefers-color-scheme: dark)";
@@ -29,8 +29,21 @@ function currentTheme(): Theme {
     return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
 }
 
-export default function ThemeToggle() {
+// The page can show more than one toggle; each tells the others when the theme changes.
+const themeChangeEvent = "theme-toggle-change";
+
+export default function ThemeToggle({ hint = true }: { hint?: boolean }) {
     const [theme, setTheme] = useState<Theme | null>(null);
+    const maskId = `moon-cut-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+
+    useEffect(() => {
+        function followOtherToggle(event: Event) {
+            setTheme((event as CustomEvent<Theme>).detail);
+        }
+
+        window.addEventListener(themeChangeEvent, followOtherToggle);
+        return () => window.removeEventListener(themeChangeEvent, followOtherToggle);
+    }, []);
 
     useEffect(() => {
         const storage = getLocalStorage();
@@ -89,6 +102,7 @@ export default function ThemeToggle() {
         }
 
         setTheme(chosen);
+        window.dispatchEvent(new CustomEvent<Theme>(themeChangeEvent, { detail: chosen }));
     }
 
     let label = "Switch theme";
@@ -98,10 +112,10 @@ export default function ThemeToggle() {
 
     return (
         <button className="theme-toggle" type="button" aria-label={label} onClick={switchTheme}>
-            <span className="theme-toggle-hint" aria-hidden="true">click me</span>
+            {hint && <span className="theme-toggle-hint" aria-hidden="true">click me</span>}
             <svg className="theme-toggle-icon" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
                 <defs>
-                    <mask id="moon-cut">
+                    <mask id={maskId}>
                         <rect width="32" height="32" fill="white" />
                         <circle cx="20" cy="11" r="7" fill="black" />
                     </mask>
@@ -110,7 +124,7 @@ export default function ThemeToggle() {
                     <circle cx="16" cy="16" r="8" />
                 </g>
                 <g className="theme-toggle-moon">
-                    <circle cx="15" cy="15" r="8" mask="url(#moon-cut)" />
+                    <circle cx="15" cy="15" r="8" mask={`url(#${maskId})`} />
                     <circle className="theme-toggle-star" cx="26" cy="6" r="1" />
                     <circle className="theme-toggle-star" cx="27" cy="20" r="0.8" />
                     <circle className="theme-toggle-star" cx="6" cy="7" r="0.9" />

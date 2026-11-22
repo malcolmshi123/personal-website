@@ -12,7 +12,7 @@ export default function Blog() {
     return (
         <div className="page-content reading-page">
             <h1>Blog</h1>
-            <p className="introduction">Some blogs I've written.</p>
+            <p className="introduction">What I've written.</p>
             <ul className="article-list" aria-label="Articles">
                 {articles.map((article) => (
                     <li key={article.href}>
