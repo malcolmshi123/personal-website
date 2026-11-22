@@ -351,6 +351,17 @@ test("the contact page lists LinkedIn, GitHub, and the resume with icons", async
     assert.match(links, /<a href="\/resume\.pdf"><svg[^>]*aria-hidden="true"[\s\S]*?<\/svg>Resume<\/a>/);
 });
 
+test("the contact form posts to Formspree with a spam trap and a status line", async () => {
+    const html = await readExport("contact/index.html");
+    const form = html.slice(html.indexOf("<form"), html.indexOf("</form>"));
+
+    assert.match(form, /action="https:\/\/formspree\.io\/f\/xzeebqoe"/);
+    assert.match(form, /method="POST"/);
+    assert.match(form, /<input(?=[^>]*name="_gotcha")(?=[^>]*tabindex="-1")[^>]*>/);
+    assert.match(form, /<p class="contact-status" role="status" aria-live="polite"><\/p>/);
+    assert.doesNotMatch(form, /disabled=""/);
+});
+
 test("the work page resume link shows the resume icon", async () => {
     const html = await readExport("work/index.html");
 
