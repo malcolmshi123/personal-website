@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("Vercel builds through npm so the Medium fetch and export fixes run", async () => {
@@ -13,4 +13,11 @@ test("Vercel serves pages without a trailing slash and redirects old slash links
 
     assert.equal(config.cleanUrls, true);
     assert.equal(config.trailingSlash, false);
+});
+
+test("Thunderstore counts come from the api function, not a forwarding rule Thunderstore rejects", async () => {
+    const config = JSON.parse(await readFile(new URL("../vercel.json", import.meta.url), "utf8"));
+
+    assert.equal(config.rewrites, undefined);
+    await access(new URL("../api/thunderstore.mjs", import.meta.url));
 });

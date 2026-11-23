@@ -1,7 +1,12 @@
 import { createPageMetadata } from "@/lib/site-metadata";
 import LinkIcon from "@/components/link-icon";
 import ThemeToggle from "@/components/theme-toggle";
+import ThunderstoreDownloads from "@/components/thunderstore-downloads";
 import { projects, projectsDescription, projectsIntroduction } from "@/content/projects";
+import downloads from "@/content/thunderstore.generated.json";
+
+// Written at build time by scripts/fetch-thunderstore.mjs; the page then checks for a newer count live.
+const thunderstoreDownloads: Record<string, number> = downloads;
 
 export const metadata = createPageMetadata(
     "Projects",
@@ -28,9 +33,19 @@ export default function Projects() {
                                 <h2 className="project-name">
                                     {project.name}
                                     {project.status && <span className="project-status">{project.status}</span>}
+                                    {project.thunderstoreHref && thunderstoreDownloads[project.thunderstoreHref] !== undefined && (
+                                        <ThunderstoreDownloads
+                                            thunderstoreHref={project.thunderstoreHref}
+                                            buildCount={thunderstoreDownloads[project.thunderstoreHref]}
+                                        />
+                                    )}
                                 </h2>
                                 {/* Lets visitors flip the theme right here and watch the screenshot change. */}
                                 {project.image.srcInLightTheme && <ThemeToggle hint={false} />}
+                                <a className="project-link" href={project.href} aria-label={`${project.name} on GitHub`}>
+                                    <LinkIcon name="github" />
+                                    GitHub
+                                </a>
                             </div>
                             {project.image.srcInLightTheme && (
                                 <ProjectImage
@@ -49,18 +64,6 @@ export default function Projects() {
                             />
                             <p>{project.description}</p>
                             <p className="work-meta">{project.technologies}</p>
-                            <div className="project-links">
-                                {project.thunderstoreHref && (
-                                    <a href={project.thunderstoreHref} aria-label={`${project.name} on Thunderstore`}>
-                                        <LinkIcon name="thunderstore" />
-                                        Thunderstore
-                                    </a>
-                                )}
-                                <a href={project.href} aria-label={`${project.name} on GitHub`}>
-                                    <LinkIcon name="github" />
-                                    GitHub
-                                </a>
-                            </div>
                         </li>
                     ))}
                 </ul>

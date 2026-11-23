@@ -13,6 +13,10 @@ type Project = {
 
 export const projectsIntroduction = "What I’ve built.";
 
+export function downloadsLabel(count: number): string {
+    return `${count.toLocaleString("en-US")} ${count === 1 ? "download" : "downloads"}`;
+}
+
 // Search results cut descriptions off around 155 characters, so only the first three projects are named.
 export function projectsDescription(list: { label: string }[]): string {
     const labels = list.slice(0, 3).map((project) => project.label);

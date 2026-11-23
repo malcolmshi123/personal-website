@@ -116,19 +116,25 @@ test("each project shows its title, then its photo, then the new description", a
     });
 });
 
-test("each project links out with logo links, Thunderstore before GitHub for GojoBracken", async () => {
+test("each project's GitHub logo link ends the title row", async () => {
     const html = await readExport("projects.html");
     const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
-    const linkLabels = (entry) => [...entry.matchAll(/<a href="([^"]+)"[^>]*><svg[^>]*class="link-icon link-icon-([a-z]+)"[\s\S]*?<\/svg>([^<]+)<\/a>/g)]
-        .map((match) => [match[1], match[2], match[3]]);
+    const repos = ["llm-inference-optimization-lab", "GojoBracken", "personal-website"];
 
-    assert.deepEqual(linkLabels(entries[0]), [["https://github.com/malcolmshi123/llm-inference-optimization-lab", "github", "GitHub"]]);
-    assert.deepEqual(linkLabels(entries[1]), [
-        ["https://thunderstore.io/c/lethal-company/p/FreakyFriday/GojoBracken", "thunderstore", "Thunderstore"],
-        ["https://github.com/malcolmshi123/GojoBracken", "github", "GitHub"],
-    ]);
-    assert.deepEqual(linkLabels(entries[2]), [["https://github.com/malcolmshi123/personal-website", "github", "GitHub"]]);
-    assert.doesNotMatch(html, /View on GitHub/);
+    assert.equal(entries.length, 3);
+    entries.forEach((entry, index) => {
+        const heading = entry.match(/<div class="project-heading">([\s\S]*?)<\/div>/)[1];
+        assert.match(heading, new RegExp(`<a class="project-link" href="https://github.com/malcolmshi123/${repos[index]}"[^>]*><svg[^>]*class="link-icon link-icon-github"[\\s\\S]*?</svg>GitHub</a>$`));
+    });
+    assert.doesNotMatch(html, /project-links|link-icon-thunderstore|View on GitHub/);
+});
+
+test("GojoBracken's download count beside the title links to Thunderstore", async () => {
+    const html = await readExport("projects.html");
+    const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
+
+    assert.match(entries[1], /<h2 class="project-name">GojoBracken<a class="project-downloads" href="https:\/\/thunderstore.io\/c\/lethal-company\/p\/FreakyFriday\/GojoBracken"[^>]*>\d{1,3}(,\d{3})* downloads?<\/a><\/h2>/);
+    assert.ok([entries[0], entries[2]].every((entry) => !entry.includes("project-downloads")));
 });
 
 test("Personal Website has its own theme toggle beside the title, without the hint", async () => {
@@ -418,6 +424,15 @@ test("the photo stack hint is hidden when JavaScript never runs", async () => {
     const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
 
     assert.match(css, /:root:not\(\[data-theme\]\) \.photo-stack-hint\{display:none\}/);
+});
+
+test("a project's theme toggle stays beside its title and its GitHub link sits at the far right", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    assert.match(css, /\.project-heading \.theme-toggle\{order:0;/);
+    assert.match(css, /\.project-link\{[^}]*margin-left:auto/);
 });
 
 test("the homepage hero has no icon links of its own", async () => {

@@ -18,3 +18,4 @@ Thumbs.db
 
 # Written at build time from the Medium feed
 src/content/blog-feed.generated.json
+src/content/thunderstore.generated.json

@@ -910,12 +910,14 @@ body:has(.home-ground) .site-footer .hill-wave {
 
 .project-heading {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 4px;
     margin: 0 0 16px;
 }
 
 .project-heading .theme-toggle {
+    order: 0;
     padding-left: 4px;
 }
 
@@ -924,6 +926,16 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-size: clamp(22px, 2.2vw, 26px);
     letter-spacing: -0.015em;
     line-height: 1.25;
+}
+
+.prose .project-downloads {
+    margin-left: 12px;
+    color: var(--ink-soft);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 400;
+    letter-spacing: 0;
+    white-space: nowrap;
 }
 
 .project-status {
@@ -1014,22 +1026,20 @@ body:has(.home-ground) .site-footer .hill-wave {
     color: var(--brick);
 }
 
-.project-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px 24px;
-    margin-bottom: 20px;
+.prose .project-downloads:hover {
+    color: var(--brick);
 }
 
-.project-links a {
+.project-link {
     display: inline-flex;
+    margin-left: auto;
     align-items: center;
     gap: 8px;
     color: var(--brick);
     font-weight: 500;
 }
 
-.project-links .link-icon {
+.project-link .link-icon {
     height: 16px;
 }
 
