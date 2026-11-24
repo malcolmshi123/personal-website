@@ -55,12 +55,11 @@ export const gospelSections: GospelSection[] = [
         heading: "Dead in sin",
         paragraphs: [
             "The Bible calls the problem sin. Sin is anything we think, say, or do that goes against God’s law and grieves His heart. In other words, it is failure to love God or love our neighbor as we ought.",
-            "Every one of us has sinned. We have turned away from the God who made us and chosen to live on our own terms. This rebellion harms our communities, relationships, and even ourselves. We see its effects in greed, envy, deceit, insolence, and the suffering we cause one another.",
+            "Every one of us has sinned. We have turned away from the God who made us and chosen to live on our own terms. This rebellion harms our communities, relationships, and even ourselves. We see its effects in greed, exploitation, and the suffering we cause one another.",
             "Because God is just, He must deal with sin. Love does not mean pretending evil is harmless; our sin makes us guilty before Him, and its punishment is death. When the Bible says we are dead in our sins, it means we are separated from God and unable to restore this relationship ourselves. We need forgiveness and new life.",
             "But how can a just God forgive us?",
         ],
         references: [
-            { label: "Romans 1:29-30", href: "https://www.esv.org/Romans+1:29-30/" },
             { label: "Romans 3:23", href: "https://www.esv.org/Romans+3:23/" },
             { label: "Romans 6:23", href: "https://www.esv.org/Romans+6:23/" },
         ],

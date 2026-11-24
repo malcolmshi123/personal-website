@@ -2,6 +2,7 @@ import { createPageMetadata } from "@/lib/site-metadata";
 import ContactForm from "@/components/contact-form";
 import LinkIcon from "@/components/link-icon";
 import { contactLinks } from "@/content/contact";
+import { newTabProps } from "@/lib/links";
 
 export const metadata = createPageMetadata(
     "Contact",
@@ -16,7 +17,7 @@ export default function Contact() {
             <p className="introduction">Let’s get in touch!</p>
             <div className="related-links contact-links">
                 {contactLinks.map((link) => (
-                    <a href={link.href} key={link.href}>
+                    <a href={link.href} {...newTabProps(link.href)} key={link.href}>
                         <LinkIcon name={link.icon} />
                         {link.label}
                     </a>

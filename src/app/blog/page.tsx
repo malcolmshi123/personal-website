@@ -1,6 +1,7 @@
 import { createPageMetadata } from "@/lib/site-metadata";
 import { articles } from "@/content/blog";
 import { mediumImageSet } from "@/lib/medium-image";
+import { newTabProps } from "@/lib/links";
 
 export const metadata = createPageMetadata(
     "Blog",
@@ -30,7 +31,7 @@ export default function Blog() {
                                 />
                             )}
                             <div className="entry-row-head">
-                                <h2><a href={article.href}>{article.title}</a></h2>
+                                <h2><a href={article.href} {...newTabProps(article.href)}>{article.title}</a></h2>
                                 <time className="entry-date" dateTime={article.publishedAt}>
                                     {new Date(article.publishedAt).toLocaleDateString("en-US", {
                                         month: "short",
@@ -43,7 +44,7 @@ export default function Blog() {
                             <p className="article-meta">
                                 {article.summary ? `${article.summary} · ${article.readingTimeMinutes} min` : `${article.readingTimeMinutes} min`}
                             </p>
-                            <a className="article-link" href={article.href} aria-label={`Read ${article.title}`}>
+                            <a className="article-link" href={article.href} {...newTabProps(article.href)} aria-label={`Read ${article.title}`}>
                                 Read <span aria-hidden="true">↗</span>
                             </a>
                         </article>

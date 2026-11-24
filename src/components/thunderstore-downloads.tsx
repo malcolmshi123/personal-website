@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import LinkIcon from "@/components/link-icon";
 import { downloadsLabel } from "@/content/projects";
+import { newTabProps } from "@/lib/links";
 import { liveDownloadsPath, newerDownloads } from "@/lib/thunderstore";
 
 type ThunderstoreDownloadsProps = { thunderstoreHref: string; buildCount: number };
@@ -20,8 +22,9 @@ export default function ThunderstoreDownloads({ thunderstoreHref, buildCount }: 
     }, [thunderstoreHref]);
 
     return (
-        <a className="project-downloads" href={thunderstoreHref} aria-label={`${downloadsLabel(count)} on Thunderstore`}>
-            {downloadsLabel(count)}
+        <a className="project-downloads" href={thunderstoreHref} {...newTabProps(thunderstoreHref)} aria-label={`${downloadsLabel(count)} on Thunderstore`}>
+            <LinkIcon name="download" />
+            {count.toLocaleString("en-US")}
         </a>
     );
 }

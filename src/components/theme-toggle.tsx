@@ -32,7 +32,8 @@ function currentTheme(): Theme {
 // The page can show more than one toggle; each tells the others when the theme changes.
 const themeChangeEvent = "theme-toggle-change";
 
-export default function ThemeToggle({ hint = true }: { hint?: boolean }) {
+// The hint sits to the right of the icon and points back at it.
+export default function ThemeToggle({ hint = false }: { hint?: boolean }) {
     const [theme, setTheme] = useState<Theme | null>(null);
     const maskId = `moon-cut-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
 
@@ -112,7 +113,6 @@ export default function ThemeToggle({ hint = true }: { hint?: boolean }) {
 
     return (
         <button className="theme-toggle" type="button" aria-label={label} onClick={switchTheme}>
-            {hint && <span className="theme-toggle-hint" aria-hidden="true">click me</span>}
             <svg className="theme-toggle-icon" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false">
                 <defs>
                     <mask id={maskId}>
@@ -130,6 +130,7 @@ export default function ThemeToggle({ hint = true }: { hint?: boolean }) {
                     <circle className="theme-toggle-star" cx="6" cy="7" r="0.9" />
                 </g>
             </svg>
+            {hint && <span className="theme-toggle-hint" aria-hidden="true">← click me!</span>}
         </button>
     );
 }

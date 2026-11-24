@@ -2,6 +2,7 @@ import { createPageMetadata } from "@/lib/site-metadata";
 import Link from "next/link";
 import { gospelIntroduction, gospelSections, paragraphText } from "@/content/gospel";
 import type { Paragraph } from "@/content/gospel";
+import { newTabProps } from "@/lib/links";
 
 export const metadata = createPageMetadata(
     "The Gospel",
@@ -37,7 +38,7 @@ export default function Gospel() {
     return (
         <article className="page-content reading-page">
             <h1>The Gospel</h1>
-            <p className="page-meta">{readingMinutes} min</p>
+            <p className="page-meta">About {readingMinutes} minutes</p>
             <p className="introduction">{gospelIntroduction}</p>
             <div className="prose">
                 {gospelSections.map(({ id, heading, paragraphs, quote, afterQuote, references }) => (
@@ -50,7 +51,7 @@ export default function Gospel() {
                                     <p>{quote.text}</p>
                                 </blockquote>
                                 <figcaption>
-                                    {quote.author}, <cite><a href={quote.href}>{quote.source}</a></cite>
+                                    {quote.author}, <cite><a href={quote.href} {...newTabProps(quote.href)}>{quote.source}</a></cite>
                                 </figcaption>
                             </figure>
                         )}
@@ -58,7 +59,7 @@ export default function Gospel() {
                         {references.length > 0 && (
                             <ul className="scripture-links" aria-label={`Bible passages for ${heading}`}>
                                 {references.map(({ label, href }) => (
-                                    <li key={href}><a href={href}>{label}</a></li>
+                                    <li key={href}><a href={href} {...newTabProps(href)}>{label}</a></li>
                                 ))}
                             </ul>
                         )}

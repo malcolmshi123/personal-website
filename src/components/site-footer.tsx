@@ -2,6 +2,7 @@ import HillWave from "@/components/hill-wave";
 import LinkIcon from "@/components/link-icon";
 import { contactLinks } from "@/content/contact";
 import { footerVerse } from "@/content/site";
+import { newTabProps } from "@/lib/links";
 
 const copyrightYear = new Date().getFullYear();
 
@@ -19,7 +20,7 @@ export default function SiteFooter() {
                     <ul className="site-footer-links">
                         {contactLinks.map((link) => (
                             <li key={link.href}>
-                                <a href={link.href} aria-label={link.iconLabel} title={link.iconLabel}>
+                                <a href={link.href} {...newTabProps(link.href)} aria-label={link.iconLabel} title={link.iconLabel}>
                                     <LinkIcon name={link.icon} />
                                 </a>
                             </li>

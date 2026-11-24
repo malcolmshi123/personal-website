@@ -1,6 +1,7 @@
 import { createPageMetadata } from "@/lib/site-metadata";
 import LinkIcon from "@/components/link-icon";
 import { experience, work } from "@/content/work";
+import { newTabProps } from "@/lib/links";
 
 export const metadata = createPageMetadata(
     "Experience",
@@ -13,7 +14,7 @@ export default function Experience() {
         <article className="page-content reading-page">
             <h1>Experience</h1>
             <p className="introduction">{work.introduction}</p>
-            <a className="resume-download" href="/resume.pdf">
+            <a className="resume-download" href="/resume.pdf" {...newTabProps("/resume.pdf")}>
                 <LinkIcon name="resume" />
                 View resume (PDF)
             </a>

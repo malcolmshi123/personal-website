@@ -232,6 +232,7 @@ h1 {
     color: var(--brick);
 }
 
+/* The hint only shows until the visitor has tried the toggle once. */
 :root[data-theme-toggled] .theme-toggle-hint {
     display: none;
 }
@@ -841,7 +842,7 @@ body:has(.home-ground) .site-footer .hill-wave {
 .entry-row-head {
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 4px 24px;
     margin-bottom: 6px;
@@ -850,7 +851,7 @@ body:has(.home-ground) .site-footer .hill-wave {
 .entry-row-head h2,
 .entry-row-head h3 {
     margin: 0;
-    font-size: clamp(22px, 2.2vw, 26px);
+    font-size: var(--project-title-size);
     letter-spacing: -0.015em;
     line-height: 1.25;
 }
@@ -908,17 +909,24 @@ body:has(.home-ground) .site-footer .hill-wave {
     display: none;
 }
 
+/* The download count starts on the title's baseline, then rises so its letters center on the title's. */
 .project-heading {
+    --project-title-size: clamp(22px, 2.2vw, 26px);
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: baseline;
     gap: 4px;
     margin: 0 0 16px;
 }
 
+/* Negative margins shrink the 44px tap target to 24px in layout, below the shortest title row (27.5px on phones),
+   so it never makes the row taller and centers on the title. */
 .project-heading .theme-toggle {
     order: 0;
-    padding-left: 4px;
+    align-self: center;
+    margin-block: -10px;
+    /* With the row's 4px gap, this matches the 12px before GojoBracken's download count. */
+    padding-left: 8px;
 }
 
 .prose .project-name {
@@ -928,7 +936,18 @@ body:has(.home-ground) .site-footer .hill-wave {
     line-height: 1.25;
 }
 
+.prose .project-name-link {
+    color: inherit;
+}
+
+.prose .project-name-link:hover {
+    color: var(--brick);
+}
+
+/* 0.377 is half the title font's letter height per pixel of size; 5.5px is half the count's. */
 .prose .project-downloads {
+    position: relative;
+    top: calc(5.5px - 0.377 * var(--project-title-size));
     margin-left: 12px;
     color: var(--ink-soft);
     font-family: var(--font-body);
@@ -936,6 +955,13 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-weight: 400;
     letter-spacing: 0;
     white-space: nowrap;
+}
+
+/* Matches the digits' height and sits on their baseline, so the arrow spans exactly the same lines as the count. */
+.project-downloads .link-icon {
+    height: 11px;
+    margin-right: 6px;
+    vertical-align: 0;
 }
 
 .project-status {
@@ -1030,16 +1056,22 @@ body:has(.home-ground) .site-footer .hill-wave {
     color: var(--brick);
 }
 
-.project-link {
+.project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin-bottom: 20px;
+}
+
+.project-links a {
     display: inline-flex;
-    margin-left: auto;
     align-items: center;
     gap: 8px;
     color: var(--brick);
     font-weight: 500;
 }
 
-.project-link .link-icon {
+.project-links .link-icon {
     height: 16px;
 }
 
@@ -1494,12 +1526,6 @@ body:has(.home-ground) .site-footer .hill-wave {
 
 @media (max-width: 760px) {
     .site-navigation a::after {
-        display: none;
-    }
-}
-
-@media (min-width: 761px) and (max-width: 960px) {
-    .theme-toggle-hint {
         display: none;
     }
 }
