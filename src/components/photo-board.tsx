@@ -2,28 +2,10 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { photoSource, photoSourceSet, shuffled, type GalleryPhoto } from "@/content/photos";
+import { columnsForWidth, placeInColumns } from "@/lib/photo-layout";
 
 const rowsPerBatch = 6;
 const boardSizes = "(max-width: 760px) 50vw, (max-width: 1100px) 33vw, 320px";
-
-function columnsForWidth(width: number): number {
-    if (width <= 760) {
-        return 2;
-    }
-    return width <= 1100 ? 3 : 4;
-}
-
-// Each photo drops into the shortest column so far, so the board fills left to right like a pinboard.
-// The placement only depends on earlier photos, so showing more never moves photos already on screen.
-function placeInColumns(photos: GalleryPhoto[], count: number): GalleryPhoto[][] {
-    const columns = Array.from({ length: count }, () => ({ photos: [] as GalleryPhoto[], height: 0 }));
-    for (const photo of photos) {
-        const shortest = columns.reduce((low, column) => (column.height < low.height ? column : low));
-        shortest.photos.push(photo);
-        shortest.height += photo.height / photo.width;
-    }
-    return columns.map((column) => column.photos);
-}
 
 // While more photos wait, cut every column at the shortest one so the board fades out along one line.
 // Photos left entirely below the cut can't be reached until Show more brings them into view.

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { photoSource, photoSourceSet, seenPhotos, shuffled, tastedPhotos, type GalleryPhoto } from "@/content/photos";
+import { createDealer, tossFrontCard, type DealtCard } from "@/lib/photo-layout";
 
 const piles = [
     { label: "tasted", photos: tastedPhotos },
@@ -10,35 +11,21 @@ const piles = [
 
 const stackSizes = "(max-width: 760px) 60vw, 380px";
 
-// Slot 0 is the card in front, 1 and 2 are fanned behind it, and 3 waits hidden so its photo is loaded before it shows.
+// Slot 0 is the card in front, 1 and 2 are spread behind it, and 3 waits hidden so its photo is loaded before it shows.
 const slotCount = 4;
-// Matches the leaving card's transition in globals.css.
+// Outlasts the leaving card's 260ms transition in globals.css, then removes it.
 const tossMs = 300;
 
-type Card = { key: number; photo: GalleryPhoto; label: string; slot: number };
-
-// Each label deals from its own shuffled pile, so no photo repeats until the whole pile has been shown.
-function dealer() {
-    const shuffledPiles = piles.map(() => [] as GalleryPhoto[]);
-    let dealt = 0;
-    return (slot: number): Card => {
-        const pileIndex = dealt % piles.length;
-        if (shuffledPiles[pileIndex].length === 0) {
-            shuffledPiles[pileIndex] = shuffled(piles[pileIndex].photos);
-        }
-        dealt += 1;
-        return { key: dealt, photo: shuffledPiles[pileIndex].pop()!, label: piles[pileIndex].label, slot };
-    };
-}
+type Card = DealtCard<GalleryPhoto>;
 
 export default function PhotoStack() {
-    const deal = useRef<ReturnType<typeof dealer> | null>(null);
+    const deal = useRef<((slot: number) => Card) | null>(null);
     const [cards, setCards] = useState<Card[]>([]);
     const [hasTurned, setHasTurned] = useState(false);
 
     // Deal in the browser, so every visit opens on a different photo.
     useEffect(() => {
-        deal.current = dealer();
+        deal.current = createDealer(piles, shuffled);
         const dealNext = deal.current;
         setCards(Array.from({ length: slotCount }, (_, slot) => dealNext(slot)));
     }, []);
@@ -49,7 +36,6 @@ export default function PhotoStack() {
 
     const front = cards.find((card) => card.slot === 0);
 
-    // The front card is tossed aside (slot -1) while every other card moves up one slot.
     // Cards keep their DOM order by key, so each one transitions between slots instead of remounting.
     function toss() {
         if (!deal.current) {
@@ -58,10 +44,7 @@ export default function PhotoStack() {
         const tossed = front?.key;
         // Deal outside the state update, which React may run twice.
         const incoming = deal.current(slotCount - 1);
-        setCards((current) => [
-            ...current.filter((card) => card.slot >= 0).map((card) => ({ ...card, slot: card.slot - 1 })),
-            incoming,
-        ]);
+        setCards((current) => tossFrontCard(current, incoming));
         setHasTurned(true);
         window.setTimeout(() => setCards((current) => current.filter((card) => card.key !== tossed)), tossMs);
     }
