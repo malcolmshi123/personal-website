@@ -7,7 +7,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-const script = fileURLToPath(new URL("./build-photos.mjs", import.meta.url));
+const script = fileURLToPath(new URL("../scripts/build-photos.mjs", import.meta.url));
 
 // A project folder that already has published photos, like a real checkout.
 function projectWithPublishedPhotos() {

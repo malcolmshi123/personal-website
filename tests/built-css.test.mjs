@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { canonicalSelector, canonicalValue, readStyles } from "./built-css.mjs";
+import { canonicalSelector, canonicalValue, readStyles } from "./built-site/built-css.mjs";
 
 test("values match however the minifier spells times, numbers, colors, and spacing", () => {
     assert.equal(canonicalValue("opacity .15s var(--ease-out), filter 150ms var(--ease-out)"), "opacity 150ms var(--ease-out),filter 150ms var(--ease-out)");

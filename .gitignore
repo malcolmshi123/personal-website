@@ -22,3 +22,9 @@ src/content/thunderstore.generated.json
 
 # Original photos; npm run photos writes the web copies into public/photos/board
 photo-inbox/
+
+# Local notes, and instructions and design context for Claude; they stay on this machine only
+AGENTS.md
+.claude/
+.impeccable/
+docs/

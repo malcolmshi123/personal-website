@@ -3,7 +3,7 @@ import test from "node:test";
 import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { inlineAssets } from "./build-social-card.mjs";
+import { inlineAssets } from "../scripts/build-social-card.mjs";
 
 test("card fonts and photos are inlined as data URLs", () => {
     const directory = mkdtempSync(path.join(tmpdir(), "card-"));

@@ -1,5 +1,5 @@
 // The Gallery board's column layout and the homepage deck's dealing, kept free of React and the photo data
-// so scripts/photo-layout.test.mjs can test them directly.
+// so tests/photo-layout.test.mjs can test them directly.
 
 type Sized = { width: number; height: number };
 

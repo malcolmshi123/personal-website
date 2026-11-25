@@ -23,8 +23,9 @@ npm run build
 npm run test:html
 ```
 
-`npm test` runs the unit tests. `npm run test:html` checks the built pages in
-`out/`, so run it after `npm run build`.
+`npm test` runs the unit tests in `tests/`. `npm run test:html` runs
+`tests/built-site/`, which checks the built pages in `out/`, so run it after
+`npm run build`. Build and maintenance tools live in `scripts/`.
 
 ## How it's built
 
@@ -73,8 +74,6 @@ page, and every footer. It's compiled from `resume/main.tex` with phone and emai
 removed. Recompile that source and replace the PDF when updating it, keep the
 private original, and check the PDF's text and link annotations as well as how it
 looks.
-
-See `CONTENT_REVIEW.md` for draft wording to review.
 
 ## Photos
 

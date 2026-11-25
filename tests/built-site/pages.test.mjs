@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
-import { projectsDescription } from "../src/content/projects.ts";
+import { projectsDescription } from "../../src/content/projects.ts";
 import { canonicalValue, loadBuiltStyles } from "./built-css.mjs";
 
 // Checks a declaration's meaning: a string must equal the built value once both are spelled the same way, and a
@@ -21,7 +21,7 @@ function declares(styles, test) {
 }
 
 async function readExport(path) {
-    const html = await readFile(new URL(`../out/${path}`, import.meta.url), "utf8");
+    const html = await readFile(new URL(`../../out/${path}`, import.meta.url), "utf8");
 
     // React separates adjacent text nodes with empty comments in static HTML.
     return html.replaceAll("<!-- -->", "");
@@ -167,7 +167,7 @@ test("malcolmshi.ca links home from its title and has its own theme toggle besid
 
 test("the header theme toggle has no hint, and the project hint hides once the visitor has toggled the theme", async () => {
     const styles = await loadBuiltStyles();
-    const pages = (await readdir(new URL("../out/", import.meta.url))).filter((name) => name.endsWith(".html"));
+    const pages = (await readdir(new URL("../../out/", import.meta.url))).filter((name) => name.endsWith(".html"));
 
     for (const page of pages) {
         const html = await readExport(page);
@@ -286,7 +286,7 @@ test("the homepage calls the work entry Experience", async () => {
 test("the about page is gone from the export and the navigation", async () => {
     const html = await readExport("index.html");
 
-    await assert.rejects(readFile(new URL("../out/about/index.html", import.meta.url)));
+    await assert.rejects(readFile(new URL("../../out/about/index.html", import.meta.url)));
     assert.doesNotMatch(html, /href="\/about\/"/);
 });
 
@@ -414,7 +414,7 @@ test("the homepage greeting has the portrait photo beside it, outside the headin
     assert.match(html, /<div class="greeting-row"><h1[^>]*class="greeting"[^>]*>[\s\S]*?<\/h1><div class="greeting-portrait"><img[^>]*src="\/photos\/portrait\.webp"[^>]*><\/div><\/div>/);
     assert.match(html, /<img[^>]*alt="Malcolm smiling in a suit outdoors"/);
     assert.doesNotMatch(html, /portrait coming soon/);
-    await readFile(new URL("../out/photos/portrait.webp", import.meta.url));
+    await readFile(new URL("../../out/photos/portrait.webp", import.meta.url));
 });
 
 test("the homepage greeting is split into two lines that can rise in", async () => {
@@ -471,17 +471,17 @@ test("every page links the M. favicon and the iPhone home screen icon", async ()
         assert.match(head, /<link rel="apple-touch-icon" href="\/apple-icon\.png[^"]*"/, page);
     }
 
-    const svg = await readFile(new URL("../out/icon.svg", import.meta.url), "utf8");
+    const svg = await readFile(new URL("../../out/icon.svg", import.meta.url), "utf8");
 
     assert.match(svg, /fill="#e9dcc5"/);
     assert.match(svg, /fill="#1b1712"/);
     assert.match(svg, /fill="#944124"/);
 
-    const darkSvg = await readFile(new URL("../out/icon-dark.svg", import.meta.url), "utf8");
+    const darkSvg = await readFile(new URL("../../out/icon-dark.svg", import.meta.url), "utf8");
 
     assert.match(darkSvg, /fill="#1b1712"/);
     assert.match(darkSvg, /fill="#df937a"/);
-    await readFile(new URL("../out/apple-icon.png", import.meta.url));
+    await readFile(new URL("../../out/apple-icon.png", import.meta.url));
 });
 
 test("the theme boot script ships in the head", async () => {
@@ -537,7 +537,7 @@ test("no link on any page ends in a slash, apart from the home link and ESV vers
 });
 
 test("the sitemap lists the homepage and every page in the navigation", async () => {
-    const xml = await readFile(new URL("../out/sitemap.xml", import.meta.url), "utf8");
+    const xml = await readFile(new URL("../../out/sitemap.xml", import.meta.url), "utf8");
     const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 
     assert.deepEqual(urls.sort(), [
@@ -599,7 +599,7 @@ test("gospel reference labels keep the capitals in each heading", async () => {
 });
 
 test("links that leave the site, and the resume PDF, open in a new tab while page links stay put", async () => {
-    const pages = (await readdir(new URL("../out/", import.meta.url))).filter((name) => name.endsWith(".html"));
+    const pages = (await readdir(new URL("../../out/", import.meta.url))).filter((name) => name.endsWith(".html"));
     let outbound = 0;
 
     for (const page of pages) {
@@ -719,13 +719,13 @@ test("the gallery is one Pinterest-style board fed by every processed photo", as
     assert.match(html, /class="photo-board"/);
     assert.doesNotMatch(html, /album-grid|class="gear"|coming soon/);
 
-    const photos = JSON.parse(await readFile(new URL("../src/content/gallery.json", import.meta.url), "utf8"));
+    const photos = JSON.parse(await readFile(new URL("../../src/content/gallery.json", import.meta.url), "utf8"));
     assert.ok(photos.length > 0);
     for (const photo of photos) {
         assert.match(photo.id, /^[a-z0-9-]+$/);
         assert.ok(photo.caption && !/[-_]/.test(photo.caption), photo.id);
         for (const width of [640, 1280]) {
-            const file = await readFile(new URL(`../out/photos/board/${photo.id}-${width}.webp`, import.meta.url));
+            const file = await readFile(new URL(`../../out/photos/board/${photo.id}-${width}.webp`, import.meta.url));
             // No EXIF block means no GPS location or camera details ship with the photo.
             assert.ok(!file.includes("EXIF") && !file.includes("Exif"), `${photo.id}-${width} still has metadata`);
         }
@@ -735,7 +735,7 @@ test("the gallery is one Pinterest-style board fed by every processed photo", as
 });
 
 test("the original photos never reach git", async () => {
-    const ignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
+    const ignore = await readFile(new URL("../../.gitignore", import.meta.url), "utf8");
     assert.match(ignore, /^photo-inbox\/$/m);
 });
 
@@ -805,7 +805,7 @@ test("link previews use the current card and describe it", async () => {
     const html = await readExport("index.html");
     assert.match(html, /<meta property="og:image:alt" content="Malcolm Shi, with a line about his faith, his work, and what he enjoys, beside his portrait\."/);
     assert.doesNotMatch(html, /Faith, engineering, writing, and photography/);
-    const card = await readFile(new URL("../out/social-card.png", import.meta.url));
+    const card = await readFile(new URL("../../out/social-card.png", import.meta.url));
     assert.equal(card.readUInt32BE(16), 1200);
     assert.equal(card.readUInt32BE(20), 630);
 });

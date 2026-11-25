@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { estimateReadingMinutes, loadArticles, parseFeed, readingMinutesFromArticle } from "./medium.mjs";
+import { estimateReadingMinutes, loadArticles, parseFeed, readingMinutesFromArticle } from "../scripts/medium.mjs";
 import { mediumImageSet } from "../src/lib/medium-image.ts";
 
 const feed = `<?xml version="1.0" encoding="UTF-8"?><rss><channel>

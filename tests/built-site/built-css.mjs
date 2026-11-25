@@ -141,7 +141,7 @@ export function readStyles(css) {
 }
 
 export async function loadBuiltStyles() {
-    const directory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const directory = new URL("../../out/_next/static/chunks/", import.meta.url);
     const files = (await readdir(directory)).filter((name) => name.endsWith(".css"));
     const css = await Promise.all(files.map((name) => readFile(new URL(name, directory), "utf8")));
     return readStyles(css.join("\n"));

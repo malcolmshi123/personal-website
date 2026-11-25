@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promis
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
-import { fixExportPaths } from "./fix-export-paths.mjs";
+import { fixExportPaths } from "../scripts/fix-export-paths.mjs";
 
 test("flattens Windows segment paths and preserves existing exports", async (t) => {
     const directory = await mkdtemp(join(tmpdir(), "website-export-"));

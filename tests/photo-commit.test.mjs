@@ -5,7 +5,7 @@ import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { chooseFold, parseOptions, stagedOutsidePhotos } from "./photo-commit.mjs";
+import { chooseFold, parseOptions, stagedOutsidePhotos } from "../scripts/photo-commit.mjs";
 
 const history = [
     { hash: "aaa", subject: "update gallery" },
@@ -42,7 +42,7 @@ test("files staged outside the photo outputs are reported", () => {
     assert.deepEqual(stagedOutsidePhotos(staged.slice(0, 2)), []);
 });
 
-const script = fileURLToPath(new URL("./photo-commit.mjs", import.meta.url));
+const script = fileURLToPath(new URL("../scripts/photo-commit.mjs", import.meta.url));
 
 function git(cwd, ...args) {
     const result = spawnSync("git", args, { cwd, encoding: "utf8" });

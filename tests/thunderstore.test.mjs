@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { loadDownloads, metricsUrl, thunderstoreHrefs, thunderstoreKey } from "./thunderstore.mjs";
+import { loadDownloads, metricsUrl, thunderstoreHrefs, thunderstoreKey } from "../scripts/thunderstore.mjs";
 import { downloadsLabel } from "../src/content/projects.ts";
 import { liveDownloadsPath, newerDownloads } from "../src/lib/thunderstore.ts";
 import { handleThunderstoreRequest } from "../api/thunderstore.mjs";

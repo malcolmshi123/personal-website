@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { captionFromFilename, duplicatePhotoIds, photoId, readsAsPhoto } from "./photos.mjs";
+import { captionFromFilename, duplicatePhotoIds, photoId, readsAsPhoto } from "../scripts/photos.mjs";
 
 test("captions come from filenames with dashes as spaces", () => {
     assert.equal(captionFromFilename("ichiran-ramen.jpg"), "ichiran ramen");
