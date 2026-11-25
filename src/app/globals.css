@@ -865,18 +865,6 @@ body:has(.fit-screen) .site-footer-inner {
     font-size: 15px;
 }
 
-.soft-photo {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 24px;
-    background: var(--placeholder);
-    color: var(--ink-soft);
-    font-size: 14px;
-    text-align: center;
-    transition: background-color var(--theme-fade);
-}
-
 .resume-download {
     display: inline-flex;
     align-items: center;
@@ -1258,129 +1246,223 @@ body:has(.fit-screen) .site-footer-inner {
     color: var(--ink-soft);
 }
 
-/* Photos */
+/* Gallery board */
 
 .photos-page {
-    max-width: 1120px;
+    max-width: 1280px;
 }
 
-.album-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1.1fr);
-    align-items: start;
-    gap: 40px clamp(20px, 3vw, 40px);
-    margin: clamp(40px, 6vw, 72px) 0 0;
-    padding: 0;
-    list-style: none;
+/* While the shuffle waits for the browser, hold a screen of room so the footer doesn't jump. */
+.photo-board {
+    --board-gap: clamp(10px, 1.4vw, 18px);
+    display: flex;
+    gap: var(--board-gap);
+    margin-top: clamp(32px, 5vw, 56px);
 }
 
-.album {
+.photo-board[aria-busy="true"] {
+    min-height: 100svh;
+}
+
+/* More photos wait below: the last stretch of the board fades into the sky. */
+.photo-board[data-more] {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 240px), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 240px), transparent);
+}
+
+.photo-board-column {
+    display: flex;
+    flex: 1;
+    align-self: flex-start;
+    flex-direction: column;
+    gap: var(--board-gap);
     min-width: 0;
-    margin: 0;
 }
 
-.album-photo {
+.photo-pin {
+    position: relative;
+    display: block;
     width: 100%;
-}
-
-.album-grid li:nth-child(1) .album-photo {
-    aspect-ratio: 5 / 6;
-    border-radius: 48% 48% 8% 34% / 40% 40% 6% 28%;
-}
-
-.album-grid li:nth-child(2) {
-    margin-top: clamp(32px, 6vw, 72px);
-}
-
-.album-grid li:nth-child(2) .album-photo {
-    aspect-ratio: 1 / 1;
-    border-radius: 12% 44% 44% 12% / 12% 50% 50% 12%;
-}
-
-.album-grid li:nth-child(3) {
-    margin-top: clamp(12px, 2vw, 24px);
-}
-
-.album-grid li:nth-child(3) .album-photo {
-    aspect-ratio: 4 / 5;
-    border-radius: 36% 10% 46% 46% / 30% 8% 40% 40%;
-}
-
-.album h2 {
-    margin: 18px 0 6px;
-    font-size: clamp(24px, 2.4vw, 30px);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-}
-
-.album p {
-    margin: 0;
-    color: var(--ink-soft);
-    font-size: 16px;
-}
-
-.gear {
-    margin-top: clamp(72px, 9vw, 112px);
-}
-
-.gear h2 {
-    margin: 0 0 24px;
-    font-size: clamp(28px, 3vw, 36px);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-}
-
-.gear-list {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 32px clamp(20px, 3vw, 40px);
-    margin: 0;
     padding: 0;
-    list-style: none;
+    overflow: hidden;
+    border: 0;
+    border-radius: 14px;
+    cursor: zoom-in;
+    animation: pin-in 500ms var(--ease-out) backwards;
 }
 
-.gear-list li {
-    padding-top: 16px;
-    border-top: 1px solid var(--rule);
+.photo-pin img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms var(--ease-out);
 }
 
-.gear-list h3 {
-    margin: 0 0 6px;
-    font-size: clamp(20px, 2vw, 24px);
-    letter-spacing: -0.015em;
-    line-height: 1.25;
+.photo-pin-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px);
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--heading);
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out), background-color var(--theme-fade), color var(--theme-fade);
 }
 
-.gear-list p {
-    margin: 0;
-    color: var(--ink-soft);
+@media (hover: hover) and (pointer: fine) {
+    .photo-pin:hover img {
+        transform: scale(1.03);
+    }
+
+    .photo-pin:hover .photo-pin-caption {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.photo-pin:focus-visible {
+    outline-offset: 3px;
+    border-radius: 14px;
+}
+
+.photo-pin:focus-visible .photo-pin-caption {
+    opacity: 1;
+    transform: none;
+}
+
+@keyframes pin-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* Pulled up into the faded stretch, so the button sits where the photos trail off. */
+.photo-board-more {
+    position: relative;
+    margin-top: -96px;
+    text-align: center;
+}
+
+.photo-board-more button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: var(--sky);
+    color: var(--ink);
+    font: inherit;
     font-size: 16px;
-    line-height: 1.6;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 200ms var(--ease-out), transform 160ms var(--ease-out), background-color var(--theme-fade);
+}
+
+.photo-board-more button:hover {
+    border-color: var(--ink-soft);
+}
+
+.photo-board-more button:active {
+    transform: scale(0.97);
+}
+
+.photo-board-static {
+    columns: 3 220px;
+    column-gap: 16px;
+    margin-top: 40px;
+}
+
+.photo-board-static img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 16px;
+    border-radius: 14px;
+}
+
+.photo-viewer {
+    max-width: min(92vw, 1100px);
+    max-height: 92svh;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+}
+
+.photo-viewer::backdrop {
+    background: rgb(27 23 18 / 0.86);
+}
+
+.photo-viewer[open] {
+    animation: viewer-in 220ms var(--ease-out);
+}
+
+.photo-viewer img {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: calc(92svh - 60px);
+    margin-inline: auto;
+    border-radius: 14px;
+}
+
+.photo-viewer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.photo-viewer-bar p {
+    margin: 0;
+    color: #e9dcc5;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-style: italic;
+}
+
+.photo-viewer-bar button {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid rgb(233 220 197 / 0.4);
+    border-radius: 10px;
+    background: transparent;
+    color: #e9dcc5;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.photo-viewer-bar button:hover {
+    border-color: #e9dcc5;
+}
+
+@keyframes viewer-in {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
 }
 
 @media (max-width: 760px) {
-    .gear-list {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 24px;
-    }
-}
-
-@media (max-width: 760px) {
-    .album-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 48px;
-    }
-
-    .album-grid li {
-        width: 85%;
-    }
-
-    .album-grid li:nth-child(2) {
-        justify-self: end;
-    }
-
-    .album-grid li:nth-child(n) {
-        margin-top: 0;
+    .photo-pin-caption {
+        font-size: 13px;
     }
 }
 

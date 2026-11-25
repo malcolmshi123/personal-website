@@ -30,7 +30,7 @@ One site that holds both a serious engineering record (GPU performance, LLM infe
 - Malcolm handles staging, commits, and pushes. Work proceeds in commit-sized increments with review between them.
 - No phone numbers or email addresses in published content or the downloadable résumé.
 - No en or em dashes in prose, except work date ranges. American spelling of "neighbor."
-- Photos are on hold until Malcolm supplies them. Use labeled placeholders until then.
+- Photos: Malcolm drops originals into `photo-inbox/` (git-ignored). `npm run photos` strips metadata (including GPS) and writes web copies to `public/photos/board/` plus `src/content/gallery.json`, which are committed. Captions are the filenames; the `food` and `places` folders feed the homepage Tasted and Seen cards; every photo appears on the Gallery board.
 
 ## Brand Commitments
 
@@ -43,7 +43,7 @@ One site that holds both a serious engineering record (GPU performance, LLM infe
 - Gospel and testimony copy: `src/content/gospel.ts`.
 - Work history, project, and education: `src/content/work.ts`; résumé at `public/resume.pdf`.
 - One blog post on Medium ("my testimony!").
-- No photographs yet, including no headshot. Do not generate or present imagery as Malcolm's own photos.
+- Malcolm's own photos (portrait, food, places, and everyday moments) are on the site. Never generate or present other imagery as his.
 - No invented biography, article titles, or professional claims.
 
 ## Product Principles

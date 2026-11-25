@@ -19,3 +19,6 @@ Thumbs.db
 # Written at build time from the Medium feed
 src/content/blog-feed.generated.json
 src/content/thunderstore.generated.json
+
+# Original photos; npm run photos writes the web copies into public/photos/board
+photo-inbox/

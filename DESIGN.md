@@ -94,7 +94,7 @@ spacing:
   measure: "65ch"
   page-block: "clamp(40px, 6vw, 88px)"
   section: "clamp(48px, 6vw, 72px)"
-  footer-gap: "clamp(72px, 10vw, 128px)"
+  footer-gap: "clamp(40px, 6vw, 72px)"
 components:
   button-primary:
     backgroundColor: "{colors.olive}"
@@ -137,7 +137,7 @@ components:
 
 The page is a landscape. A tan sky fills the top, ink in espresso browns sits on it, and every page ends where a sage hill rolls in and flattens into a ground band that holds the footer. At night the sky turns brown and the ground goes to moss; the hill stays. The structure is the land itself, so content sits in open air on the sky, separated by space and the occasional hairline, and never boxed into cards.
 
-Type does the talking. Lora, a calligraphic old-style serif set at 600, gives headings a hand-made warmth, and Hanken Grotesk at a generous 18px keeps the reading calm. Color is sparing: sienna brick marks things you can follow (links, the current page, the name in the greeting), olive marks the one thing you can press. Photos, until they exist, are irregular soft blobs in a slightly deeper tan, labeled plainly.
+Type does the talking. Lora, a calligraphic old-style serif set at 600, gives headings a hand-made warmth, and Hanken Grotesk at a generous 18px keeps the reading calm. Color is sparing: sienna brick marks things you can follow (links, the current page, the name in the greeting), olive marks the one thing you can press. The Gallery is a Pinterest-style feed of Malcolm's own photos, laid out as a masonry board and shuffled on every visit.
 
 The sun in the header still sets into a moon and stars when you switch to dark, and the land moves the way land does: slowly. The homepage arrives once per visit (the greeting lines rise like a sunrise, the photo cards are dealt, the hill swells up), hovers answer with small physical gestures, and a few quiet loops keep the scene alive. Nothing moves fast, and nothing moves for people who ask for reduced motion. The site explicitly rejects the split-hero card template, pills, Young Serif, and cream-and-terracotta.
 
@@ -190,13 +190,13 @@ An earthy canyon palette: bright sand, espresso, sienna, and sage by day; brown 
 ### Hierarchy
 - **Display** (600, `clamp(56px, 8.5vw, 96px)`, 1, -0.02em): The homepage greeting only, capped at 9ch.
 - **Headline** (600, `clamp(44px, 6vw, 72px)` on inner pages, up to 84px by default, 1.04, -0.03em): Page titles, capped at 16ch, balanced.
-- **Title** (600, `clamp(28px, 3vw, 36px)`, 1.2): Section headings in prose. Homepage band entries run larger (`clamp(28px, 3vw, 40px)`, 1.1) in ground ink; album titles sit at `clamp(24px, 2.4vw, 30px)`.
+- **Title** (600, `clamp(28px, 3vw, 36px)`, 1.2): Section headings in prose. Homepage band entries run larger (`clamp(28px, 3vw, 40px)`, 1.1) in ground ink; board captions are 15px italic Lora.
 - **Title Row** (600, `clamp(22px, 2.2vw, 26px)`, 1.25): Work and article row titles, with the date right-aligned beside them.
 - **Quote** (Lora 400, `clamp(22px, 2.4vw, 27px)`, 1.45): Gospel quotes in heading color, with a 72px brick opening quote mark hung in the margin.
 - **Lead** (400, `clamp(18px, 1.6vw, 21px)`, 1.65): Page introductions in soft ink, max 34em. The homepage description runs at `clamp(19px, 1.7vw, 22px)`, max 30em.
 - **Body** (400, 18px, 1.6; 1.75 inside prose, max 65ch): All running text.
 - **Label** (500, 16px): Nav links (17px in the mobile menu), form labels, the resume link, the send button.
-- **Meta** (400, 15px, tabular numerals for dates): Dates, reading time, figcaptions, scripture link lists. 14px for album placeholder labels and the footer verse, quote and reference alike.
+- **Meta** (400, 15px, tabular numerals for dates): Dates, reading time, figcaptions, scripture link lists. 14px for the footer verse, quote and reference alike.
 
 ### Named Rules
 **The Lora Weight Rule.** Headings, the wordmark, and the footer name are Lora 600 with negative tracking (-0.015em to -0.03em) that grows with size; quotes are Lora 400. Lora is used as shipped, with no `font-variation-settings`.
@@ -205,11 +205,11 @@ An earthy canyon palette: bright sand, espresso, sienna, and sage by day; brown 
 
 ## Layout
 
-A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, Experience, Projects, Blog) narrow to 760px with prose at 65ch; Photos widens to 1120px. Pages open with `clamp(40px, 6vw, 88px)` of vertical padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(72px, 10vw, 128px)` below content, except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
+A single centered shell, max 1280px, with fluid side gutters of `clamp(20px, 5vw, 72px)`. Reading pages (The Good News, Experience, Projects, Blog) narrow to 760px with prose at 65ch; the Gallery uses the full 1280px. Pages open with `clamp(40px, 6vw, 88px)` of top padding, and prose sections are spaced `clamp(48px, 6vw, 72px)` apart. The footer sits `clamp(40px, 6vw, 72px)` below content (the short Blog page instead fits one screen, with spare room above the footer), except on the homepage, where the ground section bleeds full width and the footer band continues it seamlessly with no second hill.
 
-Composition is loose rather than gridded. The homepage hero is a 1.3fr / 1fr split with the greeting on the left and a portrait blob on the right; the two band entries sit side by side with their titles level, and each link sits 18px under its own text. The photo albums use uneven columns (1.2fr, 1fr, 1.1fr) at staggered heights. Lists (work, articles) are open rows with a 1px hairline above each.
+Composition is loose rather than gridded. The homepage hero is a 1.3fr / 1fr split with the greeting on the left and a portrait blob on the right; the two band entries sit side by side with their titles level, and each link sits 18px under its own text. The Gallery board is masonry: four columns on wide screens, three under 1100px, two under 760px, each photo at its true aspect ratio and dropped into the shortest column so far. Lists (work, articles) are open rows with a 1px hairline above each.
 
-There is one breakpoint, 760px. Below it the hero, band entries, and albums stack into one column; albums take 85% width and alternate alignment; the nav collapses behind a Menu button while the sun toggle stays visible in the header.
+There is one breakpoint, 760px. Below it the hero and band entries stack into one column and the board drops to two columns; the nav collapses behind a Menu button while the sun toggle stays visible in the header.
 
 ## Elevation & Depth
 
@@ -220,10 +220,10 @@ Completely flat: there is no `box-shadow` in the system. Depth is the landscape 
 
 ## Shapes
 
-Two shape families. Interactive controls are gently rounded: form fields and the send button at 10px, the skip link at 8px, focus outlines drawn with a 4px radius and 4px offset. Photo slots are organic, each with its own asymmetric elliptical radius so no two look stamped from the same mold (hero `48% 48% 10% 36% / 40% 40% 8% 30%` and three different album shapes). The hill wave is a single smooth cubic curve stretched to full width at `clamp(40px, 6vw, 90px)` tall.
+Two shape families. Interactive controls are gently rounded: form fields and the send button at 10px, the skip link at 8px, focus outlines drawn with a 4px radius and 4px offset. Photo slots are organic, each with its own asymmetric elliptical radius so no two look stamped from the same mold (hero `48% 48% 10% 36% / 40% 40% 8% 30%`); board photos take a plain 14px radius so the photos themselves carry the variety. The hill wave is a single smooth cubic curve stretched to full width at `clamp(40px, 6vw, 90px)` tall.
 
 ### Named Rules
-**The No Two Alike Rule.** Every photo placeholder gets its own irregular radius and aspect ratio (4:5, 5:6, 1:1). Never reuse one shape for a set.
+**The No Two Alike Rule.** Every organic photo slot (the portrait, the stack) gets its own irregular radius. Never reuse one shape for a set.
 
 ## Components
 
@@ -259,8 +259,8 @@ A portrait blob sits 20 to 36px right of “Malcolm!”, spanning from the top o
 ### Hill Wave and Ground Band (signature)
 The hill-wave SVG fills with ground and sits flush on the ground band (1px overlap to avoid a seam). The band holds the footer: a 14px copyright line, “© [build year] Malcolm Shi” in ground soft (the wordmark appears once, in the header), the verse and its reference on one 14px Hanken Grotesk line (quote in ground ink, reference in ground soft), and, on the right, outline icon links to LinkedIn, GitHub, and the resume PDF (26px, ground ink, ground link on hover, each with a screen-reader label and tooltip). The band is a three-column grid so the verse stays centered and all three items share one vertical center; under 760px it stacks left-aligned. The verse line reads “Oh, taste and see that the LORD is good!” Psalm 34:8, with the reference set apart by its smaller size and no dash, following the no-dash rule for site copy. On the homepage the band starts mid-page and holds The Good News, Experience, and Projects as three loose entries, then flows straight into the footer; the nav covers the other pages.
 
-### Photo Placeholder
-Placeholder tan fill, soft-ink 14 to 15px label pinned to the bottom center ("photo coming soon"), organic radius per the No Two Alike Rule. Its background follows the theme fade.
+### Gallery Board (signature)
+Intro: “Pinterest core!” Every processed photo sits in one masonry board, shuffled in the browser on each visit, with each photo's dominant color behind it while it loads. Captions come from filenames (dashes become spaces, and typed apostrophes become curly) and appear only on hover or keyboard focus, as a small sky-colored italic label at the bottom left while the photo scales up 3%. The first batch is six rows' worth (24, 18, or 12 photos by column count); while more remain, every column is cut at the shortest one and the last 240px fades into the sky, with a bordered “Show more” button and a drawn chevron pulled up into the fade. Each press adds another batch without moving photos already placed, and focus moves to the first new photo. Clicking a photo opens it in a native dialog over an 86% night-sky backdrop with the caption and a Close button below; Esc or a click outside closes it. Photos fade up 8px in sequence as they arrive. The footer always follows the button, never infinite scroll. Placeholder tan remains the fill for any photo slot still loading.
 
 ### Rows (Work and Articles)
 Open rows with a 1px hairline on top and 24px above the content. The head line puts the title on the left and a 15px tabular date on the right, wrapping when narrow. Role and tech follow in soft ink at 16px and 15px. No tags or chips.

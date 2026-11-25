@@ -282,7 +282,6 @@ test("the about page is gone from the export and the navigation", async () => {
 test("page introductions use the new wording", async () => {
     assert.match(await readExport("projects.html"), /class="introduction">LLM inference benchmarks, a Lethal Company mod, and this site\.</);
     assert.match(await readExport("blog.html"), /class="introduction">I post on Medium!</);
-    assert.match(await readExport("photos.html"), /class="introduction">I put my cameras to work!</);
     assert.match(await readExport("contact.html"), /class="introduction">Let’s get in touch!</);
 });
 
@@ -290,15 +289,6 @@ test("the projects, blog, and gallery pages never call their contents things", a
     for (const page of ["projects.html", "blog.html", "photos.html"]) {
         assert.doesNotMatch(await readExport(page), /things I/i, page);
     }
-});
-
-test("the gallery has Food, Nature, and Places albums with no descriptions yet", async () => {
-    const html = await readExport("photos.html");
-    const grid = html.slice(html.indexOf('class="album-grid"'), html.indexOf("</ul>", html.indexOf('class="album-grid"')));
-    const titles = [...grid.matchAll(/<h2>([^<]+)<\/h2>/g)].map((match) => match[1]);
-
-    assert.deepEqual(titles, ["Food", "Nature", "Places"]);
-    assert.doesNotMatch(grid, /<figcaption>[\s\S]*?<p>/);
 });
 
 test("the photos page is called Gallery in its heading and the navigation", async () => {
@@ -657,23 +647,6 @@ test("the header tabs in the order it reads, and buttons and the phone menu give
     assert.match(css, /\.theme-toggle-sun\{[^}]*fill:var\(--sun\)/);
 });
 
-test("the gallery intro covers both food and places", async () => {
-    assert.match(await readExport("photos.html"), /class="introduction">I put my cameras to work!</);
-});
-
-test("the gallery lists my gear below the albums, with the lens under the camera", async () => {
-    const html = await readExport("photos.html");
-    const gear = html.match(/<section class="gear"[\s\S]*?<\/section>/)?.[0];
-    assert.ok(gear, "no gear section");
-    assert.ok(html.indexOf('class="album-grid"') < html.indexOf('class="gear"'));
-    assert.match(gear, /<h2[^>]*>Gear<\/h2>/);
-    const names = [...gear.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
-    assert.deepEqual(names, ["Canon EOS Rebel SL3", "Google Pixel 11", "Samsung Galaxy S24"]);
-    const camera = gear.slice(gear.indexOf("Canon EOS Rebel SL3"), gear.indexOf("Google Pixel 11"));
-    assert.match(camera, /Canon EF-S 18-55mm f\/4-5\.6 IS STM/);
-    assert.doesNotMatch(gear, /[–—]/);
-});
-
 test("links and the hint carry their own color so they fade with the theme instead of jumping", async () => {
     const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
     const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
@@ -746,4 +719,47 @@ test("inner pages end close to the hill, and the short blog page fits one screen
     assert.match(await readExport("blog.html"), /class="page-content reading-page fit-screen"/);
     assert.match(css, /body:has\(\.fit-screen\) \.site-footer\{margin-top:0\}/);
     assert.match(css, /\.fit-screen h1\{font-size:min\(/);
+});
+
+test("the gallery is one Pinterest-style board fed by every processed photo", async () => {
+    const html = await readExport("photos.html");
+    assert.match(html, /class="introduction">Pinterest core!</);
+    assert.match(html, /class="photo-board"/);
+    assert.doesNotMatch(html, /album-grid|class="gear"|coming soon/);
+
+    const photos = JSON.parse(await readFile(new URL("../src/content/gallery.json", import.meta.url), "utf8"));
+    assert.ok(photos.length > 0);
+    for (const photo of photos) {
+        assert.match(photo.id, /^[a-z0-9-]+$/);
+        assert.ok(photo.caption && !/[-_]/.test(photo.caption), photo.id);
+        for (const width of [640, 1280]) {
+            const file = await readFile(new URL(`../out/photos/board/${photo.id}-${width}.webp`, import.meta.url));
+            // No EXIF block means no GPS location or camera details ship with the photo.
+            assert.ok(!file.includes("EXIF") && !file.includes("Exif"), `${photo.id}-${width} still has metadata`);
+        }
+    }
+    assert.ok(photos.some((photo) => photo.folder === "food"));
+    assert.ok(photos.some((photo) => photo.folder === "places"));
+});
+
+test("the original photos never reach git", async () => {
+    const ignore = await readFile(new URL("../.gitignore", import.meta.url), "utf8");
+    assert.match(ignore, /^photo-inbox\/$/m);
+});
+
+test("the board fades into a Show more button and the viewer can close", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.photo-board\[data-more\][^{]*\{[^}]*mask-image:linear-gradient/);
+    assert.match(css, /\.photo-board-more\{/);
+    assert.match(css, /\.photo-viewer::backdrop\{/);
+    assert.match(css, /\.photo-pin-caption\{[^}]*opacity:0/);
+});
+
+test("the board shows no photo count", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.doesNotMatch(css, /\.photo-board-more p\{/);
 });
