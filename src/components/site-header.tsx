@@ -12,9 +12,14 @@ export default function SiteHeader() {
     return <HeaderNavigation key={pathname} pathname={pathname} />;
 }
 
+function withoutTrailingSlash(path: string): string {
+    return path.replace(/\/$/, "");
+}
+
 function HeaderNavigation({ pathname }: { pathname: string }) {
     const [isOpen, setIsOpen] = useState(false);
     const menuButton = useRef<HTMLButtonElement>(null);
+    const currentPath = withoutTrailingSlash(pathname);
 
     return (
         <header
@@ -45,22 +50,26 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
             </button>
             <nav id="site-navigation" className="site-navigation" aria-label="Main" data-open={isOpen}>
                 <ul>
-                    {siteNavigation.map(({ href, label }) => (
-                        <li key={href}>
-                            <Link
-                                href={href}
-                                aria-current={pathname.replace(/\/$/, "") === href.replace(/\/$/, "") ? "page" : undefined}
-                                onClick={() => {
-                                    setIsOpen(false);
-                                    if (isOpen && pathname.replace(/\/$/, "") === href.replace(/\/$/, "")) {
-                                        menuButton.current?.focus();
-                                    }
-                                }}
-                            >
-                                {label}
-                            </Link>
-                        </li>
-                    ))}
+                    {siteNavigation.map(({ href, label }) => {
+                        const isCurrent = withoutTrailingSlash(href) === currentPath;
+                        return (
+                            <li key={href}>
+                                <Link
+                                    href={href}
+                                    aria-current={isCurrent ? "page" : undefined}
+                                    onClick={() => {
+                                        setIsOpen(false);
+                                        // Following a link to this same page doesn't navigate, so focus returns to the menu button.
+                                        if (isOpen && isCurrent) {
+                                            menuButton.current?.focus();
+                                        }
+                                    }}
+                                >
+                                    {label}
+                                </Link>
+                            </li>
+                        );
+                    })}
                 </ul>
             </nav>
             <ThemeToggle />

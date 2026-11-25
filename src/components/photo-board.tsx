@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type Ref } from "react";
 import { photoSource, photoSourceSet, shuffled, type GalleryPhoto } from "@/content/photos";
 import { columnsForWidth, placeInColumns } from "@/lib/photo-layout";
 
@@ -52,6 +52,42 @@ function ViewerPhoto({ photo }: { photo: GalleryPhoto }) {
                 onLoad={() => setLoaded(true)}
             />
         </span>
+    );
+}
+
+type PhotoPinProps = {
+    photo: GalleryPhoto;
+    // Photos that just arrived fade up one after another; photos already on the board have no delay.
+    delayMs?: number;
+    pinRef?: Ref<HTMLButtonElement>;
+    onOpen: () => void;
+};
+
+function PhotoPin({ photo, delayMs, pinRef, onOpen }: PhotoPinProps) {
+    return (
+        <button
+            ref={pinRef}
+            type="button"
+            className="photo-pin"
+            style={{
+                aspectRatio: `${photo.width} / ${photo.height}`,
+                backgroundColor: photo.color,
+                animationDelay: delayMs === undefined ? undefined : `${delayMs}ms`,
+            }}
+            onClick={onOpen}
+        >
+            <img
+                src={photoSource(photo, 640)}
+                srcSet={photoSourceSet(photo)}
+                sizes={boardSizes}
+                alt={photo.caption}
+                width={photo.width}
+                height={photo.height}
+                loading="lazy"
+                decoding="async"
+            />
+            <span className="photo-pin-caption" aria-hidden="true">{photo.caption}</span>
+        </button>
     );
 }
 
@@ -117,33 +153,16 @@ export default function PhotoBoard({ photos }: { photos: GalleryPhoto[] }) {
                 {columns.map((column, columnIndex) => (
                     <div className="photo-board-column" key={columnIndex}>
                         {column.map((photo) => {
-                            const position = visible.indexOf(photo);
-                            const isNew = position >= previouslyShown.current;
+                            // How far this photo comes after the first one the last Show more added; negative if it was already here.
+                            const sinceFirstNew = visible.indexOf(photo) - previouslyShown.current;
                             return (
-                                <button
+                                <PhotoPin
                                     key={photo.id}
-                                    ref={previouslyShown.current > 0 && position === previouslyShown.current ? firstNewPin : undefined}
-                                    type="button"
-                                    className="photo-pin"
-                                    style={{
-                                        aspectRatio: `${photo.width} / ${photo.height}`,
-                                        backgroundColor: photo.color,
-                                        animationDelay: isNew ? `${Math.min((position - previouslyShown.current) * 30, 600)}ms` : undefined,
-                                    }}
-                                    onClick={() => setOpened({ photo, count: (opened?.count ?? 0) + 1 })}
-                                >
-                                    <img
-                                        src={photoSource(photo, 640)}
-                                        srcSet={photoSourceSet(photo)}
-                                        sizes={boardSizes}
-                                        alt={photo.caption}
-                                        width={photo.width}
-                                        height={photo.height}
-                                        loading="lazy"
-                                        decoding="async"
-                                    />
-                                    <span className="photo-pin-caption" aria-hidden="true">{photo.caption}</span>
-                                </button>
+                                    photo={photo}
+                                    delayMs={sinceFirstNew >= 0 ? Math.min(sinceFirstNew * 30, 600) : undefined}
+                                    pinRef={previouslyShown.current > 0 && sinceFirstNew === 0 ? firstNewPin : undefined}
+                                    onOpen={() => setOpened({ photo, count: (opened?.count ?? 0) + 1 })}
+                                />
                             );
                         })}
                     </div>

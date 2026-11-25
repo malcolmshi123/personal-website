@@ -29,6 +29,16 @@ function currentTheme(): Theme {
     return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
 }
 
+function systemTheme(prefersDark: boolean): Theme {
+    return prefersDark ? "dark" : "light";
+}
+
+// The system decides the theme until the visitor picks one, whether saved or just for this visit.
+function followsSystem(storage: Storage | null): boolean {
+    const stored = storage ? readStoredTheme(storage) : null;
+    return shouldFollowSystem(stored, document.documentElement.dataset.themeToggled === "true");
+}
+
 // The page can show more than one toggle; each tells the others when the theme changes.
 const themeChangeEvent = "theme-toggle-change";
 
@@ -62,22 +72,20 @@ export default function ThemeToggle({ hint = false }: { hint?: boolean }) {
         const root = document.documentElement;
 
         // The system theme can change between the boot script and hydration.
-        if (shouldFollowSystem(storage ? readStoredTheme(storage) : null, root.dataset.themeToggled === "true")) {
-            root.dataset.theme = media.matches ? "dark" : "light";
+        if (followsSystem(storage)) {
+            root.dataset.theme = systemTheme(media.matches);
         }
 
         setTheme(currentTheme());
 
         function followSystem(event: MediaQueryListEvent) {
-            const stored = storage ? readStoredTheme(storage) : null;
-            const toggledThisVisit = document.documentElement.dataset.themeToggled === "true";
-            if (!shouldFollowSystem(stored, toggledThisVisit)) {
+            if (!followsSystem(storage)) {
                 return;
             }
 
-            const systemTheme: Theme = event.matches ? "dark" : "light";
-            document.documentElement.dataset.theme = systemTheme;
-            setTheme(systemTheme);
+            const fromSystem = systemTheme(event.matches);
+            root.dataset.theme = fromSystem;
+            setTheme(fromSystem);
         }
 
         media.addEventListener("change", followSystem);
