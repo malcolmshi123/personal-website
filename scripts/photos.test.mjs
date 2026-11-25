@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { captionFromFilename, photoId, readsAsPhoto } from "./photos.mjs";
+import { captionFromFilename, duplicatePhotoIds, photoId, readsAsPhoto } from "./photos.mjs";
 
 test("captions come from filenames with dashes as spaces", () => {
     assert.equal(captionFromFilename("ichiran-ramen.jpg"), "ichiran ramen");
@@ -26,4 +26,14 @@ test("only image files are treated as photos", () => {
     assert.ok(readsAsPhoto("e.heic"));
     assert.ok(!readsAsPhoto("notes.txt"));
     assert.ok(!readsAsPhoto(".DS_Store"));
+});
+
+test("filenames that would share a photo id are grouped so the build can name them", () => {
+    const duplicates = duplicatePhotoIds([
+        { id: "food-chicken-parm", source: "food/chicken-parm.jpg" },
+        { id: "places-mount-fuji", source: "places/mount-fuji.jpg" },
+        { id: "food-chicken-parm", source: "food/Chicken_Parm.png" },
+    ]);
+    assert.deepEqual(duplicates, [["food/chicken-parm.jpg", "food/Chicken_Parm.png"]]);
+    assert.deepEqual(duplicatePhotoIds([{ id: "a", source: "a.jpg" }]), []);
 });
