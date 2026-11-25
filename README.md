@@ -30,8 +30,23 @@ The site currently includes the welcome, About, Gospel, Blog, Work, Photos, and
 Contact pages. Page wording and the curated article list
 live in `src/content/`. Blog posts come from the Medium feed at build time (`npm run blog:fetch`), with `src/content/blog-fallback.json` as the offline fallback.
 Work experience and projects live in `src/content/work.ts`.
-Planned photo albums live in `src/content/photos.ts`. Their covers are labeled
-placeholders until photographs are supplied; the albums do not open yet.
+Photos: drop originals into `photo-inbox/` (git-ignored; `food/` feeds the homepage
+"tasted" card and `places/` the "seen" card, and every photo appears on the Gallery
+board). The filename is the caption, with dashes as spaces (`ichiran-ramen.jpg` → "ichiran ramen"). After adding,
+renaming, or deleting photos, run:
+
+```bash
+npm run photos:commit            # rebuild photos, then commit them as "update gallery"
+npm run photos:commit -- --push  # same, then push (force-with-lease only when history was rewritten)
+npm run photos:commit -- -m "add travel photos"  # fold into a different commit message instead
+```
+
+It only ever stages `public/photos/board/` and `src/content/gallery.json`. If the
+latest commit is "update gallery" it amends it; if that commit is further back it
+folds the photos into it and keeps the commits after it; otherwise it makes a new
+commit. It stops without changing anything if other files are staged or a rebase is
+in progress, and if a later commit also changed the photos it leaves your photo
+changes staged and explains. `npm run photos` alone rebuilds without committing.
 Contact profile links live in `src/content/contact.ts`. The contact form posts to
 Formspree and opens its response page. The receiving email is managed in the
 Formspree dashboard and is not included in the site source.
