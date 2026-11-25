@@ -1,0 +1,279 @@
+/* The site header: wordmark, navigation and its underline, the sun and moon theme toggle, and the phone menu. */
+
+.site-header {
+    display: flex;
+    align-items: center;
+    gap: 12px 24px;
+    padding-block: 28px;
+}
+
+.wordmark {
+    flex-shrink: 0;
+    margin-right: auto;
+    color: var(--heading);
+    font-family: var(--font-heading);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+}
+
+.site-navigation ul {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 1.4vw, 20px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-navigation a {
+    display: inline-block;
+    padding: 8px 4px;
+    color: var(--ink-soft);
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 200ms var(--ease-out);
+}
+
+.site-navigation a:hover,
+.site-navigation a[aria-current="page"] {
+    color: var(--ink);
+}
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 4px 2px 4px 8px;
+    border: 0;
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    /* The toggle sits outside the theme-switch rule below, so it carries the fade itself. */
+    transition: transform 160ms var(--ease-out), color var(--theme-fade);
+}
+
+/* Text with its own color fade never inherits its color, or it jumps when the theme switches. */
+.theme-toggle-hint {
+    color: var(--ink-soft);
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-style: italic;
+    white-space: nowrap;
+    /* allow-discrete keeps the hint on screen while it fades out after the first click. */
+    transition: color 200ms var(--ease-out), opacity 200ms var(--ease-out), display 200ms var(--ease-out) allow-discrete;
+}
+
+.theme-toggle:hover .theme-toggle-hint {
+    color: var(--brick);
+}
+
+/* The hint only shows until the visitor has tried the toggle once. Returning visitors never see it, since
+   the attribute is set before the first paint and nothing transitions. */
+:root[data-theme-toggled] .theme-toggle-hint {
+    display: none;
+    opacity: 0;
+}
+
+:root:not([data-theme]) .theme-toggle {
+    display: none;
+}
+
+.theme-toggle-icon {
+    overflow: hidden;
+}
+
+.theme-toggle-sun,
+.theme-toggle-moon {
+    transition: transform var(--theme-fade), opacity var(--theme-fade);
+}
+
+.theme-toggle-sun {
+    fill: var(--sun);
+}
+
+.theme-toggle-moon {
+    fill: var(--moon);
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+:root[data-theme="dark"] .theme-toggle-sun {
+    opacity: 0;
+    transform: translateY(22px);
+}
+
+:root[data-theme="dark"] .theme-toggle-moon {
+    opacity: 1;
+    transform: none;
+}
+
+/* The hover lift moves the whole icon, so it never overrides the sun setting or the moon rising. */
+.theme-toggle-icon {
+    transition: transform 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .theme-toggle:hover .theme-toggle-icon {
+        transform: translateY(-1px);
+    }
+}
+
+.menu-toggle {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    padding: 8px 16px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 160ms var(--ease-out);
+}
+
+@media (max-width: 760px) {
+    .site-header {
+        flex-wrap: wrap;
+        column-gap: 4px;
+        row-gap: 0;
+        padding-block: 18px;
+    }
+
+    .wordmark {
+        font-size: 21px;
+    }
+
+    .theme-toggle {
+        padding-left: 4px;
+    }
+
+    .theme-toggle-hint {
+        font-size: 14px;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        gap: 6px;
+        padding-inline: 12px;
+    }
+
+    .site-navigation {
+        order: 4;
+        width: 100%;
+        padding-top: 12px;
+    }
+
+    .site-navigation[data-open="false"] {
+        display: none;
+    }
+
+    /* The opened menu drops in from just under its button. */
+    .site-navigation {
+        transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    }
+
+    .site-navigation ul {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .site-navigation a {
+        display: block;
+        padding: 12px 4px;
+        font-size: 17px;
+    }
+
+    .site-navigation a[aria-current="page"] {
+        color: var(--brick);
+    }
+}
+
+:root:not([data-theme="dark"]) .theme-toggle-sun circle {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sun-breathe 4s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .theme-toggle-star {
+    animation: star-twinkle 3s ease-in-out infinite;
+}
+
+:root[data-theme="dark"] .theme-toggle-star:nth-of-type(3) {
+    animation-delay: 1.1s;
+}
+
+:root[data-theme="dark"] .theme-toggle-star:nth-of-type(4) {
+    animation-delay: 2s;
+}
+
+.site-navigation a {
+    position: relative;
+}
+
+/* One underline serves both states: solid under the current page, half strength while hovering another link.
+   Leaving a link fades its line out in place, then resets the scale while it is invisible. */
+.site-navigation a::after {
+    position: absolute;
+    right: 4px;
+    bottom: 0;
+    left: 4px;
+    height: 2px;
+    background: var(--brick);
+    content: "";
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: opacity 150ms ease, transform 0s linear 150ms;
+}
+
+.site-navigation a[aria-current="page"]::after {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-navigation a:not([aria-current]):hover::after {
+        opacity: 0.45;
+        transform: scaleX(1);
+        transition: transform 250ms var(--ease-out), opacity 0s;
+    }
+}
+
+@keyframes sun-breathe {
+    50% {
+        transform: scale(1.07);
+    }
+}
+
+@keyframes star-twinkle {
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@media (max-width: 760px) {
+    .site-navigation a::after {
+        display: none;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 860px) {
+    .site-navigation ul {
+        column-gap: 4px;
+    }
+
+    .site-navigation a {
+        font-size: 15px;
+    }
+}

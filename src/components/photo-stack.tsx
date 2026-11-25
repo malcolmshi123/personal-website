@@ -13,7 +13,7 @@ const stackSizes = "(max-width: 760px) 60vw, 380px";
 
 // Slot 0 is the card in front, 1 and 2 are spread behind it, and 3 waits hidden so its photo is loaded before it shows.
 const slotCount = 4;
-// Outlasts the leaving card's 260ms transition in globals.css, then removes it.
+// Outlasts the leaving card's 260ms transition in styles/photo-stack.css, then removes it.
 const tossMs = 300;
 
 type Card = DealtCard<GalleryPhoto>;

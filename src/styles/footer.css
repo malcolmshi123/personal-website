@@ -1,0 +1,118 @@
+/* The hill wave and the green ground band with the copyright, the verse, and the link icons. */
+
+.site-footer {
+    margin-top: clamp(40px, 6vw, 72px);
+    color: var(--ground-soft);
+    font-size: 16px;
+}
+
+.hill-wave {
+    display: block;
+    width: 100%;
+    height: clamp(40px, 6vw, 90px);
+    margin-bottom: -1px;
+}
+
+.hill-wave path {
+    fill: var(--ground);
+    transition: fill var(--theme-fade);
+}
+
+.site-footer-band {
+    background: var(--ground);
+    transition: background-color var(--theme-fade);
+}
+
+.site-footer-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 16px 32px;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 20px clamp(20px, 5vw, 72px) 40px;
+}
+
+.site-footer-copyright {
+    justify-self: start;
+    margin: 0;
+    color: var(--ground-soft);
+    font-size: 14px;
+}
+
+.site-footer-verse {
+    margin: 0;
+    font-size: 14px;
+}
+
+.site-footer-verse-text {
+    color: var(--ground-ink);
+}
+
+.site-footer-links {
+    display: flex;
+    justify-self: end;
+    gap: 8px;
+    margin: 0 -8px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.site-footer-links a {
+    display: flex;
+    padding: 8px;
+}
+
+.site-footer-links .link-icon {
+    height: 17px;
+}
+
+.site-footer-links .link-icon-github,
+.site-footer-links .link-icon-resume {
+    height: 18px;
+}
+
+.site-footer a {
+    color: var(--ground-ink);
+    transition: color 200ms var(--ease-out);
+}
+
+.site-footer a:hover {
+    color: var(--ground-link);
+}
+
+.site-footer a:focus-visible {
+    outline-color: var(--ground-link);
+}
+
+@media (max-width: 760px) {
+    .site-footer-inner {
+        grid-template-columns: minmax(0, 1fr);
+        justify-items: start;
+    }
+
+    .site-footer-links {
+        justify-self: start;
+        margin: 0 0 0 -8px;
+    }
+}
+
+.hill-wave path {
+    animation: hill-breathe 9s ease-in-out infinite alternate;
+}
+
+.site-footer-links .link-icon {
+    transition: transform 250ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-footer-links a:hover .link-icon {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes hill-breathe {
+    to {
+        d: path("M0 68 C240 26 480 78 760 48 C960 22 1160 26 1300 38 C1370 46 1410 52 1440 55 L1440 90 L0 90 Z");
+    }
+}

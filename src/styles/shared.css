@@ -1,0 +1,43 @@
+/* Rules that span several components. Loaded last so they keep winning where they did in the single file. */
+
+/* Buttons sink a little while pressed. */
+.theme-toggle:active,
+.menu-toggle:active,
+.contact-form button:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.contact-links .link-icon-github,
+.contact-links .link-icon-resume,
+.resume-download .link-icon-resume {
+    height: 16px;
+}
+
+.home-description a,
+.home-link,
+.home-ground a,
+.prose a,
+.contact-links a,
+.resume-download {
+    transition: color 200ms var(--ease-out), text-decoration-thickness 250ms var(--ease-out), text-underline-offset 250ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .home-description a:hover,
+    .home-link:hover,
+    .home-ground a:hover,
+    .prose a:hover,
+    .contact-links a:hover,
+    .resume-download:hover {
+        text-underline-offset: 6px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+}

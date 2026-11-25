@@ -1,0 +1,204 @@
+/* Color tokens for both themes, fonts, easing, and the base element styles every page shares. */
+
+:root {
+    /* Day and night mirror each other: the day sky is the night's ink, the night sky is the day's heading,
+       and the hill keeps the same moss hue a short step from the sky in both. */
+    --sky: #e9dcc5;
+    --heading: #1b1712;
+    --ink: #33241a;
+    --ink-soft: #5e4838;
+    --brick: #944124;
+    --olive: #4d5e34;
+    --ground: #b9c9ab;
+    --ground-ink: #1b1712;
+    --ground-soft: #4a3e2a;
+    --ground-link: #7d3319;
+    --placeholder: #e1c9af;
+    --rule: #d7bfa6;
+    --field: #f6efe3;
+    /* At least 3:1 against both the sky and the field, so inputs read as inputs. */
+    --field-border: #806a57;
+    /* A low afternoon sun, deep enough to hold 3:1 on the sky. */
+    --sun: #c66216;
+    --highlight: #e3b562;
+    --moon: #e9dcc5;
+    --font-body: var(--font-hanken), "Segoe UI", sans-serif;
+    --font-heading: var(--font-lora), Georgia, serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --theme-fade: 800ms ease;
+    color-scheme: light;
+    accent-color: var(--olive);
+    scrollbar-color: var(--rule) var(--sky);
+}
+
+:root[data-theme="dark"] {
+    --sky: #1b1712;
+    --heading: #fbf4e8;
+    --ink: #e9dcc5;
+    --ink-soft: #b4a891;
+    --brick: #df937a;
+    --olive: #a7b884;
+    --ground: #2c3523;
+    --ground-ink: #e9dcc5;
+    --ground-soft: #c9bea6;
+    --ground-link: #df937a;
+    --placeholder: #2a221b;
+    --rule: #3a3027;
+    --field: #241e18;
+    --field-border: #776e5e;
+    color-scheme: dark;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    margin: 0;
+    background: var(--sky);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+    transition: background-color var(--theme-fade), color var(--theme-fade);
+}
+
+::selection {
+    background: var(--highlight);
+    color: #1f150e;
+}
+
+a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--brick);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    text-wrap: balance;
+}
+
+h1,
+h2 {
+    color: var(--heading);
+}
+
+h3 {
+    color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --theme-fade: 0s;
+    }
+}
+
+h1 {
+    max-width: 16ch;
+    margin: 0;
+    font-size: clamp(44px, 6vw, 84px);
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+}
+
+.site-shell {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: clamp(20px, 5vw, 72px);
+}
+
+.main-content {
+    flex: 1;
+}
+
+.main-content:focus {
+    outline: none;
+}
+
+.skip-link {
+    position: absolute;
+    top: 12px;
+    left: 24px;
+    z-index: 10;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: var(--olive);
+    color: var(--sky);
+    transform: translateY(-200%);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+/* While the theme switches, every color eases along with the sky instead of snapping.
+   The toggle keeps its own sun and moon transitions. */
+:root[data-theme-switching] *:not(.theme-toggle, .theme-toggle *),
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+    transition: color var(--theme-fade), background-color var(--theme-fade), border-color var(--theme-fade), fill var(--theme-fade),
+    stroke var(--theme-fade), text-decoration-color var(--theme-fade), outline-color var(--theme-fade) !important;
+}
+
+.link-icon {
+    flex: none;
+    width: auto;
+    height: 1.1em;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+.full-bleed {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+}
+
+.introduction {
+    max-width: 34em;
+    margin: 28px 0 0;
+    color: var(--ink-soft);
+    font-size: clamp(18px, 1.6vw, 21px);
+    line-height: 1.65;
+}
+
+@media (max-width: 760px) {
+    @starting-style {
+        .site-navigation[data-open="true"] {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+    }
+}

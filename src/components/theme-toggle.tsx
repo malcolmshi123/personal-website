@@ -32,7 +32,7 @@ function currentTheme(): Theme {
 // The page can show more than one toggle; each tells the others when the theme changes.
 const themeChangeEvent = "theme-toggle-change";
 
-// Matches --theme-fade in globals.css; text colors fade with the sky only while this flag is set.
+// Matches --theme-fade in styles/foundation.css; text colors fade with the sky only while this flag is set.
 const themeFadeMs = 800;
 let themeSwitchTimer: number | undefined;
 

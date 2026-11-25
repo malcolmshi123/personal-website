@@ -1,0 +1,137 @@
+/* The homepage photo deck: playing cards spread in a row, the toss on tap, and the caption. */
+
+/* The stack may overlap the hero padding so it never makes the page taller. */
+.photo-stack {
+    justify-self: start;
+    /* Room for the two cards spread behind the front one (30% of a card), so the visible row starts at the gap. */
+    padding-left: calc(var(--stack-height) * 5 / 7 * 0.3);
+    margin: calc(-1 * clamp(8px, 2.5svh, 48px)) 0;
+    text-align: center;
+}
+
+/* A deck of playing cards spread flat in a horizontal row to the left, so no card dips into the caption. */
+.photo-stack-button {
+    position: relative;
+    display: block;
+    height: var(--stack-height);
+    aspect-ratio: 5 / 7;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--ink-soft);
+    font: inherit;
+    cursor: pointer;
+}
+
+.photo-stack-card {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 6% / 4.3%;
+    background: var(--placeholder);
+    box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 10px 22px -10px rgb(27 23 18 / 0.45);
+    transition: transform 340ms var(--ease-out), opacity 340ms var(--ease-out), box-shadow 340ms var(--ease-out), background-color var(--theme-fade);
+}
+
+.photo-stack-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 340ms ease;
+}
+
+.photo-stack-card[data-slot="0"] {
+    z-index: 3;
+    transform: none;
+}
+
+.photo-stack-card[data-slot="1"] {
+    z-index: 2;
+    transform: translateX(-15%);
+}
+
+.photo-stack-card[data-slot="2"],
+.photo-stack-card[data-slot="3"] {
+    z-index: 1;
+    transform: translateX(-30%);
+}
+
+/* The next card waits behind the fan, already loaded, and fades in as it takes the back slot. */
+.photo-stack-card[data-slot="3"] {
+    z-index: 0;
+    opacity: 0;
+}
+
+/* Only the card leaving tilts, tossed off to the right; every other card slides straight along the row. */
+.photo-stack-card[data-leaving] {
+    z-index: 4;
+    opacity: 0;
+    transform: translate(70%, 2%) rotate(7deg);
+    transition-duration: 260ms;
+    pointer-events: none;
+}
+
+/* The queued photos are a soft preview, both at the same depth so neither reads as closer. */
+.photo-stack-card[data-slot="1"] img,
+.photo-stack-card[data-slot="2"] img {
+    filter: blur(2px) saturate(0.85) brightness(0.9);
+}
+
+/* Only for a real pointer, so a tap on a phone doesn't leave it stuck: the front card lifts off the deck,
+   inviting a tap to deal the next one, while the queued cards stay where they are. */
+@media (hover: hover) and (pointer: fine) {
+    .photo-stack-button:hover .photo-stack-card[data-slot="0"] {
+        box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 18px 30px -12px rgb(27 23 18 / 0.5);
+        transform: translateY(-4%);
+    }
+}
+
+/* A little wider than the front card and centered on it, overhanging both sides evenly. */
+.photo-stack-caption {
+    width: calc(var(--stack-height) * 0.9);
+    margin: 20px 0 0 calc(var(--stack-height) * (5 / 7 - 0.9) / 2);
+    color: var(--ink-soft);
+    font-size: 15px;
+}
+
+.photo-stack-label {
+    color: var(--brick);
+    font-family: var(--font-heading);
+    font-size: 17px;
+    font-weight: 600;
+}
+
+:root:not([data-theme]) .photo-stack-hint {
+    display: none;
+}
+
+@media (max-width: 760px) {
+    .photo-stack {
+        justify-self: center;
+        margin: 0;
+    }
+}
+
+:root[data-intro="play"] .photo-stack-card[data-slot="0"] {
+    animation: card-deal 700ms var(--ease-out) 300ms backwards;
+}
+
+:root[data-intro="play"] .photo-stack-card[data-slot="1"] {
+    animation: card-deal 700ms var(--ease-out) 400ms backwards;
+}
+
+:root[data-intro="play"] .photo-stack-card[data-slot="2"] {
+    animation: card-deal 700ms var(--ease-out) 500ms backwards;
+}
+
+:root[data-intro="play"] .photo-stack-caption {
+    animation: settle-in 600ms var(--ease-out) 650ms backwards;
+}
+
+@keyframes card-deal {
+    from {
+        opacity: 0;
+        translate: 0 16px;
+    }
+}

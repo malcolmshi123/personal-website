@@ -1,0 +1,259 @@
+/* The Gallery: the shuffled board, Show more, and the enlarged photo viewer. */
+
+.photos-page {
+    max-width: 1280px;
+}
+
+/* While the shuffle waits for the browser, hold a screen of room so the footer doesn't jump. */
+.photo-board {
+    --board-gap: clamp(10px, 1.4vw, 18px);
+    display: flex;
+    gap: var(--board-gap);
+    margin-top: clamp(32px, 5vw, 56px);
+}
+
+.photo-board[aria-busy="true"] {
+    min-height: 100svh;
+}
+
+/* More photos wait below: the last stretch of the board fades into the sky. */
+.photo-board[data-more] {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 240px), transparent);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 240px), transparent);
+}
+
+.photo-board-column {
+    display: flex;
+    flex: 1;
+    align-self: flex-start;
+    flex-direction: column;
+    gap: var(--board-gap);
+    min-width: 0;
+}
+
+.photo-pin {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    border-radius: 14px;
+    cursor: zoom-in;
+    animation: pin-in 500ms var(--ease-out) backwards;
+}
+
+.photo-pin img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 400ms var(--ease-out);
+}
+
+.photo-pin-caption {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    max-width: calc(100% - 20px);
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: var(--sky);
+    color: var(--heading);
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-style: italic;
+    line-height: 1.4;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out), background-color var(--theme-fade), color var(--theme-fade);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .photo-pin:hover img {
+        transform: scale(1.03);
+    }
+
+    .photo-pin:hover .photo-pin-caption {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.photo-pin:focus-visible {
+    outline-offset: 3px;
+    border-radius: 14px;
+}
+
+.photo-pin:focus-visible .photo-pin-caption {
+    opacity: 1;
+    transform: none;
+}
+
+@keyframes pin-in {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+}
+
+/* Pulled up into the faded stretch, so the button sits where the photos trail off. */
+.photo-board-more {
+    position: relative;
+    margin-top: -96px;
+    text-align: center;
+}
+
+.photo-board-more button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    background: var(--sky);
+    color: var(--ink);
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 200ms var(--ease-out), transform 160ms var(--ease-out), background-color var(--theme-fade);
+}
+
+.photo-board-more button:hover {
+    border-color: var(--ink-soft);
+}
+
+.photo-board-more button:active {
+    transform: scale(0.97);
+}
+
+.photo-board-static {
+    columns: 3 220px;
+    column-gap: 16px;
+    margin-top: 40px;
+}
+
+.photo-board-static img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 16px;
+    border-radius: 14px;
+}
+
+.photo-viewer {
+    max-width: min(92vw, 1100px);
+    max-height: 92svh;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    background: transparent;
+}
+
+/* The viewer and its backdrop fade and settle in over 220ms and leave faster, over 150ms. It stays centered on screen
+   rather than growing from the photo, like any modal. allow-discrete keeps it on screen while it fades out. */
+.photo-viewer {
+    opacity: 0;
+    transform: scale(0.98);
+    transition: opacity 150ms var(--ease-out), transform 150ms var(--ease-out), overlay 150ms var(--ease-out) allow-discrete, display 150ms var(--ease-out) allow-discrete;
+}
+
+.photo-viewer[open] {
+    opacity: 1;
+    transform: none;
+    transition-duration: 220ms;
+}
+
+@starting-style {
+    .photo-viewer[open] {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+}
+
+.photo-viewer::backdrop {
+    background: rgb(27 23 18 / 0);
+    transition: background-color 150ms var(--ease-out), overlay 150ms var(--ease-out) allow-discrete, display 150ms var(--ease-out) allow-discrete;
+}
+
+.photo-viewer[open]::backdrop {
+    background: rgb(27 23 18 / 0.86);
+    transition-duration: 220ms;
+}
+
+@starting-style {
+    .photo-viewer[open]::backdrop {
+        background: rgb(27 23 18 / 0);
+    }
+}
+
+/* The frame holds the soft 640px copy as its background; the full photo fades and sharpens in over it. Its size
+   comes from the photo's known shape, so the placeholder fills the right space before the full photo arrives. */
+.photo-viewer-frame {
+    display: block;
+    width: min(92vw, 1100px, calc((92svh - 60px) * var(--photo-ratio)));
+    aspect-ratio: var(--photo-ratio);
+    margin-inline: auto;
+    overflow: hidden;
+    border-radius: 14px;
+    background-position: center;
+    background-size: cover;
+}
+
+.photo-viewer-frame img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    filter: blur(6px);
+    transition: opacity 240ms var(--ease-out), filter 240ms var(--ease-out);
+}
+
+.photo-viewer-frame img[data-loaded] {
+    opacity: 1;
+    filter: none;
+}
+
+.photo-viewer-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.photo-viewer-bar p {
+    margin: 0;
+    color: #e9dcc5;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-style: italic;
+}
+
+.photo-viewer-bar button {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 1px solid rgb(233 220 197 / 0.4);
+    border-radius: 10px;
+    background: transparent;
+    color: #e9dcc5;
+    font: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.photo-viewer-bar button:hover {
+    border-color: #e9dcc5;
+}
+
+@media (max-width: 760px) {
+    .photo-pin-caption {
+        font-size: 13px;
+    }
+}
