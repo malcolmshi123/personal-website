@@ -35,13 +35,3 @@ export const featuredLinks: FeaturedLink[] = [
         href: "/projects",
     },
 ];
-
-type HeroPhoto = {
-    label: "Tasted" | "Seen";
-    placeholder: string;
-};
-
-export const heroPhotos: HeroPhoto[] = [
-    { label: "Tasted", placeholder: "food photo coming soon" },
-    { label: "Seen", placeholder: "nature photo coming soon" },
-];

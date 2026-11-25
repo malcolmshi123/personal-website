@@ -393,8 +393,7 @@ test("the homepage hero shows a labeled photo stack in place of the single photo
     const hero = html.slice(html.indexOf('class="home-hero"'), html.indexOf('class="home-ground'));
 
     assert.match(hero, /<button[^>]*class="photo-stack-button"[^>]*aria-label="Show another photo"/);
-    assert.match(hero, /food photo coming soon/);
-    assert.match(hero.replace(/<[^>]+>/g, ""), /Tasted/);
+    assert.match(hero.replace(/<[^>]+>/g, ""), /tasted/);
     assert.doesNotMatch(hero, /class="hero-photo"/);
 });
 
@@ -626,7 +625,7 @@ test("nav, theme toggle, and touch hovers follow the motion polish rules", async
     // Text colors fade with the sky while the theme switches.
     assert.match(css, /\[data-theme-switching\]/);
     // Fanned photo stack and portrait tilt only for a real pointer.
-    assert.doesNotMatch(css, /(^|\})\.photo-stack-button:hover \.photo-stack-back\{/);
+    assert.match(css, /@media \(hover:hover\) and \(pointer:fine\)\{\.photo-stack-button:hover \.photo-stack-card/);
     assert.match(css, /--field-border:/);
 });
 
@@ -757,9 +756,67 @@ test("the board fades into a Show more button and the viewer can close", async (
     assert.match(css, /\.photo-pin-caption\{[^}]*opacity:0/);
 });
 
-test("the board shows no photo count", async () => {
+test("the homepage stack never spins on a tap, and the board shows no photo count", async () => {
     const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
     const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
     const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.doesNotMatch(css, /@keyframes photo-stack-in/);
     assert.doesNotMatch(css, /\.photo-board-more p\{/);
+});
+
+test("the stack is a held fan of playing cards, and only the leaving card tilts away", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    // Standard playing card proportions, spread flat in a horizontal row to the left.
+    assert.match(css, /\.photo-stack-button\{[^}]*aspect-ratio:5\/7/);
+    assert.match(css, /\.photo-stack-card\[data-slot="?1"?\]\{[^}]*transform:translateX?\(-15%\)/);
+    assert.doesNotMatch(css, /\.photo-stack-card\[data-slot="?[123]"?\][^{]*\{[^}]*rotate/);
+    assert.doesNotMatch(css, /rotate:y|perspective:900px/);
+    // The portrait is cropped to the same 5:7 card, keeping its width so the photo never looks squeezed.
+    assert.match(css, /\.greeting-portrait\{[^}]*aspect-ratio:5\/7/);
+    assert.match(css, /\.greeting-portrait\{[^}]*border-radius:6%\/4\.3%/);
+    // It spans from the top of the "H" in "Hi" to the baseline of "Malcolm!".
+    assert.match(css, /\.greeting-portrait\{[^}]*height:calc\(var\(--greeting-size\) \* 1\.7\)/);
+    assert.match(css, /\.photo-stack-card\[data-leaving\]\{[^}]*opacity:0/);
+    // Both queued cards share one blur.
+    assert.match(css, /\.photo-stack-card\[data-slot="?1"?\] img,\.photo-stack-card\[data-slot="?2"?\] img\{filter:blur\(/);
+    assert.doesNotMatch(css, /@keyframes photo-stack-swap/);
+});
+
+test("the homepage band text scales with the screen height so three columns still fit one screen", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.home-entry p\{[^}]*font-size:clamp\([^}]*svh/);
+    assert.match(css, /\.home-entry p\{[^}]*line-height:1\.5/);
+});
+
+test("hovering the deck lifts only the front card; the queued cards stay put", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.photo-stack-button:hover \.photo-stack-card\[data-slot="?0"?\]\{[^}]*translateY\(-4%\)/);
+    assert.doesNotMatch(css, /\.photo-stack-button:hover \.photo-stack-card\[data-slot="?[12]"?\]/);
+});
+
+test("the cards keep a steady gap after the greeting text, and the portrait lifts instead of tilting", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    // The stack sits right after the text column instead of centering in leftover space.
+    assert.match(css, /\.home-hero\{[^}]*grid-template-columns:minmax\(0,max-content\) max-content/);
+    assert.match(css, /\.home-hero\{[^}]*column-gap:calc\(var\(--greeting-size\) \* \.9\)/);
+    // The portrait hover is a small lift with a deeper shadow: no tilt, and the photo inside never zooms.
+    assert.doesNotMatch(css, /\.greeting-portrait:hover\{[^}]*rotate/);
+    assert.match(css, /\.greeting-portrait:hover\{[^}]*translateY\(-4px\)/);
+    assert.doesNotMatch(css, /\.greeting-portrait:hover img/);
+});
+
+test("the homepage photo cards sit still when idle", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.doesNotMatch(css, /card-drift/);
+    assert.doesNotMatch(css, /\.photo-stack-card[^{]*\{[^}]*infinite/);
 });

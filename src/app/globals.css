@@ -455,11 +455,15 @@ body:has(.home) .main-content,
     }
 }
 
+/* The photo cards follow the whole text block (greeting and description) at one steady gap, so the space between
+   them never balloons on mid-size screens; any extra width collects on the right. */
 .home-hero {
     display: grid;
-    grid-template-columns: minmax(0, max-content) minmax(calc(var(--stack-height) * 0.8 + 96px), 1fr);
+    grid-template-columns: minmax(0, max-content) max-content;
+    justify-content: start;
     align-items: center;
-    gap: clamp(32px, 6vw, 96px) 0;
+    row-gap: clamp(32px, 6vw, 96px);
+    column-gap: calc(var(--greeting-size) * 0.9);
     padding-block: clamp(8px, 2.5svh, 48px) clamp(20px, 3.5svh, 72px);
 }
 
@@ -469,17 +473,20 @@ body:has(.home) .main-content,
     gap: calc(var(--greeting-size) * 0.6);
 }
 
+/* The portrait is cropped to the same 5:7 playing card as the stack (trimmed at the sides, never squeezed), and spans
+   exactly from the top of the "H" in "Hi" (0.70em above the first baseline) to the baseline of "Malcolm!". */
 .greeting-portrait {
     display: flex;
     flex: none;
     align-items: flex-end;
     justify-content: center;
-    height: calc(var(--greeting-size) * 1.72);
-    aspect-ratio: 4 / 5;
-    margin-bottom: calc(var(--greeting-size) * 0.16);
+    height: calc(var(--greeting-size) * 1.7);
+    aspect-ratio: 5 / 7;
+    margin-bottom: calc(var(--greeting-size) * 0.15);
     overflow: hidden;
-    border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
+    border-radius: 6% / 4.3%;
     background: var(--placeholder);
+    box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 10px 22px -10px rgb(27 23 18 / 0.45);
     transition: background-color var(--theme-fade);
 }
 
@@ -533,16 +540,19 @@ body:has(.home) .main-content,
 
 /* The stack may overlap the hero padding so it never makes the page taller. */
 .photo-stack {
-    justify-self: center;
+    justify-self: start;
+    /* Room for the two cards spread behind the front one (30% of a card), so the visible row starts at the gap. */
+    padding-left: calc(var(--stack-height) * 5 / 7 * 0.3);
     margin: calc(-1 * clamp(8px, 2.5svh, 48px)) 0;
     text-align: center;
 }
 
+/* A deck of playing cards spread flat in a horizontal row to the left, so no card dips into the caption. */
 .photo-stack-button {
     position: relative;
     display: block;
     height: var(--stack-height);
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 5 / 7;
     padding: 0;
     border: 0;
     background: none;
@@ -554,64 +564,71 @@ body:has(.home) .main-content,
 .photo-stack-card {
     position: absolute;
     inset: 0;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 28px;
-    border-radius: 48% 48% 10% 36% / 40% 40% 8% 30%;
+    overflow: hidden;
+    border-radius: 6% / 4.3%;
     background: var(--placeholder);
-    font-size: 15px;
-    transition: background-color var(--theme-fade), transform 500ms var(--ease-out);
+    box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 10px 22px -10px rgb(27 23 18 / 0.45);
+    transition: transform 340ms var(--ease-out), opacity 340ms var(--ease-out), box-shadow 340ms var(--ease-out), background-color var(--theme-fade);
 }
 
-.photo-stack-back {
-    background: color-mix(in srgb, var(--placeholder) 62%, var(--ink-soft));
-    transform: rotate(-8deg) translateX(-14px);
+.photo-stack-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: filter 340ms ease;
 }
 
-.photo-stack-middle {
-    background: color-mix(in srgb, var(--placeholder) 78%, var(--ink-soft));
-    transform: rotate(6deg) translateX(12px);
+.photo-stack-card[data-slot="0"] {
+    z-index: 3;
+    transform: none;
 }
 
-.photo-stack-button[data-turned] .photo-stack-top {
-    animation: photo-stack-in 320ms var(--ease-out);
+.photo-stack-card[data-slot="1"] {
+    z-index: 2;
+    transform: translateX(-15%);
 }
 
-/* Only fan the stack for a real pointer, so a tap on a phone doesn't leave it stuck open. */
+.photo-stack-card[data-slot="2"],
+.photo-stack-card[data-slot="3"] {
+    z-index: 1;
+    transform: translateX(-30%);
+}
+
+/* The next card waits behind the fan, already loaded, and fades in as it takes the back slot. */
+.photo-stack-card[data-slot="3"] {
+    z-index: 0;
+    opacity: 0;
+}
+
+/* Only the card leaving tilts, tossed off to the right; every other card slides straight along the row. */
+.photo-stack-card[data-leaving] {
+    z-index: 4;
+    opacity: 0;
+    transform: translate(70%, 2%) rotate(7deg);
+    transition-duration: 260ms;
+    pointer-events: none;
+}
+
+/* The queued photos are a soft preview, both at the same depth so neither reads as closer. */
+.photo-stack-card[data-slot="1"] img,
+.photo-stack-card[data-slot="2"] img {
+    filter: blur(2px) saturate(0.85) brightness(0.9);
+}
+
+/* Only for a real pointer, so a tap on a phone doesn't leave it stuck: the front card lifts off the deck,
+   inviting a tap to deal the next one, while the queued cards stay where they are. */
 @media (hover: hover) and (pointer: fine) {
-    .photo-stack-button:hover .photo-stack-back {
-        transform: rotate(-13deg) translate(-12%, -6%);
-    }
-
-    .photo-stack-button:hover .photo-stack-middle {
-        transform: rotate(11deg) translate(11%, -6%);
-    }
-
-    .photo-stack-button:hover .photo-stack-top {
-        transform: translateY(-2.5%);
-    }
-
-    /* When fanned, the new top card comes from where the back card actually is. */
-    .photo-stack-button:hover[data-turned] .photo-stack-top {
-        animation-name: photo-stack-in-fanned;
+    .photo-stack-button:hover .photo-stack-card[data-slot="0"] {
+        box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 18px 30px -12px rgb(27 23 18 / 0.5);
+        transform: translateY(-4%);
     }
 }
 
-@keyframes photo-stack-in {
-    from {
-        transform: rotate(-8deg) translateX(-14px);
-    }
-}
-
-@keyframes photo-stack-in-fanned {
-    from {
-        transform: rotate(-13deg) translate(-12%, -6%);
-    }
-}
-
+/* A little wider than the front card and centered on it, overhanging both sides evenly. */
 .photo-stack-caption {
-    margin-top: 12px;
+    width: calc(var(--stack-height) * 0.9);
+    margin: 20px 0 0 calc(var(--stack-height) * (5 / 7 - 0.9) / 2);
     color: var(--ink-soft);
     font-size: 15px;
 }
@@ -640,7 +657,7 @@ body:has(.home) .main-content,
 .home-ground-inner {
     max-width: 1280px;
     margin-inline: auto;
-    padding: clamp(16px, 3.5svh, 48px) clamp(20px, 5vw, 72px) clamp(20px, 4.5svh, 56px);
+    padding: clamp(14px, 3svh, 48px) clamp(20px, 5vw, 72px) clamp(18px, 4svh, 56px);
 }
 
 .home-ground .hill-wave {
@@ -658,16 +675,20 @@ body:has(.home) .main-content,
 
 
 .home-entry h3 {
-    margin: 0 0 10px;
+    margin: 0 0 clamp(6px, 1.2svh, 10px);
     color: var(--ground-ink);
     font-size: clamp(24px, min(3vw, 4.5svh), 40px);
     letter-spacing: -0.02em;
     line-height: 1.1;
 }
 
+/* Three columns wrap descriptions onto more lines, so the band's text scales with the screen height
+   like the rest of the homepage, keeping it to one screen. */
 .home-entry p {
     max-width: 32em;
     margin: 0 0 clamp(8px, 1.6svh, 18px);
+    font-size: clamp(15px, min(1.4vw, 2.2svh), 18px);
+    line-height: 1.5;
 }
 
 .home-ground a {
@@ -1576,16 +1597,16 @@ body:has(.fit-screen) .site-footer-inner {
     animation: settle-in 600ms var(--ease-out) 550ms backwards;
 }
 
-:root[data-intro="play"] .photo-stack-top {
+:root[data-intro="play"] .photo-stack-card[data-slot="0"] {
     animation: card-deal 700ms var(--ease-out) 300ms backwards;
 }
 
-:root[data-intro="play"] .photo-stack-middle {
-    animation: card-drift-b 8s ease-in-out infinite, card-deal 700ms var(--ease-out) 400ms backwards;
+:root[data-intro="play"] .photo-stack-card[data-slot="1"] {
+    animation: card-deal 700ms var(--ease-out) 400ms backwards;
 }
 
-:root[data-intro="play"] .photo-stack-back {
-    animation: card-drift-a 7s ease-in-out infinite, card-deal 700ms var(--ease-out) 500ms backwards;
+:root[data-intro="play"] .photo-stack-card[data-slot="2"] {
+    animation: card-deal 700ms var(--ease-out) 500ms backwards;
 }
 
 :root[data-intro="play"] .photo-stack-caption {
@@ -1595,14 +1616,6 @@ body:has(.fit-screen) .site-footer-inner {
 :root[data-intro="play"] .home-ground .hill-wave {
     transform-origin: bottom;
     animation: hill-rise 1000ms var(--ease-out) backwards;
-}
-
-.photo-stack-back {
-    animation: card-drift-a 7s ease-in-out infinite;
-}
-
-.photo-stack-middle {
-    animation: card-drift-b 8s ease-in-out infinite;
 }
 
 .hill-wave path {
@@ -1682,7 +1695,7 @@ body:has(.fit-screen) .site-footer-inner {
 }
 
 .greeting-portrait {
-    transition: transform 350ms var(--ease-out), background-color var(--theme-fade);
+    transition: transform 350ms var(--ease-out), box-shadow 350ms var(--ease-out), background-color var(--theme-fade);
 }
 
 .site-footer-links .link-icon {
@@ -1690,8 +1703,10 @@ body:has(.fit-screen) .site-footer-inner {
 }
 
 @media (hover: hover) and (pointer: fine) {
+    /* The card rises a little off the page with a deeper shadow; the photo itself stays still. */
     .greeting-portrait:hover {
-        transform: translateY(-3px) rotate(-3deg);
+        box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 16px 26px -12px rgb(27 23 18 / 0.5);
+        transform: translateY(-4px);
     }
 
     .site-footer-links a:hover .link-icon {
@@ -1723,18 +1738,6 @@ body:has(.fit-screen) .site-footer-inner {
     from {
         opacity: 0;
         translate: 0 16px;
-    }
-}
-
-@keyframes card-drift-a {
-    50% {
-        translate: -1px -3px;
-    }
-}
-
-@keyframes card-drift-b {
-    50% {
-        translate: 1px -3px;
     }
 }
 
