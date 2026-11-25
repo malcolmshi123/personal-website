@@ -82,7 +82,7 @@
 \resumeSubheading{OpenText}{Sep 2022 -- Dec 2022}{Software Engineer Intern $|$ Content Server Core}{Waterloo, ON}
 \resumeItemListStart
 \resumeItem{Executed monthly \textbf{end-to-end}, \textbf{integration}, and \textbf{functional tests} on \textbf{8+ core modules} by enhancing Selenium automation scripts that interact with complex HTML structures, achieving \textbf{98\% test coverage}}
-\resumeItem{Developed \textbf{JUnit test report generators} that automatically interpret stack traces and summarize error logs into XML documents following test suite execution, accelerating debugging processes by \textbf{42\%}}
+\resumeItem{Developed \textbf{JUnit test report generators} that automatically interpret stack traces and summarize error logs into XML documents following test suite execution, reducing debugging time by \textbf{42\%}}
 \resumeItem{Automated \textbf{regression testing} with \textbf{Selenium} test scripts and \textbf{SikuliX} workflows that revert VMware virtual machines and restore SQL Server database snapshots between test runs}
 \resumeItemListEnd
 
@@ -94,10 +94,10 @@
 
 \resumeProjectHeading{\href{https://github.com/malcolmshi123/llm-inference-optimization-lab}{\faGithub\ \textbf{LLM Inference Optimization Lab}} $|$ \emph{GPU Performance Benchmarking}}{Oct 2026}
 \resumeItemListStart
-\resumeItem{Architected GPU-accelerated \textbf{model serving infrastructure} using \textbf{vLLM} and \textbf{Modal}, deploying Qwen3-4B on NVIDIA A10 and L4 GPUs with BF16 precision, chunked prefill, and authenticated streaming APIs}
-\resumeItem{Constructed an \textbf{asynchronous benchmarking framework} in Python using asyncio and httpx, executing \textbf{1,000+ measured requests} to evaluate concurrency, token budgets, and TTFT-throughput tradeoffs}
-\resumeItem{Investigated KV cache prefix reuse through \textbf{A/B testing} across \textbf{500+ requests}, analyzing Prometheus telemetry to observe up to \textbf{77\% lower median TTFT} and \textbf{89\% less prefill computation}}
-\resumeItem{Analyzed CUDA kernel execution using PyTorch Profiler to correlate cache reuse with changes in GPU activity, measuring \textbf{36\% lower aggregate kernel duration} in a controlled diagnostic}
+\resumeItem{Deployed GPU-accelerated \textbf{model serving infrastructure} using \textbf{vLLM} and \textbf{Modal}, deploying Qwen3-4B on NVIDIA A10 and L4 GPUs with BF16 precision, chunked prefill, and authenticated streaming APIs}
+\resumeItem{Created an \textbf{asynchronous benchmarking framework} in Python using asyncio and httpx, executing \textbf{1,000+ measured requests} to evaluate concurrency, token budgets, and TTFT-throughput tradeoffs}
+\resumeItem{Investigated \textbf{KV cache reuse} through \textbf{A/B testing} with \textbf{500+ inference calls}, analyzing Prometheus telemetry to observe up to \textbf{77\%} lower median TTFT and \textbf{89\%} less prefill computation}
+\resumeItem{Analyzed \textbf{CUDA kernel execution} using PyTorch Profiler to correlate KV cache reuse with changes in GPU activity, measuring \textbf{36\%} lower aggregate kernel duration in a controlled diagnostic}
 \resumeItemListEnd
 
 \resumeProjectHeading{\href{https://malcolmshi.ca}{\faGlobe\ \textbf{malcolmshi.ca}} $|$ \emph{Personal Website}}{Nov 2026}
