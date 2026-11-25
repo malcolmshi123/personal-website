@@ -11,7 +11,7 @@
         "build": "next build && node scripts/fix-export-paths.mjs",
         "test:export": "node --test scripts/fix-export-paths.test.mjs",
         "typecheck": "next typegen && tsc --noEmit",
-        "test": "node --disable-warning=ExperimentalWarning --test scripts/theme.test.mjs scripts/fix-export-paths.test.mjs scripts/medium.test.mjs scripts/resume.test.mjs scripts/deploy-config.test.mjs scripts/thunderstore.test.mjs scripts/photos.test.mjs scripts/photo-commit.test.mjs scripts/social-card.test.mjs scripts/build-photos.test.mjs scripts/photo-layout.test.mjs",
+        "test": "node --disable-warning=ExperimentalWarning --test scripts/theme.test.mjs scripts/fix-export-paths.test.mjs scripts/medium.test.mjs scripts/resume.test.mjs scripts/deploy-config.test.mjs scripts/thunderstore.test.mjs scripts/photos.test.mjs scripts/photo-commit.test.mjs scripts/social-card.test.mjs scripts/build-photos.test.mjs scripts/photo-layout.test.mjs scripts/built-css.test.mjs",
         "test:html": "node --test scripts/export-html.test.mjs",
         "photos": "node scripts/build-photos.mjs",
         "photos:commit": "node scripts/photo-commit.mjs",

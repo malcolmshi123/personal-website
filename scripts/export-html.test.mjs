@@ -2,6 +2,23 @@ import assert from "node:assert/strict";
 import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
 import { projectsDescription } from "../src/content/projects.ts";
+import { canonicalValue, loadBuiltStyles } from "./built-css.mjs";
+
+// Checks a declaration's meaning: a string must equal the built value once both are spelled the same way, and a
+// regular expression is matched against that canonical spelling.
+function assertDeclaration(styles, selector, property, expected, within = "") {
+    const value = styles.value(selector, property, within);
+    const label = `${within} ${selector} { ${property} }`.trim();
+    if (expected instanceof RegExp) {
+        assert.match(value ?? "", expected, label);
+    } else {
+        assert.equal(value, canonicalValue(expected), label);
+    }
+}
+
+function declares(styles, test) {
+    return styles.declarations.some(test);
+}
 
 async function readExport(path) {
     const html = await readFile(new URL(`../out/${path}`, import.meta.url), "utf8");
@@ -76,11 +93,9 @@ test("each blog post shows its Medium preview image", async () => {
 });
 
 test("blog thumbnail borders fade with the theme instead of jumping", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /\.article-with-image \.article-image\{[^}]*transition:border-color var\(--theme-fade\), ?background-color var\(--theme-fade\)/);
+    assertDeclaration(styles, ".article-with-image .article-image", "transition", "border-color var(--theme-fade), background-color var(--theme-fade)");
 });
 
 test("the projects page lists the three projects in order, with tech, status, and GitHub links but no dates", async () => {
@@ -151,9 +166,7 @@ test("malcolmshi.ca links home from its title and has its own theme toggle besid
 });
 
 test("the header theme toggle has no hint, and the project hint hides once the visitor has toggled the theme", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
     const pages = (await readdir(new URL("../out/", import.meta.url))).filter((name) => name.endsWith(".html"));
 
     for (const page of pages) {
@@ -161,7 +174,7 @@ test("the header theme toggle has no hint, and the project hint hides once the v
         const header = html.slice(html.indexOf('<header class="site-header"'), html.indexOf("</header>"));
         assert.doesNotMatch(header, /theme-toggle-hint/, page);
     }
-    assert.match(css, /:root\[data-theme-toggled\] \.theme-toggle-hint[^{]*\{[^}]*display:none/);
+    assertDeclaration(styles, ":root[data-theme-toggled] .theme-toggle-hint", "display", "none");
 });
 
 test("every id on the projects page is unique", async () => {
@@ -210,11 +223,9 @@ test("each project shows a 16:9 picture with alt text that exists in public", as
 });
 
 test("project image borders fade with the theme instead of jumping", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /\.project-image\{[^}]*transition:border-color var\(--theme-fade\), ?background-color var\(--theme-fade\)/);
+    assertDeclaration(styles, ".project-image", "transition", "border-color var(--theme-fade), background-color var(--theme-fade)");
 });
 
 test("the projects page sits after Work in the navigation, and Work no longer lists projects", async () => {
@@ -413,33 +424,29 @@ test("the homepage greeting is split into two lines that can rise in", async () 
 });
 
 test("motion only runs during the intro and stops for reduced motion", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /:root\[data-intro=play\] \.greeting-line/);
-    assert.match(css, /@keyframes greeting-rise/);
-    assert.match(css, /@keyframes hill-breathe/);
-    assert.match(css, /prefers-reduced-motion:reduce\)\{[^@]*animation:none!important/);
+    assert.ok(styles.rules.some((rule) => rule.selector.startsWith(":root[data-intro=play] .greeting-line")));
+    assert.ok(styles.hasKeyframes("greeting-rise"));
+    assert.ok(styles.hasKeyframes("hill-breathe"));
+    assertDeclaration(styles, "*", "animation", "none !important", "@media (prefers-reduced-motion: reduce)");
 });
 
 test("the photo stack hint is hidden when JavaScript never runs", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /:root:not\(\[data-theme\]\) \.photo-stack-hint\{display:none\}/);
+    assertDeclaration(styles, ":root:not([data-theme]) .photo-stack-hint", "display", "none");
 });
 
 test("a project's theme toggle and download count line up with its title", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /\.project-heading\{[^}]*align-items:baseline/);    assert.match(css, /\.prose \.project-downloads\{[^}]*top:calc\([^}]*position:relative/);
+    assertDeclaration(styles, ".project-heading", "align-items", "baseline");
+    assertDeclaration(styles, ".prose .project-downloads", "position", "relative");
+    assertDeclaration(styles, ".prose .project-downloads", "top", /^calc\(/);
     // -10px leaves the toggle 24px tall in layout, under the smallest title row (27.5px on phones).
-    assert.match(css, /\.project-heading \.theme-toggle\{[^}]*margin-block:-10px/);
-    assert.doesNotMatch(css, /\.project-link\{/);
+    assertDeclaration(styles, ".project-heading .theme-toggle", "margin-block", "-10px");
+    assert.ok(!styles.rules.some((rule) => rule.selector.endsWith(".project-link")));
 });
 
 test("the homepage hero has no icon links of its own", async () => {
@@ -450,11 +457,9 @@ test("the homepage hero has no icon links of its own", async () => {
 });
 
 test("the theme toggle is hidden when JavaScript never sets a theme", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
-    assert.match(css, /:root:not\(\[data-theme\]\) \.theme-toggle\{display:none\}/);
+    assertDeclaration(styles, ":root:not([data-theme]) .theme-toggle", "display", "none");
 });
 
 test("every page links the M. favicon and the iPhone home screen icon", async () => {
@@ -613,20 +618,18 @@ test("links that leave the site, and the resume PDF, open in a new tab while pag
 });
 
 test("nav, theme toggle, and touch hovers follow the motion polish rules", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
 
     // One underline for both nav states: no border, the current page's line is the same ::after held open.
-    assert.doesNotMatch(css, /\.site-navigation a\{[^}]*border-bottom/);
-    assert.match(css, /\.site-navigation a\[aria-current=page\]:after\{[^}]*opacity:1/);
+    assert.ok(!declares(styles, (item) => item.selector === ".site-navigation a" && item.property.startsWith("border-bottom")));
+    assertDeclaration(styles, ".site-navigation a[aria-current=page]::after", "opacity", "1");
     // Hovering the toggle lifts the icon, never the sun, so clicking while hovered still sets the sun.
-    assert.doesNotMatch(css, /\.theme-toggle:hover \.theme-toggle-sun/);
+    assert.ok(!styles.rules.some((rule) => rule.selector.includes(".theme-toggle:hover .theme-toggle-sun")));
     // Text colors fade with the sky while the theme switches.
-    assert.match(css, /\[data-theme-switching\]/);
+    assert.ok(styles.rules.some((rule) => rule.selector.includes("[data-theme-switching]")));
     // Fanned photo stack and portrait tilt only for a real pointer.
-    assert.match(css, /@media \(hover:hover\) and \(pointer:fine\)\{\.photo-stack-button:hover \.photo-stack-card/);
-    assert.match(css, /--field-border:/);
+    assert.ok(styles.hasRule(".photo-stack-button:hover .photo-stack-card[data-slot=0]", "@media (hover: hover) and (pointer: fine)"));
+    assert.ok(styles.value(":root", "--field-border"));
 });
 
 test("the header tabs in the order it reads, and buttons and the phone menu give motion feedback", async () => {
@@ -635,32 +638,25 @@ test("the header tabs in the order it reads, and buttons and the phone menu give
     assert.ok(positions.every((position) => position >= 0), positions.join());
     assert.deepEqual([...positions].sort((a, b) => a - b), positions);
 
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.theme-toggle:active[^{]*\{[^}]*scale\(\.97\)/);
-    assert.match(css, /\.menu-toggle:active[^{]*\{[^}]*scale\(\.97\)/);
-    assert.match(css, /\.contact-form button:active[^{]*\{[^}]*scale\(\.97\)/);
-    assert.match(css, /@starting-style\{\.site-navigation\[data-open=true\]\{[^}]*opacity:0/);
-    assert.doesNotMatch(css, /--sun-disc/);
-    assert.match(css, /\.theme-toggle-sun\{[^}]*fill:var\(--sun\)/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".theme-toggle:active", "transform", "scale(0.97)");
+    assertDeclaration(styles, ".menu-toggle:active", "transform", "scale(0.97)");
+    assertDeclaration(styles, ".contact-form button:active:not(:disabled)", "transform", "scale(0.97)");
+    assertDeclaration(styles, ".site-navigation[data-open=true]", "opacity", "0", "@media (max-width: 760px) @starting-style");
+    assert.ok(!declares(styles, (item) => item.property === "--sun-disc" || item.value.includes("--sun-disc")));
+    assertDeclaration(styles, ".theme-toggle-sun", "fill", "var(--sun)");
 });
 
 test("links and the hint carry their own color so they fade with the theme instead of jumping", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.prose \.project-name-link\{[^}]*color:var\(--heading\)/);
-    assert.match(css, /\.theme-toggle-hint\{[^}]*color:var\(--ink-soft\)/);
-    assert.match(css, /\.theme-toggle\{[^}]*transition:[^};]*color var\(--theme-fade\)/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".prose .project-name-link", "color", "var(--heading)");
+    assertDeclaration(styles, ".theme-toggle-hint", "color", "var(--ink-soft)");
+    assertDeclaration(styles, ".theme-toggle", "transition", /(^|,)color var\(--theme-fade\)/);
 });
 
 test("the light theme keeps the dark theme's soft horizon and a sun that stands out", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    const root = css.match(/:root\{--sky:[^}]*\}/)[0];
-    const token = (name) => root.match(new RegExp(`--${name}:(#[0-9a-f]{6})`))[1];
+    const styles = await loadBuiltStyles();
+    const token = (name) => styles.value(":root", `--${name}`);
     const luminance = (hex) => {
         const channels = [1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16) / 255)
             .map((value) => (value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4));
@@ -676,7 +672,7 @@ test("the light theme keeps the dark theme's soft horizon and a sun that stands 
     assert.ok(contrast(token("ground-soft"), token("ground")) >= 4.5);
     assert.ok(contrast(token("ground-link"), token("ground")) >= 4.5);
     assert.ok(contrast(token("sun"), token("sky")) >= 3, `sun ${contrast(token("sun"), token("sky"))}`);
-    assert.match(css, /::selection\{[^}]*background:var\(--highlight\)/);
+    assertDeclaration(styles, "::selection", "background", "var(--highlight)");
 });
 
 test("the homepage band lists Projects to the right of Experience", async () => {
@@ -685,10 +681,8 @@ test("the homepage band lists Projects to the right of Experience", async () => 
     assert.deepEqual(titles, ["The Good News", "Experience", "Projects"]);
     assert.match(html, /href="\/projects">Check them out<span class="visually-hidden"> of my projects<\/span><\/a>/);
 
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.home-entries\{[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home-entries", "grid-template-columns", "repeat(3, minmax(0, 1fr))");
 });
 
 test("homepage entries reuse each page's own intro, and only Projects mentions LLM inference", async () => {
@@ -701,23 +695,22 @@ test("homepage entries reuse each page's own intro, and only Projects mentions L
 });
 
 test("the light theme mirrors the original night", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /:root\{--sky:#e9dcc5;--heading:#1b1712/);
-    assert.match(css, /:root\[data-theme=dark\]\{--sky:#1b1712;--heading:#fbf4e8;--ink:#e9dcc5/);
-    assert.match(css, /--sun:#c66216/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ":root", "--sky", "#e9dcc5");
+    assertDeclaration(styles, ":root", "--heading", "#1b1712");
+    assertDeclaration(styles, ":root[data-theme=dark]", "--sky", "#1b1712");
+    assertDeclaration(styles, ":root[data-theme=dark]", "--heading", "#fbf4e8");
+    assertDeclaration(styles, ":root[data-theme=dark]", "--ink", "#e9dcc5");
+    assertDeclaration(styles, ":root", "--sun", "#c66216");
 });
 
 test("inner pages end close to the hill, and the short blog page fits one screen", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.page-content\{padding-block:clamp\(40px,6vw,88px\) 0\}/);
-    assert.match(css, /\.site-footer\{[^}]*margin-top:clamp\(40px,6vw,72px\)/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".page-content", "padding-block", "clamp(40px, 6vw, 88px) 0");
+    assertDeclaration(styles, ".site-footer", "margin-top", "clamp(40px, 6vw, 72px)");
     assert.match(await readExport("blog.html"), /class="page-content reading-page fit-screen"/);
-    assert.match(css, /body:has\(\.fit-screen\) \.site-footer\{margin-top:0\}/);
-    assert.match(css, /\.fit-screen h1\{font-size:min\(/);
+    assertDeclaration(styles, "body:has(.fit-screen) .site-footer", "margin-top", "0");
+    assertDeclaration(styles, ".fit-screen h1", "font-size", /^min\(/);
 });
 
 test("the gallery is one Pinterest-style board fed by every processed photo", async () => {
@@ -747,78 +740,65 @@ test("the original photos never reach git", async () => {
 });
 
 test("the board fades into a Show more button and the viewer can close", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.photo-board\[data-more\][^{]*\{[^}]*mask-image:linear-gradient/);
-    assert.match(css, /\.photo-board-more\{/);
-    assert.match(css, /\.photo-viewer::backdrop\{/);
-    assert.match(css, /\.photo-pin-caption\{[^}]*opacity:0/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".photo-board[data-more]", "mask-image", /^linear-gradient\(/);
+    assert.ok(styles.hasRule(".photo-board-more"));
+    assert.ok(styles.hasRule(".photo-viewer::backdrop"));
+    assertDeclaration(styles, ".photo-pin-caption", "opacity", "0");
 });
 
 test("the homepage stack never spins on a tap, and the board shows no photo count", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.doesNotMatch(css, /@keyframes photo-stack-in/);
-    assert.doesNotMatch(css, /\.photo-board-more p\{/);
+    const styles = await loadBuiltStyles();
+    assert.ok(!styles.hasKeyframes("photo-stack-in"));
+    assert.ok(!styles.rules.some((rule) => rule.selector === ".photo-board-more p"));
 });
 
 test("the stack is a held fan of playing cards, and only the leaving card tilts away", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
     // Standard playing card proportions, spread flat in a horizontal row to the left.
-    assert.match(css, /\.photo-stack-button\{[^}]*aspect-ratio:5\/7/);
-    assert.match(css, /\.photo-stack-card\[data-slot="?1"?\]\{[^}]*transform:translateX?\(-15%\)/);
-    assert.doesNotMatch(css, /\.photo-stack-card\[data-slot="?[123]"?\][^{]*\{[^}]*rotate/);
-    assert.doesNotMatch(css, /rotate:y|perspective:900px/);
+    assertDeclaration(styles, ".photo-stack-button", "aspect-ratio", "5 / 7");
+    assertDeclaration(styles, ".photo-stack-card[data-slot=1]", "transform", "translateX(-15%)");
+    assert.ok(!declares(styles, (item) => /\.photo-stack-card\[data-slot=[123]\]/.test(item.selector) && /rotate/.test(`${item.property}:${item.value}`)));
+    assert.ok(!declares(styles, (item) => (item.property === "rotate" && item.value.startsWith("y")) || (item.property === "perspective" && item.value === "900px")));
     // The portrait is cropped to the same 5:7 card, keeping its width so the photo never looks squeezed.
-    assert.match(css, /\.greeting-portrait\{[^}]*aspect-ratio:5\/7/);
-    assert.match(css, /\.greeting-portrait\{[^}]*border-radius:6%\/4\.3%/);
+    assertDeclaration(styles, ".greeting-portrait", "aspect-ratio", "5 / 7");
+    assertDeclaration(styles, ".greeting-portrait", "border-radius", "6% / 4.3%");
     // It spans from the top of the "H" in "Hi" to the baseline of "Malcolm!".
-    assert.match(css, /\.greeting-portrait\{[^}]*height:calc\(var\(--greeting-size\) \* 1\.7\)/);
-    assert.match(css, /\.photo-stack-card\[data-leaving\]\{[^}]*opacity:0/);
+    assertDeclaration(styles, ".greeting-portrait", "height", "calc(var(--greeting-size) * 1.7)");
+    assertDeclaration(styles, ".photo-stack-card[data-leaving]", "opacity", "0");
     // Both queued cards share one blur.
-    assert.match(css, /\.photo-stack-card\[data-slot="?1"?\] img,\.photo-stack-card\[data-slot="?2"?\] img\{filter:blur\(/);
-    assert.doesNotMatch(css, /@keyframes photo-stack-swap/);
+    assertDeclaration(styles, ".photo-stack-card[data-slot=1] img", "filter", /^blur\(/);
+    assert.equal(styles.value(".photo-stack-card[data-slot=2] img", "filter"), styles.value(".photo-stack-card[data-slot=1] img", "filter"));
+    assert.ok(!styles.hasKeyframes("photo-stack-swap"));
 });
 
 test("the homepage band text scales with the screen height so three columns still fit one screen", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.home-entry p\{[^}]*font-size:clamp\([^}]*svh/);
-    assert.match(css, /\.home-entry p\{[^}]*line-height:1\.5/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home-entry p", "font-size", /^clamp\(.*svh/);
+    assertDeclaration(styles, ".home-entry p", "line-height", "1.5");
 });
 
 test("hovering the deck lifts only the front card; the queued cards stay put", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.photo-stack-button:hover \.photo-stack-card\[data-slot="?0"?\]\{[^}]*translateY\(-4%\)/);
-    assert.doesNotMatch(css, /\.photo-stack-button:hover \.photo-stack-card\[data-slot="?[12]"?\]/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".photo-stack-button:hover .photo-stack-card[data-slot=0]", "transform", /translateY\(-4%\)/, "@media (hover: hover) and (pointer: fine)");
+    assert.ok(!styles.rules.some((rule) => /\.photo-stack-button:hover \.photo-stack-card\[data-slot=[12]\]/.test(rule.selector)));
 });
 
 test("the cards keep a steady gap after the greeting text, and the portrait lifts instead of tilting", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const styles = await loadBuiltStyles();
     // The stack sits right after the text column instead of centering in leftover space.
-    assert.match(css, /\.home-hero\{[^}]*grid-template-columns:minmax\(0,max-content\) max-content/);
-    assert.match(css, /\.home-hero\{[^}]*column-gap:calc\(var\(--greeting-size\) \* \.9\)/);
+    assertDeclaration(styles, ".home-hero", "grid-template-columns", "minmax(0, max-content) max-content");
+    assertDeclaration(styles, ".home-hero", "column-gap", "calc(var(--greeting-size) * 0.9)");
     // The portrait hover is a small lift with a deeper shadow: no tilt, and the photo inside never zooms.
-    assert.doesNotMatch(css, /\.greeting-portrait:hover\{[^}]*rotate/);
-    assert.match(css, /\.greeting-portrait:hover\{[^}]*translateY\(-4px\)/);
-    assert.doesNotMatch(css, /\.greeting-portrait:hover img/);
+    assert.ok(!declares(styles, (item) => item.selector === ".greeting-portrait:hover" && /rotate/.test(`${item.property}:${item.value}`)));
+    assertDeclaration(styles, ".greeting-portrait:hover", "transform", "translateY(-4px)", "@media (hover: hover) and (pointer: fine)");
+    assert.ok(!styles.rules.some((rule) => rule.selector.includes(".greeting-portrait:hover img")));
 });
 
 test("the homepage photo cards sit still when idle", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.doesNotMatch(css, /card-drift/);
-    assert.doesNotMatch(css, /\.photo-stack-card[^{]*\{[^}]*infinite/);
+    const styles = await loadBuiltStyles();
+    assert.ok(!styles.hasKeyframes("card-drift") && !declares(styles, (item) => item.value.includes("card-drift")));
+    assert.ok(!declares(styles, (item) => item.selector.includes(".photo-stack-card") && item.value.includes("infinite")));
 });
 
 test("link previews use the current card and describe it", async () => {
@@ -835,32 +815,28 @@ test("the themed project screenshots crossfade, the photo viewer fades both ways
     // The light and dark screenshots share one frame so they can crossfade with the theme.
     assert.match(projects, /<div class="project-image-pair"><img[^>]*class="project-image shows-in-light-theme"[^>]*><img[^>]*class="project-image shows-in-dark-theme"[^>]*><\/div>/);
 
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.doesNotMatch(css, /shows-in-dark-theme\{display:none\}/);
-    assert.match(css, /\.project-image-pair>\.project-image\{[^}]*transition:opacity var\(--theme-fade\)/);
-    assert.match(css, /:root\[data-theme-switching\] \.project-image-pair>\.project-image\{[^}]*opacity var\(--theme-fade\)[^}]*!important/);
+    const styles = await loadBuiltStyles();
+    assert.ok(!declares(styles, (item) => item.selector.endsWith(".shows-in-dark-theme") && item.property === "display" && item.value === "none"));
+    assertDeclaration(styles, ".project-image-pair > .project-image", "transition", /^opacity var\(--theme-fade\)/);
+    assertDeclaration(styles, ":root[data-theme-switching] .project-image-pair > .project-image", "transition", /opacity var\(--theme-fade\).*!important$/);
 
     // The viewer and its backdrop fade in (220ms) and out (150ms) instead of popping.
-    assert.match(css, /\.photo-viewer\{[^}]*overlay \.15s[^}]*allow-discrete/);
-    assert.match(css, /@starting-style\{\.photo-viewer\[open\]\{[^}]*opacity:0/);
-    assert.match(css, /\.photo-viewer\[open\]::backdrop\{[^}]*background/);
-    assert.doesNotMatch(css, /@keyframes viewer-in/);
+    assertDeclaration(styles, ".photo-viewer", "transition", /(^|,)overlay 150ms [^,]*allow-discrete/);
+    assertDeclaration(styles, ".photo-viewer[open]", "opacity", "0", "@starting-style");
+    assert.ok(declares(styles, (item) => item.selector === ".photo-viewer[open]::backdrop" && item.within === "" && item.property.startsWith("background")));
+    assert.ok(!styles.hasKeyframes("viewer-in"));
 
     // The contact status eases in, and the theme hint fades out instead of vanishing.
-    assert.match(css, /\.contact-status-message\{[^}]*animation:/);
-    assert.match(css, /@keyframes status-in/);
-    assert.match(css, /\.theme-toggle-hint\{[^}]*display \.2s[^}]*allow-discrete/);
+    assertDeclaration(styles, ".contact-status-message", "animation", /^status-in /);
+    assert.ok(styles.hasKeyframes("status-in"));
+    assertDeclaration(styles, ".theme-toggle-hint", "transition", /(^|,)display 200ms [^,]*allow-discrete/);
 });
 
 test("the enlarged photo fades and sharpens in over its placeholder instead of popping", async () => {
-    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
-    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
-    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
-    assert.match(css, /\.photo-viewer-frame img\{[^}]*opacity:0/);
-    assert.match(css, /\.photo-viewer-frame img\{[^}]*transition:opacity \.24s var\(--ease-out\),\s?filter \.24s var\(--ease-out\)/);
-    assert.match(css, /\.photo-viewer-frame img\[data-loaded\]\{[^}]*opacity:1/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".photo-viewer-frame img", "opacity", "0");
+    assertDeclaration(styles, ".photo-viewer-frame img", "transition", "opacity 240ms var(--ease-out), filter 240ms var(--ease-out)");
+    assertDeclaration(styles, ".photo-viewer-frame img[data-loaded]", "opacity", "1");
     // The frame is sized from the photo's shape, so the placeholder shows before the full photo loads.
-    assert.match(css, /\.photo-viewer-frame\{[^}]*aspect-ratio:var\(--photo-ratio\)/);
+    assertDeclaration(styles, ".photo-viewer-frame", "aspect-ratio", "var(--photo-ratio)");
 });
