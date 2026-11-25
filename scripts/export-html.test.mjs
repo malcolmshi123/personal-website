@@ -280,9 +280,9 @@ test("the about page is gone from the export and the navigation", async () => {
 });
 
 test("page introductions use the new wording", async () => {
-    assert.match(await readExport("projects.html"), /class="introduction">What I’ve built\.</);
-    assert.match(await readExport("blog.html"), /class="introduction">What I&#x27;ve written\.</);
-    assert.match(await readExport("photos.html"), /class="introduction">What I&#x27;ve tasted and seen\.</);
+    assert.match(await readExport("projects.html"), /class="introduction">LLM inference benchmarks, a Lethal Company mod, and this site\.</);
+    assert.match(await readExport("blog.html"), /class="introduction">I post on Medium!</);
+    assert.match(await readExport("photos.html"), /class="introduction">I put my cameras to work!</);
     assert.match(await readExport("contact.html"), /class="introduction">Let’s get in touch!</);
 });
 
@@ -479,7 +479,9 @@ test("every page links the M. favicon and the iPhone home screen icon", async ()
 
     const svg = await readFile(new URL("../out/icon.svg", import.meta.url), "utf8");
 
-    assert.match(svg, /fill="#933f2a"/);
+    assert.match(svg, /fill="#e9dcc5"/);
+    assert.match(svg, /fill="#1b1712"/);
+    assert.match(svg, /fill="#944124"/);
 
     const darkSvg = await readFile(new URL("../out/icon-dark.svg", import.meta.url), "utf8");
 
@@ -619,4 +621,129 @@ test("links that leave the site, and the resume PDF, open in a new tab while pag
         }
     }
     assert.ok(outbound > 20, `found only ${outbound} outbound links`);
+});
+
+test("nav, theme toggle, and touch hovers follow the motion polish rules", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+
+    // One underline for both nav states: no border, the current page's line is the same ::after held open.
+    assert.doesNotMatch(css, /\.site-navigation a\{[^}]*border-bottom/);
+    assert.match(css, /\.site-navigation a\[aria-current=page\]:after\{[^}]*opacity:1/);
+    // Hovering the toggle lifts the icon, never the sun, so clicking while hovered still sets the sun.
+    assert.doesNotMatch(css, /\.theme-toggle:hover \.theme-toggle-sun/);
+    // Text colors fade with the sky while the theme switches.
+    assert.match(css, /\[data-theme-switching\]/);
+    // Fanned photo stack and portrait tilt only for a real pointer.
+    assert.doesNotMatch(css, /(^|\})\.photo-stack-button:hover \.photo-stack-back\{/);
+    assert.match(css, /--field-border:/);
+});
+
+test("the header tabs in the order it reads, and buttons and the phone menu give motion feedback", async () => {
+    const header = (await readExport("index.html")).match(/<header class="site-header"[\s\S]*?<\/header>/)[0];
+    const positions = ['class="wordmark"', 'class="menu-toggle"', 'class="site-navigation"', 'class="theme-toggle'].map((marker) => header.indexOf(marker));
+    assert.ok(positions.every((position) => position >= 0), positions.join());
+    assert.deepEqual([...positions].sort((a, b) => a - b), positions);
+
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.theme-toggle:active[^{]*\{[^}]*scale\(\.97\)/);
+    assert.match(css, /\.menu-toggle:active[^{]*\{[^}]*scale\(\.97\)/);
+    assert.match(css, /\.contact-form button:active[^{]*\{[^}]*scale\(\.97\)/);
+    assert.match(css, /@starting-style\{\.site-navigation\[data-open=true\]\{[^}]*opacity:0/);
+    assert.doesNotMatch(css, /--sun-disc/);
+    assert.match(css, /\.theme-toggle-sun\{[^}]*fill:var\(--sun\)/);
+});
+
+test("the gallery intro covers both food and places", async () => {
+    assert.match(await readExport("photos.html"), /class="introduction">I put my cameras to work!</);
+});
+
+test("the gallery lists my gear below the albums, with the lens under the camera", async () => {
+    const html = await readExport("photos.html");
+    const gear = html.match(/<section class="gear"[\s\S]*?<\/section>/)?.[0];
+    assert.ok(gear, "no gear section");
+    assert.ok(html.indexOf('class="album-grid"') < html.indexOf('class="gear"'));
+    assert.match(gear, /<h2[^>]*>Gear<\/h2>/);
+    const names = [...gear.matchAll(/<h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
+    assert.deepEqual(names, ["Canon EOS Rebel SL3", "Google Pixel 11", "Samsung Galaxy S24"]);
+    const camera = gear.slice(gear.indexOf("Canon EOS Rebel SL3"), gear.indexOf("Google Pixel 11"));
+    assert.match(camera, /Canon EF-S 18-55mm f\/4-5\.6 IS STM/);
+    assert.doesNotMatch(gear, /[–—]/);
+});
+
+test("links and the hint carry their own color so they fade with the theme instead of jumping", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.prose \.project-name-link\{[^}]*color:var\(--heading\)/);
+    assert.match(css, /\.theme-toggle-hint\{[^}]*color:var\(--ink-soft\)/);
+    assert.match(css, /\.theme-toggle\{[^}]*transition:[^};]*color var\(--theme-fade\)/);
+});
+
+test("the light theme keeps the dark theme's soft horizon and a sun that stands out", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    const root = css.match(/:root\{--sky:[^}]*\}/)[0];
+    const token = (name) => root.match(new RegExp(`--${name}:(#[0-9a-f]{6})`))[1];
+    const luminance = (hex) => {
+        const channels = [1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16) / 255)
+            .map((value) => (value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4));
+        return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+    };
+    const contrast = (a, b) => {
+        const [high, low] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+        return (high + 0.05) / (low + 0.05);
+    };
+    // The ground sits close to the sky, like the night ground does, instead of a dark slab.
+    assert.ok(contrast(token("sky"), token("ground")) < 1.6, `sky/ground ${contrast(token("sky"), token("ground"))}`);
+    assert.ok(contrast(token("ground-ink"), token("ground")) >= 4.5);
+    assert.ok(contrast(token("ground-soft"), token("ground")) >= 4.5);
+    assert.ok(contrast(token("ground-link"), token("ground")) >= 4.5);
+    assert.ok(contrast(token("sun"), token("sky")) >= 3, `sun ${contrast(token("sun"), token("sky"))}`);
+    assert.match(css, /::selection\{[^}]*background:var\(--highlight\)/);
+});
+
+test("the homepage band lists Projects to the right of Experience", async () => {
+    const html = await readExport("index.html");
+    const titles = [...html.matchAll(/<li class="home-entry"><h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
+    assert.deepEqual(titles, ["The Good News", "Experience", "Projects"]);
+    assert.match(html, /href="\/projects">Check them out<span class="visually-hidden"> of my projects<\/span><\/a>/);
+
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.home-entries\{[^}]*grid-template-columns:repeat\(3,minmax\(0,1fr\)\)/);
+});
+
+test("homepage entries reuse each page's own intro, and only Projects mentions LLM inference", async () => {
+    const home = await readExport("index.html");
+    const experience = "GPU performance and graphics at Huawei, plus earlier work in web apps, security, and testing.";
+    assert.match(await readExport("work.html"), new RegExp(`class="introduction">${experience}<`));
+    assert.match(home, new RegExp(`<h3>Experience</h3><p>${experience}</p>`));
+    assert.match(home, /<h3>Projects<\/h3><p>LLM inference benchmarks, a Lethal Company mod, and this site\.<\/p>/);
+    assert.equal(home.split("<h3>").filter((entry) => entry.includes("LLM inference")).length, 1);
+});
+
+test("the light theme mirrors the original night", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /:root\{--sky:#e9dcc5;--heading:#1b1712/);
+    assert.match(css, /:root\[data-theme=dark\]\{--sky:#1b1712;--heading:#fbf4e8;--ink:#e9dcc5/);
+    assert.match(css, /--sun:#c66216/);
+});
+
+test("inner pages end close to the hill, and the short blog page fits one screen", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.page-content\{padding-block:clamp\(40px,6vw,88px\) 0\}/);
+    assert.match(css, /\.site-footer\{[^}]*margin-top:clamp\(40px,6vw,72px\)/);
+    assert.match(await readExport("blog.html"), /class="page-content reading-page fit-screen"/);
+    assert.match(css, /body:has\(\.fit-screen\) \.site-footer\{margin-top:0\}/);
+    assert.match(css, /\.fit-screen h1\{font-size:min\(/);
 });

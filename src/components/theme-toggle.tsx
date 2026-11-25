@@ -32,6 +32,16 @@ function currentTheme(): Theme {
 // The page can show more than one toggle; each tells the others when the theme changes.
 const themeChangeEvent = "theme-toggle-change";
 
+// Matches --theme-fade in globals.css; text colors fade with the sky only while this flag is set.
+const themeFadeMs = 800;
+let themeSwitchTimer: number | undefined;
+
+function markThemeSwitching(root: HTMLElement) {
+    root.dataset.themeSwitching = "";
+    window.clearTimeout(themeSwitchTimer);
+    themeSwitchTimer = window.setTimeout(() => delete root.dataset.themeSwitching, themeFadeMs);
+}
+
 // The hint sits to the right of the icon and points back at it.
 export default function ThemeToggle({ hint = false }: { hint?: boolean }) {
     const [theme, setTheme] = useState<Theme | null>(null);
@@ -94,6 +104,7 @@ export default function ThemeToggle({ hint = false }: { hint?: boolean }) {
     function switchTheme() {
         const chosen = nextTheme(currentTheme());
         const root = document.documentElement;
+        markThemeSwitching(root);
         root.dataset.theme = chosen;
         root.dataset.themeToggled = "true";
 

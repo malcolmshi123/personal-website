@@ -13,7 +13,7 @@ type Project = {
     image: { src: string; alt: string; srcInLightTheme?: string };
 };
 
-export const projectsIntroduction = "What I’ve built.";
+export const projectsIntroduction = "LLM inference benchmarks, a Lethal Company mod, and this site.";
 
 export function downloadsLabel(count: number): string {
     return `${count.toLocaleString("en-US")} ${count === 1 ? "download" : "downloads"}`;

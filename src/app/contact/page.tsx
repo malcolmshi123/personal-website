@@ -17,7 +17,7 @@ export default function Contact() {
             <p className="introduction">Let’s get in touch!</p>
             <div className="related-links contact-links">
                 {contactLinks.map((link) => (
-                    <a href={link.href} {...newTabProps(link.href)} key={link.href}>
+                    <a key={link.href} href={link.href} {...newTabProps(link.href)}>
                         <LinkIcon name={link.icon} />
                         {link.label}
                     </a>

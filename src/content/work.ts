@@ -8,7 +8,7 @@ type Experience = {
 };
 
 export const work = {
-    introduction: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
+    introduction: "GPU performance and graphics at Huawei, plus earlier work in web apps, security, and testing.",
     education: {
         school: "University of Waterloo",
         degree: "BASc in Computer Engineering, Co-op",

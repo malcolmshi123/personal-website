@@ -26,10 +26,10 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
                 }
             }}
         >
+            {/* Page order matches reading order: on desktop the nav comes before the toggle, and on phones the menu opens right after its button. */}
             <Link className="wordmark" href="/" aria-label="Malcolm Shi, home">
                 Malcolm Shi.
             </Link>
-            <ThemeToggle />
             <button
                 ref={menuButton}
                 className="menu-toggle"
@@ -63,6 +63,7 @@ function HeaderNavigation({ pathname }: { pathname: string }) {
                     ))}
                 </ul>
             </nav>
+            <ThemeToggle />
         </header>
     );
 }

@@ -1,18 +1,24 @@
 :root {
-    --sky: #e8d9bf;
-    --heading: #1f150e;
+    /* Day and night mirror each other: the day sky is the night's ink, the night sky is the day's heading,
+       and the hill keeps the same moss hue a short step from the sky in both. */
+    --sky: #e9dcc5;
+    --heading: #1b1712;
     --ink: #33241a;
-    --ink-soft: #644c3b;
-    --brick: #933f2a;
+    --ink-soft: #5e4838;
+    --brick: #944124;
     --olive: #4d5e34;
-    --ground: #4d5e34;
-    --ground-ink: #f1e6d2;
-    --ground-soft: #dcd3bc;
-    --ground-link: #efcfaa;
-    --placeholder: #dcc9a8;
-    --rule: #cdb995;
-    --field: #f1e6d2;
-    --sun: #e3b562;
+    --ground: #b9c9ab;
+    --ground-ink: #1b1712;
+    --ground-soft: #4a3e2a;
+    --ground-link: #7d3319;
+    --placeholder: #e1c9af;
+    --rule: #d7bfa6;
+    --field: #f6efe3;
+    /* At least 3:1 against both the sky and the field, so inputs read as inputs. */
+    --field-border: #806a57;
+    /* A low afternoon sun, deep enough to hold 3:1 on the sky. */
+    --sun: #c66216;
+    --highlight: #e3b562;
     --moon: #e9dcc5;
     --font-body: var(--font-hanken), "Segoe UI", sans-serif;
     --font-heading: var(--font-lora), Georgia, serif;
@@ -37,6 +43,7 @@
     --placeholder: #2a221b;
     --rule: #3a3027;
     --field: #241e18;
+    --field-border: #776e5e;
     color-scheme: dark;
 }
 
@@ -64,7 +71,7 @@ body {
 }
 
 ::selection {
-    background: var(--sun);
+    background: var(--highlight);
     color: #1f150e;
 }
 
@@ -103,11 +110,6 @@ h3 {
 @media (prefers-reduced-motion: reduce) {
     :root {
         --theme-fade: 0s;
-    }
-
-    .photo-stack-card {
-        animation: none;
-        transition: background-color var(--theme-fade);
     }
 }
 
@@ -173,8 +175,11 @@ h1 {
     text-decoration: none;
 }
 
-.site-navigation {
-    order: 1;
+/* Buttons sink a little while pressed. */
+.theme-toggle:active,
+.menu-toggle:active,
+.contact-form button:active:not(:disabled) {
+    transform: scale(0.97);
 }
 
 .site-navigation ul {
@@ -189,26 +194,20 @@ h1 {
 .site-navigation a {
     display: inline-block;
     padding: 8px 4px;
-    border-bottom: 1.5px solid transparent;
     color: var(--ink-soft);
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
-    transition: color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+    transition: color 200ms var(--ease-out);
 }
 
-.site-navigation a:hover {
-    color: var(--ink);
-}
-
+.site-navigation a:hover,
 .site-navigation a[aria-current="page"] {
-    border-bottom-color: var(--brick);
     color: var(--ink);
 }
 
 .theme-toggle {
     display: inline-flex;
-    order: 2;
     align-items: center;
     gap: 8px;
     min-width: 44px;
@@ -218,9 +217,13 @@ h1 {
     background: transparent;
     color: var(--ink-soft);
     cursor: pointer;
+    /* The toggle sits outside the theme-switch rule below, so it carries the fade itself. */
+    transition: transform 160ms var(--ease-out), color var(--theme-fade);
 }
 
+/* Text with its own color fade never inherits its color, or it jumps when the theme switches. */
 .theme-toggle-hint {
+    color: var(--ink-soft);
     font-family: var(--font-heading);
     font-size: 15px;
     font-style: italic;
@@ -270,13 +273,28 @@ h1 {
     transform: none;
 }
 
-.theme-toggle:hover .theme-toggle-sun {
-    transform: translateY(-1px);
+/* The hover lift moves the whole icon, so it never overrides the sun setting or the moon rising. */
+.theme-toggle-icon {
+    transition: transform 200ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .theme-toggle:hover .theme-toggle-icon {
+        transform: translateY(-1px);
+    }
+}
+
+/* While the theme switches, every color eases along with the sky instead of snapping.
+   The toggle keeps its own sun and moon transitions. */
+:root[data-theme-switching] *:not(.theme-toggle, .theme-toggle *),
+:root[data-theme-switching] *::before,
+:root[data-theme-switching] *::after {
+    transition: color var(--theme-fade), background-color var(--theme-fade), border-color var(--theme-fade), fill var(--theme-fade),
+        stroke var(--theme-fade), text-decoration-color var(--theme-fade), outline-color var(--theme-fade) !important;
 }
 
 .menu-toggle {
     display: none;
-    order: 3;
     align-items: center;
     gap: 10px;
     min-height: 44px;
@@ -289,12 +307,13 @@ h1 {
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
+    transition: transform 160ms var(--ease-out);
 }
 
 /* Footer */
 
 .site-footer {
-    margin-top: clamp(72px, 10vw, 128px);
+    margin-top: clamp(40px, 6vw, 72px);
     color: var(--ground-soft);
     font-size: 16px;
 }
@@ -367,6 +386,7 @@ h1 {
 
 .site-footer a {
     color: var(--ground-ink);
+    transition: color 200ms var(--ease-out);
 }
 
 .site-footer a:hover {
@@ -555,24 +575,38 @@ body:has(.home) .main-content,
 }
 
 .photo-stack-button[data-turned] .photo-stack-top {
-    animation: photo-stack-in 0.35s ease;
+    animation: photo-stack-in 320ms var(--ease-out);
 }
 
-.photo-stack-button:hover .photo-stack-back {
-    transform: rotate(-13deg) translate(-12%, -6%);
-}
+/* Only fan the stack for a real pointer, so a tap on a phone doesn't leave it stuck open. */
+@media (hover: hover) and (pointer: fine) {
+    .photo-stack-button:hover .photo-stack-back {
+        transform: rotate(-13deg) translate(-12%, -6%);
+    }
 
-.photo-stack-button:hover .photo-stack-middle {
-    transform: rotate(11deg) translate(11%, -6%);
-}
+    .photo-stack-button:hover .photo-stack-middle {
+        transform: rotate(11deg) translate(11%, -6%);
+    }
 
-.photo-stack-button:hover .photo-stack-top {
-    transform: translateY(-2.5%);
+    .photo-stack-button:hover .photo-stack-top {
+        transform: translateY(-2.5%);
+    }
+
+    /* When fanned, the new top card comes from where the back card actually is. */
+    .photo-stack-button:hover[data-turned] .photo-stack-top {
+        animation-name: photo-stack-in-fanned;
+    }
 }
 
 @keyframes photo-stack-in {
     from {
         transform: rotate(-8deg) translateX(-14px);
+    }
+}
+
+@keyframes photo-stack-in-fanned {
+    from {
+        transform: rotate(-13deg) translate(-12%, -6%);
     }
 }
 
@@ -615,8 +649,8 @@ body:has(.home) .main-content,
 
 .home-entries {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 40px clamp(32px, 6vw, 96px);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 40px clamp(28px, 4vw, 64px);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -685,7 +719,50 @@ body:has(.home-ground) .site-footer .hill-wave {
 /* Inner pages */
 
 .page-content {
-    padding-block: clamp(40px, 6vw, 88px);
+    padding-block: clamp(40px, 6vw, 88px) 0;
+}
+
+/* Short pages fit one screen exactly, like the homepage: vertical spacing scales with the viewport height,
+   and the footer sits at the bottom with any spare room above it. */
+body:has(.fit-screen) .site-header {
+    padding-block: clamp(14px, 3svh, 28px);
+}
+
+.fit-screen {
+    padding-block: clamp(16px, 4svh, 56px) clamp(12px, 3svh, 40px);
+}
+
+.fit-screen h1 {
+    font-size: min(clamp(44px, 6vw, 72px), 7.5svh);
+}
+
+.fit-screen .introduction {
+    margin-top: clamp(8px, 2svh, 28px);
+}
+
+.fit-screen .article-list {
+    margin-top: clamp(16px, 3svh, 48px);
+}
+
+.fit-screen .article-list li {
+    padding-top: clamp(12px, 2svh, 24px);
+}
+
+.fit-screen .article-with-image {
+    grid-template-columns: minmax(0, 1fr) min(clamp(150px, 26%, 220px), 24svh);
+}
+
+body:has(.fit-screen) .site-footer {
+    margin-top: 0;
+}
+
+body:has(.fit-screen) .site-footer .hill-wave {
+    height: clamp(28px, min(6vw, 5svh), 90px);
+}
+
+body:has(.fit-screen) .site-footer-inner {
+    padding-top: clamp(14px, 2.5svh, 20px);
+    padding-bottom: clamp(16px, 3svh, 40px);
 }
 
 .page-content h1 {
@@ -937,7 +1014,8 @@ body:has(.home-ground) .site-footer .hill-wave {
 }
 
 .prose .project-name-link {
-    color: inherit;
+    color: var(--heading);
+    transition: color 200ms var(--ease-out);
 }
 
 .prose .project-name-link:hover {
@@ -955,6 +1033,7 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-weight: 400;
     letter-spacing: 0;
     white-space: nowrap;
+    transition: color 200ms var(--ease-out);
 }
 
 /* Matches the digits' height and sits on their baseline, so the arrow spans exactly the same lines as the count. */
@@ -981,14 +1060,17 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-size: 15px;
 }
 
+/* The underline is always there but transparent, so hovering fades it in with the color instead of popping it on. */
 .article-list h2 a {
     color: var(--heading);
-    text-decoration: none;
+    text-decoration: underline transparent;
+    text-decoration-thickness: 1px;
+    transition: color 200ms var(--ease-out), text-decoration-color 200ms var(--ease-out);
 }
 
 .article-list h2 a:hover {
     color: var(--brick);
-    text-decoration: underline;
+    text-decoration-color: currentColor;
 }
 
 .article-list p {
@@ -1114,7 +1196,7 @@ body:has(.home-ground) .site-footer .hill-wave {
 .contact-form textarea {
     width: 100%;
     padding: 12px 16px;
-    border: 1px solid var(--rule);
+    border: 1px solid var(--field-border);
     border-radius: 10px;
     background: var(--field);
     color: var(--ink);
@@ -1151,7 +1233,7 @@ body:has(.home-ground) .site-footer .hill-wave {
     font: inherit;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 200ms var(--ease-out);
+    transition: background-color 200ms var(--ease-out), transform 160ms var(--ease-out);
 }
 
 .contact-form button:hover {
@@ -1237,6 +1319,52 @@ body:has(.home-ground) .site-footer .hill-wave {
     font-size: 16px;
 }
 
+.gear {
+    margin-top: clamp(72px, 9vw, 112px);
+}
+
+.gear h2 {
+    margin: 0 0 24px;
+    font-size: clamp(28px, 3vw, 36px);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.gear-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 32px clamp(20px, 3vw, 40px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gear-list li {
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
+}
+
+.gear-list h3 {
+    margin: 0 0 6px;
+    font-size: clamp(20px, 2vw, 24px);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+}
+
+.gear-list p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+@media (max-width: 760px) {
+    .gear-list {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 24px;
+    }
+}
+
 @media (max-width: 760px) {
     .album-grid {
         grid-template-columns: minmax(0, 1fr);
@@ -1304,6 +1432,18 @@ body:has(.home-ground) .site-footer .hill-wave {
         display: none;
     }
 
+    /* The opened menu drops in from just under its button. */
+    .site-navigation {
+        transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+    }
+
+    @starting-style {
+        .site-navigation[data-open="true"] {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+    }
+
     .site-navigation ul {
         align-items: stretch;
         flex-direction: column;
@@ -1313,7 +1453,6 @@ body:has(.home-ground) .site-footer .hill-wave {
     .site-navigation a {
         display: block;
         padding: 12px 4px;
-        border-bottom: 0;
         font-size: 17px;
     }
 
@@ -1410,21 +1549,34 @@ body:has(.home-ground) .site-footer .hill-wave {
     position: relative;
 }
 
+/* One underline serves both states: solid under the current page, half strength while hovering another link.
+   Leaving a link fades its line out in place, then resets the scale while it is invisible. */
 .site-navigation a::after {
     position: absolute;
     right: 4px;
-    bottom: -1.5px;
+    bottom: 0;
     left: 4px;
-    height: 1.5px;
+    height: 2px;
     background: var(--brick);
     content: "";
+    opacity: 0;
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 300ms var(--ease-out);
+    transition: opacity 150ms ease, transform 0s linear 150ms;
 }
 
-.site-navigation a:hover::after {
-    transform: scaleX(1);
+.site-navigation a[aria-current="page"]::after {
+    opacity: 1;
+    transform: none;
+    transition: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .site-navigation a:not([aria-current]):hover::after {
+        opacity: 0.45;
+        transform: scaleX(1);
+        transition: transform 250ms var(--ease-out), opacity 0s;
+    }
 }
 
 .home-description a,
@@ -1436,29 +1588,33 @@ body:has(.home-ground) .site-footer .hill-wave {
     transition: color 200ms var(--ease-out), text-decoration-thickness 250ms var(--ease-out), text-underline-offset 250ms var(--ease-out);
 }
 
-.home-description a:hover,
-.home-link:hover,
-.home-ground a:hover,
-.prose a:hover,
-.contact-links a:hover,
-.resume-download:hover {
-    text-underline-offset: 6px;
+@media (hover: hover) and (pointer: fine) {
+    .home-description a:hover,
+    .home-link:hover,
+    .home-ground a:hover,
+    .prose a:hover,
+    .contact-links a:hover,
+    .resume-download:hover {
+        text-underline-offset: 6px;
+    }
 }
 
 .greeting-portrait {
     transition: transform 350ms var(--ease-out), background-color var(--theme-fade);
 }
 
-.greeting-portrait:hover {
-    transform: translateY(-3px) rotate(-3deg);
-}
-
 .site-footer-links .link-icon {
     transition: transform 250ms var(--ease-out);
 }
 
-.site-footer-links a:hover .link-icon {
-    transform: translateY(-2px);
+@media (hover: hover) and (pointer: fine) {
+    .greeting-portrait:hover {
+        transform: translateY(-3px) rotate(-3deg);
+    }
+
+    .site-footer-links a:hover .link-icon {
+        transform: translateY(-2px);
+    }
 }
 
 @keyframes greeting-rise {

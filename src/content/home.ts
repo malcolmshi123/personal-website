@@ -1,3 +1,6 @@
+import { projectsIntroduction } from "@/content/projects";
+import { work } from "@/content/work";
+
 type HomeLink = {
     title: string;
     description: string;
@@ -19,10 +22,17 @@ export const featuredLinks: FeaturedLink[] = [
     },
     {
         title: "Experience",
-        description: "GPU performance and LLM inference, plus earlier work in graphics, web apps, and testing.",
+        description: work.introduction,
         action: "See more",
         actionContext: " of my experience",
         href: "/work",
+    },
+    {
+        title: "Projects",
+        description: projectsIntroduction,
+        action: "Check them out",
+        actionContext: " of my projects",
+        href: "/projects",
     },
 ];
 

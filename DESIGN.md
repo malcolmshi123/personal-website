@@ -2,20 +2,21 @@
 name: Malcolm Shi
 description: A warm, free-flowing personal site under a canyon sky, with a sunset theme toggle.
 colors:
-  sky: "#e8d9bf"
-  heading: "#1f150e"
+  sky: "#e9dcc5"
+  heading: "#1b1712"
   ink: "#33241a"
-  ink-soft: "#644c3b"
-  brick: "#933f2a"
+  ink-soft: "#5e4838"
+  brick: "#944124"
   olive: "#4d5e34"
-  ground: "#4d5e34"
-  ground-ink: "#f1e6d2"
-  ground-soft: "#dcd3bc"
-  ground-link: "#efcfaa"
-  placeholder: "#dcc9a8"
-  rule: "#cdb995"
-  field: "#f1e6d2"
-  sun: "#e3b562"
+  ground: "#b9c9ab"
+  ground-ink: "#1b1712"
+  ground-soft: "#4a3e2a"
+  ground-link: "#7d3319"
+  placeholder: "#e1c9af"
+  rule: "#d7bfa6"
+  field: "#f6efe3"
+  sun: "#c66216"
+  highlight: "#e3b562"
   moon: "#e9dcc5"
   sky-dark: "#1b1712"
   heading-dark: "#fbf4e8"
@@ -134,7 +135,7 @@ components:
 
 **Creative North Star: "The Canyon Hillside"**
 
-The page is a landscape. A tan sky fills the top, ink in espresso browns sits on it, and every page ends where an olive hill rolls in and flattens into a ground band that holds the footer. At night the sky turns brown and the ground goes to moss; the hill stays. The structure is the land itself, so content sits in open air on the sky, separated by space and the occasional hairline, and never boxed into cards.
+The page is a landscape. A tan sky fills the top, ink in espresso browns sits on it, and every page ends where a sage hill rolls in and flattens into a ground band that holds the footer. At night the sky turns brown and the ground goes to moss; the hill stays. The structure is the land itself, so content sits in open air on the sky, separated by space and the occasional hairline, and never boxed into cards.
 
 Type does the talking. Lora, a calligraphic old-style serif set at 600, gives headings a hand-made warmth, and Hanken Grotesk at a generous 18px keeps the reading calm. Color is sparing: sienna brick marks things you can follow (links, the current page, the name in the greeting), olive marks the one thing you can press. Photos, until they exist, are irregular soft blobs in a slightly deeper tan, labeled plainly.
 
@@ -150,18 +151,18 @@ The sun in the header still sets into a moon and stars when you switch to dark, 
 
 ## Colors
 
-An earthy canyon palette: tan, espresso, sienna, and olive by day; brown night sky, cream ink, pale clay sienna, and moss by night. Every token has a light value and a dark value (the `-dark` keys), switched on `:root[data-theme="dark"]`.
+An earthy canyon palette: bright sand, espresso, sienna, and sage by day; brown night sky, cream ink, pale clay sienna, and moss by night. Every token has a light value and a dark value (the `-dark` keys), switched on `:root[data-theme="dark"]`. The two themes mirror each other: the day sky is the night's ink, the night sky is the day's heading, and each accent keeps its hue across both, so switching reads as the same place getting dark. The day sky is tinted enough that light-gray project images still read as cards on it.
 
 ### Primary
-- **Sienna Brick** (`brick`, dark: `brick-dark`): A burnt sienna by day (#933f2a, 4.8:1 on sky) and a pale clay by night (#df937a, 7.6:1 on the night sky). Links in reading content, the current-page underline in the nav, the "Malcolm!" accent in the greeting, the gospel quote mark, focus outlines, and the text caret in form fields. It is the color of anything you can follow.
+- **Sienna Brick** (`brick`, dark: `brick-dark`): A burnt sienna by day (#944124, 5.1:1 on sky) and a pale clay by night (#df937a, 7.3:1 on the night sky), the same hue in both. Links in reading content, the current-page underline in the nav, the "Malcolm!" accent in the greeting, the gospel quote mark, focus outlines, and the text caret in form fields. It is the color of anything you can follow.
 
 ### Secondary
 - **Olive** (`olive`, dark: `olive-dark`): The one filled action (the contact send button), the skip link fill, and the native `accent-color`. It marks what you can press or the primary next step.
 
 ### Tertiary
-- **Ground** (`ground`, dark: `ground-dark`): The hill wave and the ground band beneath it. In light mode it matches olive exactly; in dark mode it deepens to moss while olive brightens, so the band reads as land and not as a button.
-- **Ground Ink, Ground Soft, Ground Link** (`ground-ink`, `ground-soft`, `ground-link` and their dark pairs): The text set for anything on the band. Headings and names in ground ink, running text in ground soft, links in ground link (pale apricot #efcfaa by day, the same clay as `brick-dark` by night).
-- **Sun and Moon** (`sun`, `moon`): Only for the theme toggle glyphs. Sun also fills `::selection`, with near-black text in both themes.
+- **Ground** (`ground`, dark: `ground-dark`): The hill wave and the ground band beneath it. Both themes keep the ground the same moss hue, only a step from the sky (about 1.3 to 1.4:1), so the hill reads as a soft horizon, not a heavy slab: pale moss by day, deep moss by night. Olive stays the button color in both.
+- **Ground Ink, Ground Soft, Ground Link** (`ground-ink`, `ground-soft`, `ground-link` and their dark pairs): The text set for anything on the band. Headings and names in ground ink, running text in ground soft, links in ground link (deep rust #7d3319 by day, the same clay as `brick-dark` by night).
+- **Sun and Moon** (`sun`, `moon`): Only for the theme toggle glyphs. The sun is a low afternoon orange (#c66216, 3.0:1 on the sky) so the toggle is easy to find. `highlight` (the old honey yellow) fills `::selection`, with near-black text in both themes.
 
 ### Neutral
 - **Tan Sky** (`sky`, dark: `sky-dark`): The page background. Also the text color on olive fills.
@@ -244,11 +245,11 @@ Quiet and solid, used once per page at most.
 - **Homepage next step:** "Contact me" links to Contact in brick, like every other link on the sky, with a 1px underline that thickens on hover.
 
 ### Navigation
-- **Desktop:** wordmark (Lora 24px, weight 600, heading color) on the left; nav links in soft ink at 16px weight 500 with a 1.5px transparent bottom border. Hover lifts to ink; the current page shows ink text over a brick underline. All transitions 200ms on `cubic-bezier(0.16, 1, 0.3, 1)`.
-- **Mobile (760px and below):** wordmark 21px, a Menu / Close button with a plus or minus stroke icon, and the nav opening below as a stacked list of 17px links; the current page turns brick instead of underlined. Escape closes the menu and returns focus.
+- **Desktop:** wordmark (Lora 24px, weight 600, heading color) on the left; nav links in soft ink at 16px weight 500. One 2px brick underline, inset 4px each side, serves both states: solid under the current page, and at 45% strength while hovering any other link. Hover lifts the text to ink in 200ms on `cubic-bezier(0.16, 1, 0.3, 1)`.
+- **Mobile (760px and below):** wordmark 21px, a Menu / Close button with a plus or minus stroke icon, and the nav opening below as a stacked list of 17px links; the current page turns brick instead of underlined. The menu fades in and drops 6px into place (200ms). Escape closes the menu and returns focus. The Menu button sits left of the sun, and the header's page order matches what you see (wordmark, Menu, links, sun), so Tab never jumps backward on either layout.
 
 ### Sunset Toggle (signature)
-A 32px sun in sun yellow sits beside the nav with an italic Lora "click me" hint (15px, soft ink, brick on hover). The hint disappears for good after the first toggle. Switching to dark slides the sun down 22px and fades it while a masked crescent moon and three small stars fade in, all on the 800ms theme fade. Hit area is at least 44px square, and the label reads "Switch to dark theme" or "Switch to light theme". Under reduced motion the swap is instant.
+A 32px sun in afternoon orange sits beside the nav. On the Projects page, the toggle beside malcolmshi.ca carries an italic Lora "← click me!" hint (15px, soft ink, brick on hover) that disappears for good after the first toggle; the header toggle has no hint. Hovering lifts the whole icon 1px, so clicking while hovered still sets the sun. Switching to dark slides the sun down 22px and fades it while a masked crescent moon and three small stars fade in, all on the 800ms theme fade. While the theme switches, every text, border, and fill color eases on the same 800ms fade, so text never sits on a background it can't be read against. Hit area is at least 44px square, and the label reads "Switch to dark theme" or "Switch to light theme". Under reduced motion the swap is instant.
 
 ### Greeting
 "Hi, I’m Malcolm!" as an h1 in display type, split into two lines that rise in during the intro, heading color, with "Malcolm!" in brick. Below it the homepage description sits in soft ink at `clamp(19px, 1.7vw, 22px)`, line height 1.55, max 30em, followed by a brick "Contact me" link. "write" and "photos" inside the description link to Blog and Photos in brick. Nothing animates here.
@@ -256,7 +257,7 @@ A 32px sun in sun yellow sits beside the nav with an italic Lora "click me" hint
 A portrait blob sits 20 to 36px right of “Malcolm!”, spanning from the top of “Hi” to the baseline of “Malcolm!” (1.72× the greeting size). It holds a 400×500 WebP portrait at `public/photos/portrait.webp`, cropped head and shoulders with room above the head so the rounded top never clips it. To the right, centered in the open space beside the text, sits the photo stack: three soft blobs fanned at -8° and 6°, the top one showing the current photo (placeholders until photos arrive). Tapping it brings the next photo forward from the back of the stack and updates the caption label, Tasted for food and Seen for everything else, after Psalm 34:8. The “tap for another” hint hides when JavaScript never runs. The homepage fits one laptop screen (tested 1024×700 through 1920×1080): header padding, hero spacing, greeting, stack height, band entries, and the hill all scale with viewport height. Phones scroll.
 
 ### Hill Wave and Ground Band (signature)
-The hill-wave SVG fills with ground and sits flush on the ground band (1px overlap to avoid a seam). The band holds the footer: a 14px copyright line, “© [build year] Malcolm Shi” in ground soft (the wordmark appears once, in the header), the verse and its reference on one 14px Hanken Grotesk line (quote in ground ink, reference in ground soft), and, on the right, outline icon links to LinkedIn, GitHub, and the resume PDF (26px, ground ink, ground link on hover, each with a screen-reader label and tooltip). The band is a three-column grid so the verse stays centered and all three items share one vertical center; under 760px it stacks left-aligned. The verse line reads “Oh, taste and see that the LORD is good!” Psalm 34:8, with the reference set apart by its smaller size and no dash, following the no-dash rule for site copy. On the homepage the band starts mid-page and holds The Good News and Work as two loose entries, then flows straight into the footer; the nav covers the other pages.
+The hill-wave SVG fills with ground and sits flush on the ground band (1px overlap to avoid a seam). The band holds the footer: a 14px copyright line, “© [build year] Malcolm Shi” in ground soft (the wordmark appears once, in the header), the verse and its reference on one 14px Hanken Grotesk line (quote in ground ink, reference in ground soft), and, on the right, outline icon links to LinkedIn, GitHub, and the resume PDF (26px, ground ink, ground link on hover, each with a screen-reader label and tooltip). The band is a three-column grid so the verse stays centered and all three items share one vertical center; under 760px it stacks left-aligned. The verse line reads “Oh, taste and see that the LORD is good!” Psalm 34:8, with the reference set apart by its smaller size and no dash, following the no-dash rule for site copy. On the homepage the band starts mid-page and holds The Good News, Experience, and Projects as three loose entries, then flows straight into the footer; the nav covers the other pages.
 
 ### Photo Placeholder
 Placeholder tan fill, soft-ink 14 to 15px label pinned to the bottom center ("photo coming soon"), organic radius per the No Two Alike Rule. Its background follows the theme fade.
@@ -275,7 +276,8 @@ Open rows with a 1px hairline on top and 24px above the content. The head line p
 - **Do** give every photo slot its own irregular radius and a plain label until a real photo exists.
 - **Do** keep motion on `cubic-bezier(0.16, 1, 0.3, 1)` and to these three layers, all off under `prefers-reduced-motion`:
   - **Intro (homepage, once per visit, about 1.2s):** the boot script sets `data-intro="play"` on the first homepage load of a session; greeting lines rise from a clip (800ms, second line +120ms), the portrait pops (350ms delay), description and Contact me settle in (450ms, 550ms), photo cards are dealt (300 to 500ms), the hill scales up from its base (1s). A client effect clears the flag after 1.6s so returning never replays it. Without JavaScript nothing animates and nothing is hidden.
-  - **Hover:** nav underline draws in from the left (300ms; hidden in the mobile menu), link underlines drop from 4px to 6px offset, the photo stack fans wider, the portrait lifts 3px and tilts 3°, footer icons lift 2px.
+  - **Hover:** a nav link's faint underline draws in from the left (250ms) and fades out in place on leave (150ms; hidden in the mobile menu), link underlines drop from 4px to 6px offset, the photo stack fans wider, the portrait lifts 3px and tilts 3°, footer icons lift 2px. These hover moves only apply to a mouse or trackpad (`hover: hover` and `pointer: fine`), so a tap on a phone never leaves them stuck.
+  - **Press:** the theme toggle, the Menu button, and the send button sink to 97% while held (160ms).
   - **Idle:** the stack's back cards drift 3px (7s and 8s), every hill breathes (9s, alternate), the sun gently swells in light mode (4s), and the moon's stars twinkle in dark mode (3s, staggered).
 - **Do** keep a visible 2px brick focus outline and 44px minimum hit areas on header controls.
 

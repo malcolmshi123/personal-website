@@ -11,9 +11,9 @@ export const metadata = createPageMetadata(
 
 export default function Blog() {
     return (
-        <div className="page-content reading-page">
+        <div className="page-content reading-page fit-screen">
             <h1>Blog</h1>
-            <p className="introduction">What I've written.</p>
+            <p className="introduction">I post on Medium!</p>
             <ul className="article-list" aria-label="Articles">
                 {articles.map((article) => (
                     <li key={article.href}>
