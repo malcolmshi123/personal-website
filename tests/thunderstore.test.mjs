@@ -1,18 +1,11 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
 import test from "node:test";
-import { loadDownloads, metricsUrl, thunderstoreHrefs, thunderstoreKey } from "../scripts/thunderstore.mjs";
+import { loadDownloads } from "../scripts/thunderstore.mjs";
 import { downloadsLabel } from "../src/content/projects.ts";
-import { liveDownloadsPath, newerDownloads } from "../src/lib/thunderstore.ts";
+import { liveDownloadsPath, metricsUrl, newerDownloads, thunderstoreKey } from "../src/lib/thunderstore.ts";
 import { handleThunderstoreRequest } from "../api/thunderstore.mjs";
 
 const gojo = "https://thunderstore.io/c/lethal-company/p/FreakyFriday/GojoBracken";
-
-test("thunderstoreHrefs finds every Thunderstore link in the project list", async () => {
-    const source = await readFile(new URL("../src/content/projects.ts", import.meta.url), "utf8");
-
-    assert.deepEqual(thunderstoreHrefs(source), [gojo]);
-});
 
 test("thunderstoreKey reads the team and package name from a mod page link", () => {
     assert.equal(thunderstoreKey(gojo), "FreakyFriday/GojoBracken");

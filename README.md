@@ -5,7 +5,8 @@ Router site in TypeScript, exported as static pages and hosted on Vercel.
 
 ## Development
 
-Requires Node.js 22.18 or newer and npm (the unit tests load TypeScript directly, which needs 22.18).
+Requires Node.js 22.18 or newer and npm (the unit tests and the Thunderstore build
+step load TypeScript directly, which needs 22.18).
 
 ```sh
 npm ci

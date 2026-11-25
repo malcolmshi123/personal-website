@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "blog:fetch": "node scripts/fetch-medium.mjs",
-        "data:fetch": "node scripts/fetch-medium.mjs && node scripts/fetch-thunderstore.mjs",
+        "data:fetch": "node scripts/fetch-medium.mjs && node --disable-warning=ExperimentalWarning --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/fetch-thunderstore.mjs",
         "predev": "npm run data:fetch",
         "prebuild": "npm run data:fetch",
         "pretypecheck": "npm run data:fetch",

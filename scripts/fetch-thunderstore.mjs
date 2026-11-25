@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { loadDownloads, thunderstoreHrefs, thunderstoreKey } from "./thunderstore.mjs";
-
-const projectsFile = new URL("../src/content/projects.ts", import.meta.url);
+import { projects } from "../src/content/projects.ts";
+import { thunderstoreKey } from "../src/lib/thunderstore.ts";
+import { loadDownloads } from "./thunderstore.mjs";
 
 const fallbackFile = new URL("../src/content/thunderstore-fallback.json", import.meta.url);
 const outputFile = new URL("../src/content/thunderstore.generated.json", import.meta.url);
@@ -17,7 +17,7 @@ async function fetchJson(url) {
     return response.json();
 }
 
-const hrefs = thunderstoreHrefs(readFileSync(projectsFile, "utf8"));
+const hrefs = projects.flatMap((project) => (project.thunderstoreHref ? [project.thunderstoreHref] : []));
 const fallback = JSON.parse(readFileSync(fallbackFile, "utf8"));
 const downloads = await loadDownloads({ hrefs, fetchJson, fallback });
 writeFileSync(outputFile, `${JSON.stringify(downloads, null, 4)}\n`);
