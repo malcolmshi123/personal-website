@@ -45,21 +45,20 @@ export default function Projects() {
                                 {/* Lets visitors flip the theme right here and watch the screenshot change. */}
                                 {project.image.srcInLightTheme && <ThemeToggle hint />}
                             </div>
-                            {project.image.srcInLightTheme && (
-                                <ProjectImage
-                                    className="project-image shows-in-light-theme"
-                                    src={project.image.srcInLightTheme}
-                                    alt={project.image.alt}
-                                    loading="eager"
-                                />
+                            {project.image.srcInLightTheme ? (
+                                // Both screenshots load up front and share one frame, so switching themes crossfades them.
+                                <div className="project-image-pair">
+                                    <ProjectImage
+                                        className="project-image shows-in-light-theme"
+                                        src={project.image.srcInLightTheme}
+                                        alt={project.image.alt}
+                                        loading="eager"
+                                    />
+                                    <ProjectImage className="project-image shows-in-dark-theme" src={project.image.src} alt={project.image.alt} loading="eager" />
+                                </div>
+                            ) : (
+                                <ProjectImage className="project-image" src={project.image.src} alt={project.image.alt} loading="lazy" />
                             )}
-                            {/* A themed pair loads up front so switching themes never shows an empty frame. */}
-                            <ProjectImage
-                                className={project.image.srcInLightTheme ? "project-image shows-in-dark-theme" : "project-image"}
-                                src={project.image.src}
-                                alt={project.image.alt}
-                                loading={project.image.srcInLightTheme ? "eager" : "lazy"}
-                            />
                             <p>{project.description}</p>
                             <p className="work-meta">{project.technologies}</p>
                             <div className="project-links">

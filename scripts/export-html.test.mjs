@@ -161,7 +161,7 @@ test("the header theme toggle has no hint, and the project hint hides once the v
         const header = html.slice(html.indexOf('<header class="site-header"'), html.indexOf("</header>"));
         assert.doesNotMatch(header, /theme-toggle-hint/, page);
     }
-    assert.match(css, /:root\[data-theme-toggled\] \.theme-toggle-hint[^{]*\{display:none\}/);
+    assert.match(css, /:root\[data-theme-toggled\] \.theme-toggle-hint[^{]*\{[^}]*display:none/);
 });
 
 test("every id on the projects page is unique", async () => {
@@ -828,4 +828,39 @@ test("link previews use the current card and describe it", async () => {
     const card = await readFile(new URL("../out/social-card.png", import.meta.url));
     assert.equal(card.readUInt32BE(16), 1200);
     assert.equal(card.readUInt32BE(20), 630);
+});
+
+test("the themed project screenshots crossfade, the photo viewer fades both ways, and status and hint ease", async () => {
+    const projects = await readExport("projects.html");
+    // The light and dark screenshots share one frame so they can crossfade with the theme.
+    assert.match(projects, /<div class="project-image-pair"><img[^>]*class="project-image shows-in-light-theme"[^>]*><img[^>]*class="project-image shows-in-dark-theme"[^>]*><\/div>/);
+
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.doesNotMatch(css, /shows-in-dark-theme\{display:none\}/);
+    assert.match(css, /\.project-image-pair>\.project-image\{[^}]*transition:opacity var\(--theme-fade\)/);
+    assert.match(css, /:root\[data-theme-switching\] \.project-image-pair>\.project-image\{[^}]*opacity var\(--theme-fade\)[^}]*!important/);
+
+    // The viewer and its backdrop fade in (220ms) and out (150ms) instead of popping.
+    assert.match(css, /\.photo-viewer\{[^}]*overlay \.15s[^}]*allow-discrete/);
+    assert.match(css, /@starting-style\{\.photo-viewer\[open\]\{[^}]*opacity:0/);
+    assert.match(css, /\.photo-viewer\[open\]::backdrop\{[^}]*background/);
+    assert.doesNotMatch(css, /@keyframes viewer-in/);
+
+    // The contact status eases in, and the theme hint fades out instead of vanishing.
+    assert.match(css, /\.contact-status-message\{[^}]*animation:/);
+    assert.match(css, /@keyframes status-in/);
+    assert.match(css, /\.theme-toggle-hint\{[^}]*display \.2s[^}]*allow-discrete/);
+});
+
+test("the enlarged photo fades and sharpens in over its placeholder instead of popping", async () => {
+    const cssDirectory = new URL("../out/_next/static/chunks/", import.meta.url);
+    const cssFiles = (await readdir(cssDirectory)).filter((name) => name.endsWith(".css"));
+    const css = (await Promise.all(cssFiles.map((name) => readFile(new URL(name, cssDirectory), "utf8")))).join("");
+    assert.match(css, /\.photo-viewer-frame img\{[^}]*opacity:0/);
+    assert.match(css, /\.photo-viewer-frame img\{[^}]*transition:opacity \.24s var\(--ease-out\),\s?filter \.24s var\(--ease-out\)/);
+    assert.match(css, /\.photo-viewer-frame img\[data-loaded\]\{[^}]*opacity:1/);
+    // The frame is sized from the photo's shape, so the placeholder shows before the full photo loads.
+    assert.match(css, /\.photo-viewer-frame\{[^}]*aspect-ratio:var\(--photo-ratio\)/);
 });

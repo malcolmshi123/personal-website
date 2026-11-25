@@ -39,11 +39,46 @@ function trimToShortestColumn(board: HTMLDivElement, hasMore: boolean) {
     }
 }
 
+// The board's already-loaded 640px copy fills the frame at once; the 1280px photo fades and sharpens in over it once loaded.
+// A photo that's already cached shows immediately instead, since the layout effect runs before the first paint.
+function ViewerPhoto({ photo }: { photo: GalleryPhoto }) {
+    const [loaded, setLoaded] = useState(false);
+    const image = useRef<HTMLImageElement>(null);
+
+    useLayoutEffect(() => {
+        if (image.current?.complete) {
+            setLoaded(true);
+        }
+    }, []);
+
+    return (
+        <span
+            className="photo-viewer-frame"
+            style={{
+                backgroundColor: photo.color,
+                backgroundImage: `url(${photoSource(photo, 640)})`,
+                ["--photo-ratio" as string]: `${photo.width / photo.height}`,
+            }}
+        >
+            <img
+                ref={image}
+                src={photoSource(photo, 1280)}
+                alt={photo.caption}
+                width={photo.width}
+                height={photo.height}
+                data-loaded={loaded || undefined}
+                onLoad={() => setLoaded(true)}
+            />
+        </span>
+    );
+}
+
 export default function PhotoBoard({ photos }: { photos: GalleryPhoto[] }) {
     const [order, setOrder] = useState<GalleryPhoto[] | null>(null);
     const [columnCount, setColumnCount] = useState(4);
     const [shown, setShown] = useState(0);
-    const [opened, setOpened] = useState<GalleryPhoto | null>(null);
+    // Stays set after closing so the photo can fade out with the viewer; `count` reopens the same photo.
+    const [opened, setOpened] = useState<{ photo: GalleryPhoto; count: number } | null>(null);
     const viewer = useRef<HTMLDialogElement>(null);
     const board = useRef<HTMLDivElement>(null);
     const firstNewPin = useRef<HTMLButtonElement>(null);
@@ -65,7 +100,7 @@ export default function PhotoBoard({ photos }: { photos: GalleryPhoto[] }) {
     }, [photos]);
 
     useEffect(() => {
-        if (opened) {
+        if (opened && !viewer.current?.open) {
             viewer.current?.showModal();
         }
     }, [opened]);
@@ -113,7 +148,7 @@ export default function PhotoBoard({ photos }: { photos: GalleryPhoto[] }) {
                                         backgroundColor: photo.color,
                                         animationDelay: isNew ? `${Math.min((position - previouslyShown.current) * 30, 600)}ms` : undefined,
                                     }}
-                                    onClick={() => setOpened(photo)}
+                                    onClick={() => setOpened({ photo, count: (opened?.count ?? 0) + 1 })}
                                 >
                                     <img
                                         src={photoSource(photo, 640)}
@@ -152,19 +187,17 @@ export default function PhotoBoard({ photos }: { photos: GalleryPhoto[] }) {
             <dialog
                 ref={viewer}
                 className="photo-viewer"
-                aria-label={opened?.caption ?? "Photo"}
-                onClose={() => setOpened(null)}
+                aria-label={opened?.photo.caption ?? "Photo"}
                 onClick={(event) => {
                     if (event.target === viewer.current) {
                         viewer.current?.close();
                     }
                 }}
             >
-                {opened && (
-                    <img src={photoSource(opened, 1280)} alt={opened.caption} width={opened.width} height={opened.height} />
-                )}
+                {/* Keyed so each photo gets a fresh frame and the last photo never lingers while the next one loads. */}
+                {opened && <ViewerPhoto key={opened.photo.id} photo={opened.photo} />}
                 <div className="photo-viewer-bar">
-                    <p>{opened?.caption}</p>
+                    <p>{opened?.photo.caption}</p>
                     <button type="button" onClick={() => viewer.current?.close()}>
                         Close
                     </button>

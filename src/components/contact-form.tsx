@@ -62,7 +62,10 @@ export default function ContactForm() {
                 <button type="submit" disabled={status === "sending"}>
                     {status === "sending" ? "Sending…" : "Send message"}
                 </button>
-                <p className="contact-status" role="status" aria-live="polite">{statusMessages[status]}</p>
+                <p className="contact-status" role="status" aria-live="polite">
+                    {/* Keyed by status so each new message eases in; the live region itself stays put so it's announced. */}
+                    {statusMessages[status] && <span key={status} className="contact-status-message">{statusMessages[status]}</span>}
+                </p>
             </fieldset>
         </form>
     );
