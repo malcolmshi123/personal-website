@@ -9,7 +9,7 @@ export function createPageMetadata(title: string, description: string, path: str
         url: "/social-card.png",
         width: 1200,
         height: 630,
-        alt: "Malcolm Shi. Faith, engineering, writing, and photography.",
+        alt: "Malcolm Shi, with a line about his faith, his work, and what he enjoys, beside his portrait.",
     };
 
     return {

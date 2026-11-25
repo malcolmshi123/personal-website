@@ -820,3 +820,12 @@ test("the homepage photo cards sit still when idle", async () => {
     assert.doesNotMatch(css, /card-drift/);
     assert.doesNotMatch(css, /\.photo-stack-card[^{]*\{[^}]*infinite/);
 });
+
+test("link previews use the current card and describe it", async () => {
+    const html = await readExport("index.html");
+    assert.match(html, /<meta property="og:image:alt" content="Malcolm Shi, with a line about his faith, his work, and what he enjoys, beside his portrait\."/);
+    assert.doesNotMatch(html, /Faith, engineering, writing, and photography/);
+    const card = await readFile(new URL("../out/social-card.png", import.meta.url));
+    assert.equal(card.readUInt32BE(16), 1200);
+    assert.equal(card.readUInt32BE(20), 630);
+});

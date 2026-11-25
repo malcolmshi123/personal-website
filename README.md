@@ -58,7 +58,7 @@ See `CONTENT_REVIEW.md` for draft wording to review before launch.
 
 Production metadata uses `https://malcolmshi.ca` in `src/lib/site-metadata.ts`.
 The static export includes `sitemap.xml`, `robots.txt`, and a shared social card
-at `public/social-card.png`. Its editable source is `assets/social-card.svg`.
+at `public/social-card.png`. Its editable source is `assets/social-card.html`; run `npm run social-card` to re-render it with a local Chrome or Edge.
 
 ## Planned implementation
 

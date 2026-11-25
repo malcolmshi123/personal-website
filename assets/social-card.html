@@ -1,0 +1,147 @@
+<!doctype html>
+<!-- Source for public/social-card.png. Edit here, then run `npm run social-card`.
+     The build script inlines the fonts and photos below, so this file stays readable. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+@font-face {
+    font-family: "Lora";
+    font-weight: 400 700;
+    src: url("{{font:fonts/lora-latin.woff2}}") format("woff2");
+}
+
+@font-face {
+    font-family: "Hanken Grotesk";
+    font-weight: 100 900;
+    src: url("{{font:fonts/hanken-grotesk-latin.woff2}}") format("woff2");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 1200px;
+    height: 630px;
+    margin: 0;
+    overflow: hidden;
+}
+
+body {
+    position: relative;
+    background: #e9dcc5;
+    color: #1b1712;
+    font-family: "Hanken Grotesk", sans-serif;
+}
+
+.sun {
+    position: absolute;
+    top: 48px;
+    right: 56px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #c66216;
+}
+
+.name {
+    position: absolute;
+    top: 150px;
+    left: 80px;
+    margin: 0;
+    font-family: "Lora", serif;
+    font-size: 104px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.name span {
+    color: #944124;
+}
+
+.line {
+    position: absolute;
+    top: 286px;
+    left: 84px;
+    width: 520px;
+    margin: 0;
+    color: #5e4838;
+    font-size: 30px;
+    line-height: 1.45;
+}
+
+/* The homepage deck: the portrait in front, two photos spread flat to the left behind it. */
+.deck {
+    position: absolute;
+    top: 132px;
+    right: 120px;
+    width: 236px;
+    height: 330px;
+}
+
+.card {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 6% / 4.3%;
+    box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 16px 30px -12px rgb(27 23 18 / 0.5);
+}
+
+.card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card.back {
+    transform: translateX(-30%);
+}
+
+.card.middle {
+    transform: translateX(-15%);
+}
+
+.card.back img,
+.card.middle img {
+    filter: blur(2px) saturate(0.85) brightness(0.9);
+}
+
+.hill {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 150px;
+}
+
+.url {
+    position: absolute;
+    bottom: 40px;
+    left: 84px;
+    margin: 0;
+    color: #4a3e2a;
+    font-size: 26px;
+    font-weight: 500;
+}
+</style>
+</head>
+<body>
+    <span class="sun"></span>
+    <h1 class="name">Malcolm Shi<span>.</span></h1>
+    <p class="line">A bit about my faith, my work,<br>and the things I enjoy.</p>
+    <div class="deck">
+        <div class="card back"><img src="{{image:../public/photos/board/places-mount-fuji-640.webp}}" alt=""></div>
+        <div class="card middle"><img src="{{image:../public/photos/board/food-ichiran-ramen-640.webp}}" alt=""></div>
+        <div class="card"><img src="{{image:../public/photos/portrait.webp}}" alt=""></div>
+    </div>
+    <svg class="hill" viewBox="0 0 1200 150" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 78 C200 36 400 92 633 60 C800 36 967 40 1083 56 C1142 64 1175 70 1200 72 L1200 150 L0 150 Z" fill="#b9c9ab"/>
+    </svg>
+    <p class="url">malcolmshi.ca</p>
+</body>
+</html>
