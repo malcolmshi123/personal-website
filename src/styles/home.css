@@ -1,41 +1,44 @@
 /* The homepage: greeting, portrait card, description, the one-screen sizing, the ground band entries, and the intro. */
 
-body:has(.home) .site-header {
-    padding-block: clamp(14px, 3svh, 28px);
-}
-
 body:has(.home) .main-content,
 .home {
     display: flex;
     flex-direction: column;
 }
 
+/* The deck sits beside the text, sized so the homepage still fits one screen. */
 .home {
-    --stack-height: clamp(200px, min(33svh, 30vw), 460px);
+    --stack-height: clamp(170px, min(28svh, 25.5vw), 390px);
     --greeting-size: min(clamp(48px, 8.5vw, 96px), 9.5svh);
     flex: 1;
 }
 
+/* On screens taller than the content needs, the spare height is split evenly between the hero and the ground band,
+   and each centers its content in its share, so neither the sky nor the band ends up with all the empty space. */
 .home-hero {
     flex: 1;
 }
 
 @media (max-height: 740px) {
     .home {
-        --stack-height: clamp(180px, min(30svh, 30vw), 460px);
+        --stack-height: clamp(153px, min(25.5svh, 25.5vw), 390px);
     }
 }
 
 /* The photo cards follow the whole text block (greeting and description) at one steady gap, so the space between
-   them never balloons on mid-size screens; any extra width collects on the right. */
+   them never balloons on mid-size screens; any extra width collects on the right. Both columns start at the top,
+   so the front card's top can line up with the portrait's. */
 .home-hero {
     display: grid;
     grid-template-columns: minmax(0, max-content) max-content;
     justify-content: start;
-    align-items: center;
+    align-content: center;
+    align-items: start;
     row-gap: clamp(32px, 6vw, 96px);
     column-gap: calc(var(--greeting-size) * 0.9);
-    padding-block: clamp(8px, 2.5svh, 48px) clamp(20px, 3.5svh, 72px);
+    /* The header keeps every page's 28px padding, so the hero's padding and the hill below scale with the screen
+       height instead, which keeps the even spacing in the hero and the band on one screen. */
+    padding-block: clamp(4px, 1.5svh, 48px) clamp(12px, 2svh, 72px);
 }
 
 .greeting-row {
@@ -44,20 +47,22 @@ body:has(.home) .main-content,
     gap: calc(var(--greeting-size) * 0.6);
 }
 
-/* The portrait is cropped to the same 5:7 playing card as the stack (trimmed at the sides, never squeezed), and spans
-   exactly from the top of the "H" in "Hi" (0.70em above the first baseline) to the baseline of "Malcolm!". */
+/* The portrait is cropped to the same 5:7 playing card as the stack (trimmed at the sides, never squeezed). It starts
+   at the top of the "H" in "Hi", 0.15em below the greeting's top, and at twice the greeting size it reaches a little
+   past the baseline of "Malcolm!", so Malcolm reads first and the photo deck second. */
 .greeting-portrait {
     display: flex;
     flex: none;
+    align-self: flex-start;
     align-items: flex-end;
     justify-content: center;
-    height: calc(var(--greeting-size) * 1.7);
+    height: calc(var(--greeting-size) * 2);
     aspect-ratio: 5 / 7;
-    margin-bottom: calc(var(--greeting-size) * 0.15);
+    margin: calc(var(--greeting-size) * 0.15) 0 0;
     overflow: hidden;
     border-radius: 6% / 4.3%;
     background: var(--placeholder);
-    box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 10px 22px -10px rgb(27 23 18 / 0.45);
+    box-shadow: 0 0 0 1px var(--card-edge), 0 10px 22px -10px rgb(27 23 18 / 0.45);
     transition: background-color var(--theme-fade);
 }
 
@@ -81,9 +86,11 @@ body:has(.home) .main-content,
 
 .home-description {
     max-width: 30em;
-    margin: clamp(12px, 2svh, 24px) 0 0;
+    /* The greeting, the description, and Contact me sit at one even step, like the band's entries below. */
+    margin: clamp(16px, 3svh, 32px) 0 0;
     color: var(--ink-soft);
-    font-size: clamp(17px, min(1.7vw, 2.8svh), 22px);
+    /* Never below the 18px body size, so it doesn't read as fine print under the greeting. */
+    font-size: clamp(18px, min(1.7vw, 2.8svh), 22px);
     line-height: 1.55;
 }
 
@@ -98,7 +105,7 @@ body:has(.home) .main-content,
 
 .home-link {
     display: inline-block;
-    margin-top: clamp(12px, 2.4svh, 28px);
+    margin-top: clamp(16px, 3svh, 32px);
     color: var(--brick);
     font-weight: 500;
     text-decoration: underline;
@@ -110,23 +117,30 @@ body:has(.home) .main-content,
 }
 
 .home-ground {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
     margin-bottom: -1px;
 }
 
 .home-ground-band {
+    display: grid;
+    flex: 1;
+    align-content: center;
     background: var(--ground);
     color: var(--ground-soft);
     transition: background-color var(--theme-fade);
 }
 
 .home-ground-inner {
+    width: 100%;
     max-width: 1280px;
     margin-inline: auto;
-    padding: clamp(14px, 3svh, 48px) clamp(20px, 5vw, 72px) clamp(18px, 4svh, 56px);
+    padding: clamp(14px, 2.5svh, 48px) clamp(20px, 5vw, 72px) clamp(18px, 4svh, 56px);
 }
 
 .home-ground .hill-wave {
-    height: clamp(28px, min(6vw, 7svh), 90px);
+    height: clamp(28px, min(6vw, 4svh), 90px);
 }
 
 .home-entries {
@@ -138,8 +152,20 @@ body:has(.home) .main-content,
     list-style: none;
 }
 
+/* Each entry is a column with its link at the bottom, so the three links share one row even when one
+   description runs a line longer. */
+.home-entry {
+    display: flex;
+    flex-direction: column;
+}
+
+.home-entry a {
+    align-self: flex-start;
+    margin-top: auto;
+}
+
 .home-entry h3 {
-    margin: 0 0 clamp(6px, 1.2svh, 10px);
+    margin: 0 0 clamp(8px, 1.8svh, 16px);
     color: var(--ground-ink);
     font-size: clamp(24px, min(3vw, 4.5svh), 40px);
     letter-spacing: -0.02em;
@@ -150,7 +176,7 @@ body:has(.home) .main-content,
    like the rest of the homepage, keeping it to one screen. */
 .home-entry p {
     max-width: 32em;
-    margin: 0 0 clamp(8px, 1.6svh, 18px);
+    margin: 0 0 clamp(12px, 2.4svh, 24px);
     font-size: clamp(15px, min(1.4vw, 2.2svh), 18px);
     line-height: 1.5;
 }
@@ -188,7 +214,8 @@ body:has(.home-ground) .site-footer .hill-wave {
     }
 
     .home {
-        --stack-height: clamp(160px, 26svh, 280px);
+        /* Under the text on a phone, so it stays modest and the portrait above leads. */
+        --stack-height: clamp(120px, 16svh, 170px);
     }
 
     .home-entries {
@@ -239,7 +266,7 @@ body:has(.home-ground) .site-footer .hill-wave {
 @media (hover: hover) and (pointer: fine) {
     /* The card rises a little off the page with a deeper shadow; the photo itself stays still. */
     .greeting-portrait:hover {
-        box-shadow: 0 0 0 1px rgb(27 23 18 / 0.08), 0 16px 26px -12px rgb(27 23 18 / 0.5);
+        box-shadow: 0 0 0 1px var(--card-edge), 0 16px 26px -12px rgb(27 23 18 / 0.5);
         transform: translateY(-4px);
     }
 }

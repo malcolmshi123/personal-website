@@ -7,12 +7,6 @@
     transform: scale(0.97);
 }
 
-.contact-links .link-icon-github,
-.contact-links .link-icon-resume,
-.resume-download .link-icon-resume {
-    height: 16px;
-}
-
 .home-description a,
 .home-link,
 .home-ground a,

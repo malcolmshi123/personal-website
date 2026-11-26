@@ -10,7 +10,8 @@ import { captionFromFilename, duplicatePhotoIds, photoId, readsAsPhoto } from ".
 const inbox = "photo-inbox";
 const outputDirectory = "public/photos/board";
 const listFile = "src/content/gallery.json";
-const widths = [640, 1280];
+// 320 for the homepage deck's small cards, 640 for the Gallery board, 1280 for the enlarged viewer.
+const widths = [320, 640, 1280];
 const allowEmpty = process.argv.includes("--allow-empty");
 
 async function listPhotos(directory, folder = "") {

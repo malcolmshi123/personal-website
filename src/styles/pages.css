@@ -6,20 +6,26 @@
 
 /* Short pages fit one screen exactly, like the homepage: vertical spacing scales with the viewport height,
    and the footer sits at the bottom with any spare room above it. */
-body:has(.fit-screen) .site-header {
-    padding-block: clamp(14px, 3svh, 28px);
-}
 
 .fit-screen {
-    padding-block: clamp(16px, 4svh, 56px) clamp(12px, 3svh, 40px);
+    padding-block: clamp(16px, 4svh, 56px) clamp(12px, 2.4svh, 40px);
+}
+
+/* Spare height goes above the heading first, up to the gap between this page's tighter top padding and the
+   other pages', so the heading lands where theirs does whenever it fits. */
+body:has(.fit-screen) .main-content {
+    display: flex;
+    flex-direction: column;
+}
+
+body:has(.fit-screen) .main-content::before {
+    content: "";
+    flex: 1 0 0;
+    max-height: max(0px, clamp(40px, 6vw, 88px) - clamp(16px, 4svh, 56px));
 }
 
 .fit-screen h1 {
     font-size: min(clamp(44px, 6vw, 72px), 7.5svh);
-}
-
-.fit-screen .introduction {
-    margin-top: clamp(8px, 2svh, 28px);
 }
 
 .fit-screen .article-list {
@@ -30,21 +36,28 @@ body:has(.fit-screen) .site-header {
     padding-top: clamp(12px, 2svh, 24px);
 }
 
-.fit-screen .article-with-image {
-    grid-template-columns: minmax(0, 1fr) min(clamp(150px, 26%, 220px), 24svh);
+/* Wider screens only: on phones the image stacks above the text instead (see .article-with-image). The thumbnail
+   scales with the screen height so the page keeps the other pages' heading and intro spacing and still fits. */
+@media (min-width: 601px) {
+    .fit-screen .article-with-image {
+        grid-template-columns: minmax(0, 1fr) min(clamp(150px, 26%, 220px), 22.5svh);
+    }
+}
+
+/* On phones the images stack above the posts, so the page scrolls anyway. It takes the other pages' top padding
+   directly, since the spacer only fills spare room and there is none. */
+@media (max-width: 600px) {
+    .fit-screen {
+        padding-top: clamp(40px, 6vw, 88px);
+    }
+
+    body:has(.fit-screen) .main-content::before {
+        display: none;
+    }
 }
 
 body:has(.fit-screen) .site-footer {
     margin-top: 0;
-}
-
-body:has(.fit-screen) .site-footer .hill-wave {
-    height: clamp(28px, min(6vw, 5svh), 90px);
-}
-
-body:has(.fit-screen) .site-footer-inner {
-    padding-top: clamp(14px, 2.5svh, 20px);
-    padding-bottom: clamp(16px, 3svh, 40px);
 }
 
 .page-content h1 {
@@ -52,6 +65,8 @@ body:has(.fit-screen) .site-footer-inner {
 }
 
 .reading-page {
+    /* One title size for every row: blog posts, jobs, and projects. */
+    --project-title-size: clamp(22px, 2.2vw, 26px);
     max-width: 760px;
 }
 
@@ -238,6 +253,23 @@ body:has(.fit-screen) .site-footer-inner {
     font-size: 16px;
 }
 
+/* A blog post's date sits on its own line under the subtitle and read time, a step quieter, like the dates on
+   Experience. */
+.article-list .entry-row-head {
+    margin-bottom: 10px;
+}
+
+.article-list .article-meta {
+    margin-bottom: 6px;
+}
+
+.article-date {
+    margin: 0 0 14px;
+    color: var(--ink-soft);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+}
+
 .project-image {
     display: block;
     width: 100%;
@@ -277,7 +309,6 @@ body:has(.fit-screen) .site-footer-inner {
 
 /* The download count starts on the title's baseline, then rises so its letters center on the title's. */
 .project-heading {
-    --project-title-size: clamp(22px, 2.2vw, 26px);
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -297,7 +328,7 @@ body:has(.fit-screen) .site-footer-inner {
 
 .prose .project-name {
     margin: 0;
-    font-size: clamp(22px, 2.2vw, 26px);
+    font-size: var(--project-title-size);
     letter-spacing: -0.015em;
     line-height: 1.25;
 }
@@ -315,7 +346,8 @@ body:has(.fit-screen) .site-footer-inner {
 .prose .project-downloads {
     position: relative;
     top: calc(5.5px - 0.377 * var(--project-title-size));
-    margin-left: 12px;
+    /* With the heading row's 4px gap, this keeps the count 12px after the title. */
+    margin-left: 8px;
     color: var(--ink-soft);
     font-family: var(--font-body);
     font-size: 15px;
@@ -323,6 +355,10 @@ body:has(.fit-screen) .site-footer-inner {
     letter-spacing: 0;
     white-space: nowrap;
     transition: color 200ms var(--ease-out);
+}
+
+.prose .project-downloads:hover {
+    color: var(--brick);
 }
 
 /* Matches the digits' height and sits on their baseline, so the arrow spans exactly the same lines as the count. */
@@ -366,9 +402,16 @@ body:has(.fit-screen) .site-footer-inner {
     max-width: 640px;
 }
 
-.article-link {
-    color: var(--brick);
-    font-weight: 500;
+/* The title's link covers the whole post, so the image and the summary open it too, with one tab stop per post.
+   Hovering anywhere on the post hovers the link, so the title shows where it goes. */
+.article-list article {
+    position: relative;
+}
+
+.article-list h2 a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
 }
 
 .article-with-image {
@@ -409,10 +452,6 @@ body:has(.fit-screen) .site-footer-inner {
     }
 }
 
-.prose .project-downloads:hover {
-    color: var(--brick);
-}
-
 .project-links {
     display: flex;
     flex-wrap: wrap;
@@ -426,8 +465,4 @@ body:has(.fit-screen) .site-footer-inner {
     gap: 8px;
     color: var(--brick);
     font-weight: 500;
-}
-
-.project-links .link-icon {
-    height: 16px;
 }

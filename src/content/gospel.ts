@@ -115,8 +115,8 @@ export const gospelSections: GospelSection[] = [
         id: "my-story",
         heading: "My testimony",
         paragraphs: [
-            "For much of university, I chose to reject God and live for myself. Among other things, I was addicted to video games and turned to substances and gambling. I had experienced what the world had to offer, but I was still lost and unsatisfied.",
-            "Since being saved by grace through faith in Jesus Christ, I have come to understand that His grace is sufficient. I can testify that nothing in this world can satisfy nearly as much as God’s love. Now my life’s mission is to share this love with everyone around me.",
+            "For much of university, I chose to reject God and live for myself. Among other things, I was addicted to video games and turned to substances and gambling. I had tasted and seen what the world had to offer, but I was still lost and unsatisfied.",
+            "Since being saved by grace through faith in Jesus Christ, I have tasted and seen that His grace is sufficient. I can testify that nothing in this world can satisfy nearly as much as God’s love. Now my life’s mission is to share this love with everyone around me.",
         ],
         references: [
             { label: "2 Corinthians 12:9-10", href: "https://www.esv.org/2+Corinthians+12:9-10/" },

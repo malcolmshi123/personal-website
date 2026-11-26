@@ -1,4 +1,5 @@
-const thumbnailWidths = [440, 880];
+// 220 suits the thumbnail on a standard screen, so the browser rarely shrinks a much larger image.
+const thumbnailWidths = [220, 440, 880];
 
 function resized(imageId: string, width: number): string {
     return `https://miro.medium.com/v2/resize:fit:${width}/${imageId}`;
@@ -8,7 +9,7 @@ function resized(imageId: string, width: number): string {
 export function mediumImageSet(url: string): { src: string; srcSet: string } {
     const imageId = url.split("/").pop() ?? "";
     return {
-        src: resized(imageId, thumbnailWidths[0]),
+        src: resized(imageId, 440),
         srcSet: thumbnailWidths.map((width) => `${resized(imageId, width)} ${width}w`).join(", "),
     };
 }

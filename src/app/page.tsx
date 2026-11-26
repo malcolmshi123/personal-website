@@ -16,7 +16,14 @@ export default function Home() {
                             <span className="greeting-line"><span className="greeting-accent">Malcolm!</span></span>
                         </h1>
                         <div className="greeting-portrait">
-                            <img src="/photos/portrait.webp" alt="Malcolm smiling in a suit outdoors" width={400} height={500} />
+                            <img
+                                src="/photos/portrait.webp"
+                                srcSet="/photos/portrait-160.webp 160w, /photos/portrait-320.webp 320w, /photos/portrait.webp 400w"
+                                sizes="(max-width: 760px) 70px, 140px"
+                                alt="Malcolm smiling in a suit outdoors"
+                                width={400}
+                                height={500}
+                            />
                         </div>
                     </div>
                     <p className="home-description">

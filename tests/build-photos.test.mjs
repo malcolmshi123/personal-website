@@ -74,7 +74,7 @@ test("a normal inbox replaces the published photos", async () => {
     await photo(cwd, "photo-inbox/places/mount-fuji.jpg", "#36c");
     const result = run(cwd);
     assert.equal(result.status, 0, result.stderr);
-    assert.deepEqual(readdirSync(path.join(cwd, "public/photos/board")).sort(), ["places-mount-fuji-1280.webp", "places-mount-fuji-640.webp"]);
+    assert.deepEqual(readdirSync(path.join(cwd, "public/photos/board")).sort(), ["places-mount-fuji-1280.webp", "places-mount-fuji-320.webp", "places-mount-fuji-640.webp"]);
     const gallery = JSON.parse(readFileSync(path.join(cwd, "src/content/gallery.json"), "utf8"));
     assert.deepEqual(gallery.map((entry) => [entry.id, entry.caption]), [["places-mount-fuji", "mount fuji"]]);
     assert.ok(!existsSync(path.join(cwd, "public/photos/board/food-kajiken-640.webp")));

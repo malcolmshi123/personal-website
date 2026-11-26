@@ -5,20 +5,11 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "no
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { findBrowser } from "./browser.mjs";
 
 const source = "assets/social-card.html";
 const output = "public/social-card.png";
 const mimeTypes = { ".woff2": "font/woff2", ".webp": "image/webp", ".png": "image/png", ".jpg": "image/jpeg" };
-
-const browsers = [
-    process.env.CARD_BROWSER,
-    "C:/Program Files/Google/Chrome/Application/chrome.exe",
-    "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-    "C:/Program Files/Microsoft/Edge/Application/msedge.exe",
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-    "/usr/bin/google-chrome",
-    "/usr/bin/chromium",
-].filter(Boolean);
 
 // Fonts and photos are inlined so the headless browser never has to load local files.
 export function inlineAssets(html, baseDirectory) {
@@ -33,10 +24,7 @@ export function inlineAssets(html, baseDirectory) {
 }
 
 function main() {
-    const browser = browsers.find((candidate) => existsSync(candidate));
-    if (!browser) {
-        throw new Error("No Chrome or Edge found. Set CARD_BROWSER to a Chromium browser's path.");
-    }
+    const browser = findBrowser();
     const workDirectory = mkdtempSync(path.join(tmpdir(), "social-card-"));
     try {
         const page = path.join(workDirectory, "card.html");
@@ -61,6 +49,7 @@ function main() {
     }
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// Only when run directly; importing the file (tests, other scripts, `node -e`) just loads its functions.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     main();
 }

@@ -26,13 +26,19 @@ export default function Blog() {
                                     alt=""
                                     width={1024}
                                     height={683}
-                                    loading="lazy"
                                     decoding="async"
                                 />
                             )}
+                            {/* The title is the post's only link; CSS stretches it over the whole post. */}
                             <div className="entry-row-head">
                                 <h2><a href={article.href} {...newTabProps(article.href)}>{article.title}</a></h2>
-                                <time className="entry-date" dateTime={article.publishedAt}>
+                            </div>
+                            <p className="article-meta">
+                                {article.summary ? `${article.summary} · ` : ""}
+                                {article.readingTimeMinutes} min
+                            </p>
+                            <p className="article-date">
+                                <time dateTime={article.publishedAt}>
                                     {new Date(article.publishedAt).toLocaleDateString("en-US", {
                                         month: "short",
                                         day: "numeric",
@@ -40,13 +46,7 @@ export default function Blog() {
                                         timeZone: "UTC",
                                     })}
                                 </time>
-                            </div>
-                            <p className="article-meta">
-                                {article.summary ? `${article.summary} · ${article.readingTimeMinutes} min` : `${article.readingTimeMinutes} min`}
                             </p>
-                            <a className="article-link" href={article.href} {...newTabProps(article.href)} aria-label={`Read ${article.title}`}>
-                                Read <span aria-hidden="true">↗</span>
-                            </a>
                         </article>
                     </li>
                 ))}

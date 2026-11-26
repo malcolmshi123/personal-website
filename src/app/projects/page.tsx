@@ -18,8 +18,21 @@ export const metadata = createPageMetadata(
 
 type ProjectImageProps = { className: string; src: string; alt: string; loading: "lazy" | "eager" };
 
+// Each image has an 800px copy (npm run image-sizes) for the 760px column, so the browser rarely shrinks the 1280px one.
 function ProjectImage({ className, src, alt, loading }: ProjectImageProps) {
-    return <img className={className} src={src} alt={alt} width={1280} height={720} loading={loading} decoding="async" />;
+    return (
+        <img
+            className={className}
+            src={src}
+            srcSet={`${src.replace(/\.webp$/, "-800.webp")} 800w, ${src} 1280w`}
+            sizes="(max-width: 800px) calc(100vw - 40px), 760px"
+            alt={alt}
+            width={1280}
+            height={720}
+            loading={loading}
+            decoding="async"
+        />
+    );
 }
 
 export default function Projects() {
@@ -35,13 +48,14 @@ export default function Projects() {
                                 <h2 className="project-name">
                                     {project.titleHref ? <Link className="project-name-link" href={project.titleHref}>{project.name}</Link> : project.name}
                                     {project.status && <span className="project-status">{project.status}</span>}
-                                    {project.thunderstoreHref && thunderstoreDownloads[project.thunderstoreHref] !== undefined && (
-                                        <ThunderstoreDownloads
-                                            thunderstoreHref={project.thunderstoreHref}
-                                            buildCount={thunderstoreDownloads[project.thunderstoreHref]}
-                                        />
-                                    )}
                                 </h2>
+                                {/* Beside the heading rather than inside it, so screen readers list the heading as just the name. */}
+                                {project.thunderstoreHref && thunderstoreDownloads[project.thunderstoreHref] !== undefined && (
+                                    <ThunderstoreDownloads
+                                        thunderstoreHref={project.thunderstoreHref}
+                                        buildCount={thunderstoreDownloads[project.thunderstoreHref]}
+                                    />
+                                )}
                                 {/* Lets visitors flip the theme right here and watch the screenshot change. */}
                                 {project.image.srcInLightTheme && <ThemeToggle hint />}
                             </div>

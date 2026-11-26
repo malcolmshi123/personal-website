@@ -216,13 +216,16 @@
     animation-delay: 2s;
 }
 
-.site-navigation a {
+.site-navigation a,
+.wordmark {
     position: relative;
 }
 
 /* One underline serves both states: solid under the current page, half strength while hovering another link.
-   Leaving a link fades its line out in place, then resets the scale while it is invisible. */
-.site-navigation a::after {
+   Leaving a link fades its line out in place, then resets the scale while it is invisible. The wordmark
+   shares the hover half. */
+.site-navigation a::after,
+.wordmark::after {
     position: absolute;
     right: 4px;
     bottom: 0;
@@ -236,6 +239,13 @@
     transition: opacity 150ms ease, transform 0s linear 150ms;
 }
 
+/* The wordmark has no side padding, and its line sits a touch lower so it shares a line with the nav's. */
+.wordmark::after {
+    right: 0;
+    bottom: -1.6px;
+    left: 0;
+}
+
 .site-navigation a[aria-current="page"]::after {
     opacity: 1;
     transform: none;
@@ -243,7 +253,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    .site-navigation a:not([aria-current]):hover::after {
+    .site-navigation a:not([aria-current]):hover::after,
+    .wordmark:hover::after {
         opacity: 0.45;
         transform: scaleX(1);
         transition: transform 250ms var(--ease-out), opacity 0s;

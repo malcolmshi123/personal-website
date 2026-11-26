@@ -18,10 +18,13 @@
     --field: #f6efe3;
     /* At least 3:1 against both the sky and the field, so inputs read as inputs. */
     --field-border: #806a57;
-    /* A low afternoon sun, deep enough to hold 3:1 on the sky. */
-    --sun: #c66216;
+    /* The sun by day and the moon by night are the same brick as "Malcolm!" in that theme. */
+    --sun: var(--brick);
     --highlight: #e3b562;
-    --moon: #e9dcc5;
+    --moon: var(--brick);
+    /* The hairline around the portrait and photo cards: ink by day, a faint light edge at night,
+       where the drop shadow disappears into the sky. */
+    --card-edge: rgb(27 23 18 / 0.08);
     --font-body: var(--font-hanken), "Segoe UI", sans-serif;
     --font-heading: var(--font-lora), Georgia, serif;
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -46,6 +49,7 @@
     --rule: #3a3027;
     --field: #241e18;
     --field-border: #776e5e;
+    --card-edge: rgb(251 244 232 / 0.14);
     color-scheme: dark;
 }
 
@@ -98,6 +102,11 @@ h3 {
     font-family: var(--font-heading);
     font-weight: 600;
     text-wrap: balance;
+}
+
+/* Paragraphs never leave one word alone on their last line, like "kingdom." on a phone. */
+p {
+    text-wrap: pretty;
 }
 
 h1,
@@ -166,10 +175,11 @@ h1 {
     stroke var(--theme-fade), text-decoration-color var(--theme-fade), outline-color var(--theme-fade) !important;
 }
 
+/* One size everywhere they appear; only the download count's arrow is smaller (see .project-downloads). */
 .link-icon {
     flex: none;
     width: auto;
-    height: 1.1em;
+    height: 16px;
 }
 
 .visually-hidden {

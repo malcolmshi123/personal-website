@@ -16,22 +16,22 @@ export const featuredLinks: FeaturedLink[] = [
     {
         title: "The Good News",
         description: "What I believe about Jesus and why it matters to me.",
-        action: "Read more",
+        action: "Read",
         actionContext: " about the good news",
         href: "/gospel",
     },
     {
         title: "Experience",
         description: work.introduction,
-        action: "See more",
-        actionContext: " of my experience",
+        action: "View",
+        actionContext: " my experience",
         href: "/work",
     },
     {
         title: "Projects",
         description: projectsIntroduction,
-        action: "Check them out",
-        actionContext: " of my projects",
+        action: "Browse",
+        actionContext: " my projects",
         href: "/projects",
     },
 ];

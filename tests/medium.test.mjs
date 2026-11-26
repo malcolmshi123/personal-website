@@ -94,7 +94,7 @@ test("loadArticles falls back to the saved list when the feed fails", async () =
 test("mediumImageSet asks Medium for thumbnails near their display size", () => {
     assert.deepEqual(mediumImageSet("https://cdn-images-1.medium.com/max/1024/1*hQIx25wo_LdDxfxABl1I3w.jpeg"), {
         src: "https://miro.medium.com/v2/resize:fit:440/1*hQIx25wo_LdDxfxABl1I3w.jpeg",
-        srcSet: "https://miro.medium.com/v2/resize:fit:440/1*hQIx25wo_LdDxfxABl1I3w.jpeg 440w, https://miro.medium.com/v2/resize:fit:880/1*hQIx25wo_LdDxfxABl1I3w.jpeg 880w",
+        srcSet: "https://miro.medium.com/v2/resize:fit:220/1*hQIx25wo_LdDxfxABl1I3w.jpeg 220w, https://miro.medium.com/v2/resize:fit:440/1*hQIx25wo_LdDxfxABl1I3w.jpeg 440w, https://miro.medium.com/v2/resize:fit:880/1*hQIx25wo_LdDxfxABl1I3w.jpeg 880w",
     });
 });
 

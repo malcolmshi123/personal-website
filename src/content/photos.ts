@@ -15,12 +15,12 @@ export const galleryPhotos: GalleryPhoto[] = processedPhotos;
 export const tastedPhotos = galleryPhotos.filter((photo) => photo.folder === "food");
 export const seenPhotos = galleryPhotos.filter((photo) => photo.folder === "places");
 
-export function photoSource(photo: GalleryPhoto, width: 640 | 1280): string {
+export function photoSource(photo: GalleryPhoto, width: 320 | 640 | 1280): string {
     return `/photos/board/${photo.id}-${width}.webp`;
 }
 
 export function photoSourceSet(photo: GalleryPhoto): string {
-    return `${photoSource(photo, 640)} 640w, ${photoSource(photo, 1280)} 1280w`;
+    return `${photoSource(photo, 320)} 320w, ${photoSource(photo, 640)} 640w, ${photoSource(photo, 1280)} 1280w`;
 }
 
 export function shuffled<T>(list: readonly T[]): T[] {

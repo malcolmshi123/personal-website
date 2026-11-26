@@ -9,7 +9,8 @@ const piles = [
     { label: "seen", photos: seenPhotos },
 ].filter((pile) => pile.photos.length > 0);
 
-const stackSizes = "(max-width: 760px) 60vw, 380px";
+// The front card's widest: about 121px on a phone and 216px on a large screen.
+const stackSizes = "(max-width: 760px) 121px, 216px";
 
 // Slot 0 is the card in front, 1 and 2 are spread behind it, and 3 waits hidden so its photo is loaded before it shows.
 const slotCount = 4;
@@ -76,7 +77,13 @@ export default function PhotoStack() {
             <figcaption className="photo-stack-caption" aria-live="polite">
                 <span className="photo-stack-label">{front?.label ?? piles[0].label}</span>
                 {front && <span className="photo-stack-name"> · {front.photo.caption}</span>}
-                {!hasTurned && <span className="photo-stack-hint"> · tap for another</span>}
+                {/* CSS shows "tap" on touch screens and "click" with a mouse, so only one word is ever read out. */}
+                {!hasTurned && (
+                    <span className="photo-stack-hint">
+                        <span className="photo-stack-hint-touch">tap</span>
+                        <span className="photo-stack-hint-pointer">click</span> for another
+                    </span>
+                )}
             </figcaption>
         </figure>
     );

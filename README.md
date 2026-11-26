@@ -91,7 +91,7 @@ npm run photos:commit -- --push  # same, then push (force-with-lease only when h
 npm run photos:commit -- -m "add travel photos"  # fold into a commit with a different message
 ```
 
-It strips location data, writes 640px and 1280px WebP copies to
+It strips location data, writes 320px, 640px, and 1280px WebP copies to
 `public/photos/board/`, and writes captions to `src/content/gallery.json`. It only
 ever stages those two paths. If the latest commit is "update gallery" it amends
 it. If that commit is further back, it folds the photos into it and keeps the
@@ -106,3 +106,15 @@ Production metadata uses `https://malcolmshi.ca` in `src/lib/site-metadata.ts`.
 The export includes `sitemap.xml`, `robots.txt`, and the link preview card at
 `public/social-card.png`. Its editable source is `assets/social-card.html`; run
 `npm run social-card` to re-render it with a local Chrome or Edge.
+
+The Projects page shows this site's homepage in both themes. After changing the
+homepage, run `npm run build`, then `npm run site-screenshots` to retake
+`public/projects/personal-website.webp` and `personal-website-dark.webp` from the
+built site. Both themes deal the same photos.
+
+## Image sizes
+
+Images come in sizes close to how they're shown, since a browser shrinking a much
+larger file makes it look soft. The homepage portrait has 160px and 320px copies
+next to `public/photos/portrait.webp`, and each Projects image has an 800px copy.
+After replacing any of them, run `npm run image-sizes` to remake the copies.

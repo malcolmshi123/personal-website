@@ -6,10 +6,12 @@
     font-size: 16px;
 }
 
+/* The wave and the band's padding scale with the screen height, so the footer is the same on every page,
+   including the one-screen Blog. */
 .hill-wave {
     display: block;
     width: 100%;
-    height: clamp(40px, 6vw, 90px);
+    height: clamp(28px, min(6vw, 5svh), 90px);
     margin-bottom: -1px;
 }
 
@@ -30,46 +32,49 @@
     gap: 16px 32px;
     max-width: 1280px;
     margin-inline: auto;
-    padding: 20px clamp(20px, 5vw, 72px) 40px;
+    padding: clamp(14px, 2.5svh, 20px) clamp(20px, 5vw, 72px) clamp(16px, 3svh, 40px);
 }
 
 .site-footer-copyright {
     justify-self: start;
     margin: 0;
     color: var(--ground-soft);
-    font-size: 14px;
+    font-size: 15px;
+    /* "© 2026 Malcolm Shi" stays on one line, even when the middle column squeezes it on a tablet. */
+    white-space: nowrap;
 }
 
 .site-footer-verse {
     margin: 0;
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .site-footer-verse-text {
     color: var(--ground-ink);
 }
 
+/* "Psalm 34:8" stays together, so the verse number never ends up alone on a phone. */
+.site-footer-verse-reference {
+    white-space: nowrap;
+}
+
+/* Each icon sits in a 44px tap target. Negative margins let the targets reach past the row, so the last icon
+   still ends at the content edge (15.5px is half the target less half the 13px resume icon) and the row stays
+   as tall as its text. */
 .site-footer-links {
     display: flex;
     justify-self: end;
-    gap: 8px;
-    margin: 0 -8px 0 0;
+    margin: -5px -15.5px -5px 0;
     padding: 0;
     list-style: none;
 }
 
 .site-footer-links a {
     display: flex;
-    padding: 8px;
-}
-
-.site-footer-links .link-icon {
-    height: 17px;
-}
-
-.site-footer-links .link-icon-github,
-.site-footer-links .link-icon-resume {
-    height: 18px;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .site-footer a {
@@ -91,9 +96,15 @@
         justify-items: start;
     }
 
+    /* The verse keeps one line and the reference goes under it, instead of the line breaking inside the verse. */
+    .site-footer-verse-reference {
+        display: block;
+    }
+
+    /* On phones the first icon, 16px wide, starts at the left edge instead. */
     .site-footer-links {
         justify-self: start;
-        margin: 0 0 0 -8px;
+        margin: -5px 0 -5px -14px;
     }
 }
 

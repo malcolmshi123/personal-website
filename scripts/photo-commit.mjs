@@ -174,7 +174,8 @@ function main() {
     }
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+// Only when run directly; importing the file (tests, other scripts, `node -e`) just loads its functions.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
     try {
         main();
     } catch (error) {

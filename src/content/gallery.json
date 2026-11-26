@@ -16,14 +16,6 @@
         "color": "#d8c8b8"
     },
     {
-        "id": "food-chicken-parm",
-        "caption": "chicken parm",
-        "folder": "food",
-        "width": 802,
-        "height": 1069,
-        "color": "#080808"
-    },
-    {
         "id": "food-conveyor-belt-sushi",
         "caption": "conveyor belt sushi",
         "folder": "food",
@@ -94,14 +86,6 @@
         "width": 1280,
         "height": 1707,
         "color": "#180808"
-    },
-    {
-        "id": "food-korean-food",
-        "caption": "korean food",
-        "folder": "food",
-        "width": 802,
-        "height": 1069,
-        "color": "#483828"
     },
     {
         "id": "food-korean-fried-chicken",

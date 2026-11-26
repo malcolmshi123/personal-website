@@ -12,7 +12,7 @@ export default function Gallery() {
     return (
         <div className="page-content photos-page">
             <h1>Gallery</h1>
-            <p className="introduction">Pinterest core!</p>
+            <p className="introduction">Malcolm core!</p>
             <PhotoBoard photos={galleryPhotos} />
         </div>
     );

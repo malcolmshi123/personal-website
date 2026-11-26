@@ -12,11 +12,6 @@
     color: var(--brick);
 }
 
-.contact-links .link-icon,
-.resume-download .link-icon {
-    height: 15px;
-}
-
 .prose .contact-heading {
     margin-top: 56px;
 }
@@ -68,19 +63,23 @@
     outline-offset: 2px;
 }
 
+/* Resizing stops at one line, the height of the name and email fields. */
 .contact-form textarea {
+    min-height: calc(1.6em + 26px);
     resize: vertical;
 }
 
+/* The same text size, line height, and border as the fields, so the button is exactly as tall as they are. */
 .contact-form button {
-    min-height: 48px;
-    padding: 12px 28px;
-    border: 0;
+    padding: 12px 24px;
+    border: 1px solid transparent;
     border-radius: 10px;
     background: var(--olive);
     color: var(--sky);
     font: inherit;
+    font-size: 16px;
     font-weight: 500;
+    line-height: 1.6;
     cursor: pointer;
     transition: background-color 200ms var(--ease-out), transform 160ms var(--ease-out);
 }
@@ -101,7 +100,8 @@
     height: 1px;
 }
 
-.contact-status {
+/* More specific than .prose p, which would otherwise pull the status up against the button. */
+.contact-form .contact-status {
     min-height: 1.6em;
     margin: 16px 0 0;
     color: var(--ink-soft);

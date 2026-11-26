@@ -54,25 +54,27 @@ test("the blog lists Medium posts newest first with Medium titles, short months,
     assert.doesNotMatch(html, /my testimony!/);
     assert.match(text, /Nov 18, 2026/);
     assert.match(text, /Nov 26, 2024/);
-    assert.match(html, /<p class="article-meta">A Short Devo · 5 min<\/p>/);
-    assert.match(html, /<p class="article-meta">the extended version · 6 min<\/p>/);
+    // What the post is and how long it takes on one line, and the date quietly on its own line below.
+    assert.match(html, /<p class="article-meta">A Short Devo · 5 min<\/p><p class="article-date"><time[^>]*>Nov 18, 2026<\/time><\/p>/);
+    assert.match(html, /<p class="article-meta">the extended version · 6 min<\/p><p class="article-date"><time[^>]*>Nov 26, 2024<\/time><\/p>/);
     assert.doesNotMatch(html, /article-duration/);
     assert.doesNotMatch(text, /min read/);
     assert.doesNotMatch(text, /November/);
 });
 
-test("blog links say Read without mentioning Medium", async () => {
+test("each blog post is one link: its title, stretched over the whole post, without mentioning Medium", async () => {
     const page = await readExport("blog.html");
     const html = page.slice(page.indexOf('class="article-list"'), page.indexOf("</ul>", page.indexOf('class="article-list"')));
-    const links = [...html.matchAll(/<a class="article-link"([^>]*)>([\s\S]*?)<\/a>/g)];
+    const posts = html.split("<li>").slice(1);
 
-    assert.ok(links.length >= 2);
-    for (const [, attributes, label] of links) {
-        assert.match(label, /^Read <span aria-hidden="true">↗<\/span>$/);
-        assert.match(attributes, /aria-label="Read [^"]+"/);
-        assert.doesNotMatch(attributes, /Medium/);
+    assert.ok(posts.length >= 2);
+    for (const post of posts) {
+        assert.equal([...post.matchAll(/<a /g)].length, 1, post);
     }
-    assert.doesNotMatch(html, /Medium ·|on Medium/);
+    assert.doesNotMatch(html, /article-link|Medium ·|on Medium/);
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".article-list article", "position", "relative");
+    assertDeclaration(styles, ".article-list h2 a::after", "inset", "0");
 });
 
 test("each blog post shows its Medium preview image", async () => {
@@ -87,7 +89,8 @@ test("each blog post shows its Medium preview image", async () => {
         assert.match(image, /srcSet="[^"]+ 440w, [^"]+resize:fit:880\/[^"]+ 880w"/i);
         assert.match(image, /sizes="\(max-width: 600px\) 100vw, 220px"/);
         assert.match(image, /alt=""/);
-        assert.match(image, /loading="lazy"/);
+        // The blog fits one screen, so every preview is in view on load and none waits to be scrolled to.
+        assert.doesNotMatch(image, /loading="lazy"/);
     }
     assert.doesNotMatch(html, /_\/stat/);
 });
@@ -149,7 +152,8 @@ test("GojoBracken's download count beside the title links to Thunderstore", asyn
     const html = await readExport("projects.html");
     const entries = [...html.matchAll(/<li class="work-entry">([\s\S]*?)<\/li>/g)].map((match) => match[1]);
 
-    assert.match(entries[1], /<h2 class="project-name">GojoBracken<a class="project-downloads" href="https:\/\/thunderstore.io\/c\/lethal-company\/p\/FreakyFriday\/GojoBracken"[^>]*aria-label="\d{1,3}(,\d{3})* downloads? on Thunderstore"><svg[^>]*class="link-icon link-icon-download"[\s\S]*?<\/svg>\d{1,3}(,\d{3})*<\/a><\/h2>/);
+    // The count sits beside the heading, not inside it, so screen readers list the heading as just "GojoBracken".
+    assert.match(entries[1], /<h2 class="project-name">GojoBracken<\/h2><a class="project-downloads" href="https:\/\/thunderstore.io\/c\/lethal-company\/p\/FreakyFriday\/GojoBracken"[^>]*aria-label="\d{1,3}(,\d{3})* downloads? on Thunderstore"><svg[^>]*class="link-icon link-icon-download"[\s\S]*?<\/svg>\d{1,3}(,\d{3})*<\/a>/);
     assert.ok([entries[0], entries[2]].every((entry) => !entry.includes("project-downloads")));
 });
 
@@ -322,7 +326,7 @@ test("every page footer carries Psalm 34:8", async () => {
 test("the homepage work entry says see more and names its destination for screen readers", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /href="\/work">See more<span class="visually-hidden"> of my experience<\/span><\/a>/);
+    assert.match(html, /href="\/work">View<span class="visually-hidden"> my experience<\/span><\/a>/);
 });
 
 test("the gospel testimony uses the updated wording and references", async () => {
@@ -330,8 +334,8 @@ test("the gospel testimony uses the updated wording and references", async () =>
     const body = page.slice(page.indexOf('class="prose"'), page.indexOf("<footer")).replace(/<[^>]+>/g, "\n");
     const testimony = body.slice(body.indexOf("My testimony"), body.indexOf("Come to Jesus"));
 
-    assert.match(testimony, /I had experienced what the world had to offer, but I was still lost and unsatisfied\./);
-    assert.match(testimony, /I have come to understand that His grace is sufficient\./);
+    assert.match(testimony, /I had tasted and seen what the world had to offer, but I was still lost and unsatisfied\./);
+    assert.match(testimony, /I have tasted and seen that His grace is sufficient\./);
     assert.doesNotMatch(body, /Psalm 34:8/);
     assert.equal((body.match(/Ephesians 2:1-5/g) ?? []).length, 1);
 });
@@ -518,7 +522,7 @@ test("the homepage hero links to the contact page", async () => {
 test("the good news entry says read more and names its destination for screen readers", async () => {
     const html = await readExport("index.html");
 
-    assert.match(html, /href="\/gospel">Read more<span class="visually-hidden"> about the good news<\/span><\/a>/);
+    assert.match(html, /href="\/gospel">Read<span class="visually-hidden"> about the good news<\/span><\/a>/);
 });
 
 test("no link on any page ends in a slash, apart from the home link and ESV verses", async () => {
@@ -551,10 +555,12 @@ test("the sitemap lists the homepage and every page in the navigation", async ()
     ]);
 });
 
-test("the gospel page shows its reading time", async () => {
+test("the gospel page shows its reading time, counted like Medium: every word at 265 a minute, rounded up", async () => {
     const html = await readExport("gospel.html");
+    const article = html.slice(html.indexOf("<article"), html.indexOf("</article>")).replace(/<p class="page-meta">.*?<\/p>/, "");
+    const words = article.replace(/<[^>]+>/g, " ").trim().split(/\s+/).length;
 
-    assert.match(html, /<p class="page-meta">About 3 minutes<\/p>/);
+    assert.match(html, new RegExp(`<p class="page-meta">About (<!-- -->)?${Math.ceil(words / 265)}(<!-- -->)? minutes</p>`));
 });
 
 test("the sin section names its effects and cites only Romans 3 and 6", async () => {
@@ -671,7 +677,8 @@ test("the light theme keeps the dark theme's soft horizon and a sun that stands 
     assert.ok(contrast(token("ground-ink"), token("ground")) >= 4.5);
     assert.ok(contrast(token("ground-soft"), token("ground")) >= 4.5);
     assert.ok(contrast(token("ground-link"), token("ground")) >= 4.5);
-    assert.ok(contrast(token("sun"), token("sky")) >= 3, `sun ${contrast(token("sun"), token("sky"))}`);
+    // The sun is drawn in the same brick as "Malcolm!", which stands out well on the sky.
+    assert.ok(contrast(token("brick"), token("sky")) >= 3, `sun ${contrast(token("brick"), token("sky"))}`);
     assertDeclaration(styles, "::selection", "background", "var(--highlight)");
 });
 
@@ -679,7 +686,7 @@ test("the homepage band lists Projects to the right of Experience", async () => 
     const html = await readExport("index.html");
     const titles = [...html.matchAll(/<li class="home-entry"><h3>([^<]+)<\/h3>/g)].map((match) => match[1]);
     assert.deepEqual(titles, ["The Good News", "Experience", "Projects"]);
-    assert.match(html, /href="\/projects">Check them out<span class="visually-hidden"> of my projects<\/span><\/a>/);
+    assert.match(html, /href="\/projects">Browse<span class="visually-hidden"> my projects<\/span><\/a>/);
 
     const styles = await loadBuiltStyles();
     assertDeclaration(styles, ".home-entries", "grid-template-columns", "repeat(3, minmax(0, 1fr))");
@@ -701,7 +708,9 @@ test("the light theme mirrors the original night", async () => {
     assertDeclaration(styles, ":root[data-theme=dark]", "--sky", "#1b1712");
     assertDeclaration(styles, ":root[data-theme=dark]", "--heading", "#fbf4e8");
     assertDeclaration(styles, ":root[data-theme=dark]", "--ink", "#e9dcc5");
-    assertDeclaration(styles, ":root", "--sun", "#c66216");
+    // The sun by day and the moon by night take the color of "Malcolm!" in that theme.
+    assertDeclaration(styles, ":root", "--sun", "var(--brick)");
+    assertDeclaration(styles, ":root", "--moon", "var(--brick)");
 });
 
 test("inner pages end close to the hill, and the short blog page fits one screen", async () => {
@@ -715,7 +724,7 @@ test("inner pages end close to the hill, and the short blog page fits one screen
 
 test("the gallery is one Pinterest-style board fed by every processed photo", async () => {
     const html = await readExport("photos.html");
-    assert.match(html, /class="introduction">Pinterest core!</);
+    assert.match(html, /class="introduction">Malcolm core!</);
     assert.match(html, /class="photo-board"/);
     assert.doesNotMatch(html, /album-grid|class="gear"|coming soon/);
 
@@ -724,7 +733,7 @@ test("the gallery is one Pinterest-style board fed by every processed photo", as
     for (const photo of photos) {
         assert.match(photo.id, /^[a-z0-9-]+$/);
         assert.ok(photo.caption && !/[-_]/.test(photo.caption), photo.id);
-        for (const width of [640, 1280]) {
+        for (const width of [320, 640, 1280]) {
             const file = await readFile(new URL(`../../out/photos/board/${photo.id}-${width}.webp`, import.meta.url));
             // No EXIF block means no GPS location or camera details ship with the photo.
             assert.ok(!file.includes("EXIF") && !file.includes("Exif"), `${photo.id}-${width} still has metadata`);
@@ -763,8 +772,10 @@ test("the stack is a held fan of playing cards, and only the leaving card tilts 
     // The portrait is cropped to the same 5:7 card, keeping its width so the photo never looks squeezed.
     assertDeclaration(styles, ".greeting-portrait", "aspect-ratio", "5 / 7");
     assertDeclaration(styles, ".greeting-portrait", "border-radius", "6% / 4.3%");
-    // It spans from the top of the "H" in "Hi" to the baseline of "Malcolm!".
-    assertDeclaration(styles, ".greeting-portrait", "height", "calc(var(--greeting-size) * 1.7)");
+    // Twice the greeting size, starting at the top of the "H" in "Hi" like the deck beside it.
+    assertDeclaration(styles, ".greeting-portrait", "height", "calc(var(--greeting-size) * 2)");
+    assertDeclaration(styles, ".greeting-portrait", "align-self", "flex-start");
+    assertDeclaration(styles, ".greeting-portrait", "margin", /^calc\(var\(--greeting-size\) \* 0\.15\) 0 0$/);
     assertDeclaration(styles, ".photo-stack-card[data-leaving]", "opacity", "0");
     // Both queued cards share one blur.
     assertDeclaration(styles, ".photo-stack-card[data-slot=1] img", "filter", /^blur\(/);
@@ -776,6 +787,82 @@ test("the homepage band text scales with the screen height so three columns stil
     const styles = await loadBuiltStyles();
     assertDeclaration(styles, ".home-entry p", "font-size", /^clamp\(.*svh/);
     assertDeclaration(styles, ".home-entry p", "line-height", "1.5");
+});
+
+test("the homepage description never drops below body size, and the phone deck starts at the left edge with the text", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home-description", "font-size", /^clamp\(18px,/);
+    // On phones the deck is smaller than the text column, and it and its caption start at the left edge with the text.
+    const phone = "@media (max-width: 760px)";
+    assertDeclaration(styles, ".home", "--stack-height", /^clamp\(120px,16svh,170px\)$/, phone);
+    assertDeclaration(styles, ".photo-stack", "justify-self", "stretch", phone);
+    assertDeclaration(styles, ".photo-stack", "text-align", "left", phone);
+    assertDeclaration(styles, ".photo-stack-caption", "width", "auto", phone);
+});
+
+test("polish: band links share a row, text never strands one word, and the deck hint is for touch only", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home-entry", "display", "flex");
+    assertDeclaration(styles, ".home-entry", "flex-direction", "column");
+    assertDeclaration(styles, ".home-entry a", "margin-top", "auto");
+    // Every paragraph avoids a lone last word, like "me." on the homepage or "kingdom." on The Good News.
+    assertDeclaration(styles, "p", "text-wrap", "pretty");
+    assertDeclaration(styles, ".site-footer-copyright", "white-space", "nowrap");
+    // The hint takes its own line, says "click" to a mouse and "tap" to a touch screen, and the verse reference never splits.
+    assertDeclaration(styles, ".photo-stack-hint", "display", "block");
+    assertDeclaration(styles, ".photo-stack-hint", "white-space", "nowrap");
+    assertDeclaration(styles, ".photo-stack-hint-pointer", "display", "none");
+    assertDeclaration(styles, ".photo-stack-hint-touch", "display", "none", "@media (hover: hover) and (pointer: fine)");
+    assertDeclaration(styles, ".photo-stack-hint-pointer", "display", "inline", "@media (hover: hover) and (pointer: fine)");
+    assertDeclaration(styles, ".site-footer-verse-reference", "white-space", "nowrap");
+});
+
+test("polish: footer verse reads at meta size, icon links are 44px targets, and cards keep an edge at night", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".site-footer-verse", "font-size", "15px");
+    assertDeclaration(styles, ".site-footer-links a", "min-width", "44px");
+    assertDeclaration(styles, ".site-footer-links a", "min-height", "44px");
+    assert.ok(styles.value(":root", "--card-edge"));
+    assert.ok(styles.value(":root[data-theme=dark]", "--card-edge"));
+    assert.notEqual(styles.value(":root", "--card-edge"), styles.value(":root[data-theme=dark]", "--card-edge"));
+    for (const card of [".greeting-portrait", ".photo-stack-card"]) {
+        assertDeclaration(styles, card, "box-shadow", /^0 0 0 1px var\(--card-edge\),/);
+    }
+});
+
+test("the one-screen blog spends its spare height above the heading, so the heading sits where other pages' does", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, "body:has(.fit-screen) .main-content", "display", "flex");
+    assertDeclaration(styles, "body:has(.fit-screen) .main-content::before", "flex", "1 0 0");
+    // Capped at the gap between the blog's tighter spacing and the other pages' header and top padding.
+    assertDeclaration(styles, "body:has(.fit-screen) .main-content::before", "max-height", /^max\(0,.*clamp\(40px,6vw,88px\)/);
+});
+
+test("the deck plays second to the portrait: 0.85 of its old size, its top on the portrait's top", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home", "--stack-height", /^clamp\(170px,min\(28svh,25\.5vw\),390px\)$/);
+    assertDeclaration(styles, ".home", "--stack-height", /^clamp\(153px,min\(25\.5svh,25\.5vw\),390px\)$/, "@media (max-height: 740px)");
+    assertDeclaration(styles, ".home-hero", "align-items", "start");
+    // The portrait's top sits 0.15em below the greeting's top (the top of the "H"), so the deck starts there too.
+    assertDeclaration(styles, ".photo-stack", "margin", /^calc\(var\(--greeting-size\) \* 0\.15\) 0 /);
+});
+
+test("the desktop deck caption is wide enough that photo names stay on one line", async () => {
+    const styles = await loadBuiltStyles();
+    // 1.3 deck heights fits every current name at 1280×720, centered under the front card (5/7 of a deck height wide).
+    assertDeclaration(styles, ".photo-stack-caption", "width", "calc(var(--stack-height) * 1.3)");
+    assertDeclaration(styles, ".photo-stack-caption", "margin", "20px 0 0 calc(var(--stack-height) * (5 / 7 - 1.3) / 2)");
+});
+
+test("on tall screens the homepage's spare height is shared by the hero and the band, each centered in its share", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".home-hero", "flex", /^1( 1 0(%|px)?)?$/);
+    assertDeclaration(styles, ".home-hero", "align-content", "center");
+    assertDeclaration(styles, ".home-ground", "flex", "1 0 auto");
+    assertDeclaration(styles, ".home-ground", "display", "flex");
+    assertDeclaration(styles, ".home-ground-band", "flex", /^1( 1 0(%|px)?)?$/);
+    assertDeclaration(styles, ".home-ground-band", "align-content", "center");
+    assertDeclaration(styles, ".home-ground-inner", "width", "100%");
 });
 
 test("hovering the deck lifts only the front card; the queued cards stay put", async () => {
@@ -839,4 +926,29 @@ test("the enlarged photo fades and sharpens in over its placeholder instead of p
     assertDeclaration(styles, ".photo-viewer-frame img[data-loaded]", "opacity", "1");
     // The frame is sized from the photo's shape, so the placeholder shows before the full photo loads.
     assertDeclaration(styles, ".photo-viewer-frame", "aspect-ratio", "var(--photo-ratio)");
+});
+
+test("images come in sizes close to how they're shown, so the browser never has to shrink a big file", async () => {
+    const home = await readExport("index.html");
+    const portrait = home.match(/<div class="greeting-portrait"><img[^>]*>/)[0];
+    assert.match(portrait, /srcSet="\/photos\/portrait-160\.webp 160w, \/photos\/portrait-320\.webp 320w, \/photos\/portrait\.webp 400w"/);
+    assert.match(portrait, /sizes="[^"]+"/);
+    const projects = await readExport("projects.html");
+    for (const image of projects.match(/<img[^>]*class="project-image[^"]*"[^>]*>/g)) {
+        const src = image.match(/src="\/projects\/([a-z-]+)\.webp"/)[1];
+        assert.match(image, new RegExp(`srcSet="/projects/${src}-800\.webp 800w, /projects/${src}\.webp 1280w"`), src);
+        await readFile(new URL(`../../out/projects/${src}-800.webp`, import.meta.url));
+    }
+    for (const width of [160, 320]) {
+        await readFile(new URL(`../../out/photos/portrait-${width}.webp`, import.meta.url));
+    }
+});
+
+test("every page's header has the same spacing, and the contact status keeps its gap below the button", async () => {
+    const styles = await loadBuiltStyles();
+    assertDeclaration(styles, ".site-header", "padding-block", "28px");
+    // No page shrinks its header to fit one screen; the homepage and the blog find the room elsewhere.
+    assert.ok(!declares(styles, (item) => item.selector.startsWith("body:has(") && item.selector.endsWith(".site-header") && item.property === "padding-block"));
+    // More specific than .prose p, which would otherwise pull the status up against the button.
+    assertDeclaration(styles, ".contact-form .contact-status", "margin", "16px 0 0");
 });

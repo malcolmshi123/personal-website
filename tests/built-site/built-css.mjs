@@ -61,6 +61,17 @@ function splitTopLevel(text, separator) {
     return parts.map((part) => part.trim()).filter(Boolean);
 }
 
+// The minifier merges align-* and justify-* pairs into place-* shorthands ("place-content: center start"), so a
+// shorthand also counts as its two longhands. A single value applies to both.
+function placeLonghands(property, value) {
+    const match = property.match(/^place-(content|items|self)$/);
+    if (!match) {
+        return [];
+    }
+    const [align, justify = align] = value.split(" ");
+    return [[`align-${match[1]}`, align], [`justify-${match[1]}`, justify]];
+}
+
 export function parseRules(css) {
     const source = css.replace(/\/\*[\s\S]*?\*\//g, "");
     const rules = [];
@@ -85,7 +96,9 @@ export function parseRules(css) {
         const value = canonicalValue(text.slice(colon + 1));
         const within = canonicalCondition(stack.slice(0, -1).filter((item) => item.startsWith("@")).join(" "));
         for (const selector of splitTopLevel(prelude, ",")) {
-            declarations.push({ within, selector: canonicalSelector(selector), property, value });
+            for (const [longhand, longhandValue] of [[property, value], ...placeLonghands(property, value)]) {
+                declarations.push({ within, selector: canonicalSelector(selector), property: longhand, value: longhandValue });
+            }
         }
     };
 

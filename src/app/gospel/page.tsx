@@ -4,8 +4,10 @@ import { gospelIntroduction, gospelSections, paragraphText } from "@/content/gos
 import type { Paragraph } from "@/content/gospel";
 import { newTabProps } from "@/lib/links";
 
+const title = "The Gospel";
+
 export const metadata = createPageMetadata(
-    "The Gospel",
+    title,
     "The good news of God’s kingdom, what Jesus has done, and how He calls us to live.",
     "/gospel",
 );
@@ -24,20 +26,24 @@ function GospelParagraph({ paragraph }: { paragraph: Paragraph }) {
 }
 
 export default function Gospel() {
+    // Counted the way Medium counts a post: every word on the page, title and headings included, at 265 words
+    // a minute, rounded up. That keeps this time in line with the ones on the Blog.
     const words = [
+        title,
         gospelIntroduction,
-        ...gospelSections.flatMap(({ paragraphs, quote, afterQuote }) => [
+        ...gospelSections.flatMap(({ heading, paragraphs, quote, afterQuote, references }) => [
+            heading,
             ...paragraphs.map(paragraphText),
-            quote?.text ?? "",
+            quote ? `${quote.text} ${quote.author}, ${quote.source}` : "",
             ...(afterQuote ?? []),
+            ...references.map(({ label }) => label),
         ]),
-    ].join(" ").split(/\s+/).length;
-    // Medium’s reading speed, so this matches the times on Malcolm’s Medium posts.
+    ].join(" ").trim().split(/\s+/).length;
     const readingMinutes = Math.ceil(words / 265);
 
     return (
         <article className="page-content reading-page">
-            <h1>The Gospel</h1>
+            <h1>{title}</h1>
             <p className="page-meta">About {readingMinutes} minutes</p>
             <p className="introduction">{gospelIntroduction}</p>
             <div className="prose">

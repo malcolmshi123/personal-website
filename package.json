@@ -16,7 +16,9 @@
         "test:html": "node --test tests/built-site/*.test.mjs",
         "photos": "node scripts/build-photos.mjs",
         "photos:commit": "node scripts/photo-commit.mjs",
-        "social-card": "node scripts/build-social-card.mjs"
+        "social-card": "node scripts/build-social-card.mjs",
+        "site-screenshots": "node scripts/build-site-screenshots.mjs",
+        "image-sizes": "node scripts/build-image-sizes.mjs"
     },
     "dependencies": {
         "next": "16.4.6",

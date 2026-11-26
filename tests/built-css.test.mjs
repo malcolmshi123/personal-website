@@ -50,6 +50,15 @@ test("a declaration is found by selector, property, and the at-rules around it",
     assert.ok(!styles.hasRule(".missing"));
 });
 
+test("place-* shorthands the minifier writes also count as their two longhands", () => {
+    const styles = readStyles(".hero{place-content:center start;place-items:end}");
+    assert.equal(styles.value(".hero", "align-content"), "center");
+    assert.equal(styles.value(".hero", "justify-content"), "start");
+    assert.equal(styles.value(".hero", "align-items"), "end");
+    assert.equal(styles.value(".hero", "justify-items"), "end");
+    assert.equal(styles.value(".hero", "place-content"), "center start");
+});
+
 test("semicolons and braces inside strings and urls don't split declarations", () => {
     const styles = readStyles(`.icon{background:url("data:image/svg+xml;utf8,<svg>{}</svg>");content:"a;b}";color:red}`);
     assert.equal(styles.value(".icon", "content"), '"a;b}"');
